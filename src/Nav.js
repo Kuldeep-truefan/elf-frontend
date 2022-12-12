@@ -22,7 +22,7 @@ function Nav() {
       <Sidebar onClick={handleMenu}/>
       <img src={logo1}/>
       <div className='logout-nav'>
-      <h4 className='user-name'>admin</h4>
+      <h4 className='user-name' fontFamily={'Courier'}>admin</h4>
       <Button onClick={handleClick} className='logout-btn' variant="outlined" style={{color: 'white', border: '0.5px solid white'}} >Logout</Button>
       </div>
     </div>

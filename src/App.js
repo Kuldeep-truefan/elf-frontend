@@ -8,7 +8,6 @@ import {
   FormGroup,
   Typography,
 } from "@mui/material";
-import { pink } from "@mui/material/colors";
 import { useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import { useNavigate } from "react-router-dom";
@@ -34,6 +33,14 @@ function App() {
     <div className="App">
       <div className="login-div">
         <img src={logo}></img>
+          <div className="wel-div">
+            <div>
+              <Typography level="h4" component="h1" fontFamily={'Courier'} fontWeight={'semibold'}>
+                <b>Welcome!</b>
+              </Typography>
+              <Typography level="body2" fontFamily={'Courier'} fontWeight={'semibold'}>Sign in to continue.</Typography>
+            </div>
+          </div>
         <div className="main-txt-btns">
           <div className="txt-btns">
             <TextField
