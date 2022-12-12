@@ -8,7 +8,7 @@ import {
   FormGroup,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import { useNavigate } from "react-router-dom";
 
@@ -19,16 +19,48 @@ function App() {
     vertical: 'top',
     horizontal: 'center',
   });
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
   const { vertical, horizontal, open } = state;
 
   const handleClick = (newState) => () => {
     setState({ open: true, ...newState });
-    navigate('/qc');
   };
   const handleClose = () => {
     setState({ ...state, open: false });
   };
   // const handleClick = () => navigate('/login');
+  const handelUsername = (text) => {
+    setUsername(text)
+    // console.log("usnerame",event.target.value)
+  }
+
+  // useEffect(()=>{
+  //   console.log(username, 'anshul login')
+  // },[username])
+
+  const handelPassword = (event) => {
+    setPassword(event.target.value)
+    console.log("password",event.target.value)
+  }
+
+
+  let FetchUser = async()=> {
+    fetch(`http://127.0.0.1:8000/log/api/token`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: username, password: password})
+    }).then(res=>{
+      if (res.status == 200) {
+        setState({ open: true });
+        navigate('/qc');
+      }
+      // else{
+      //   setState({ open: false});
+      // }
+      console.log('Response',res)})
+  }
   return (
     <div className="App">
       <div className="login-div">
@@ -44,6 +76,9 @@ function App() {
         <div className="main-txt-btns">
           <div className="txt-btns">
             <TextField
+              onChange={(e)=>{ 
+             setUsername(e.target.value)
+            }}
               id="outlined-basic"
               label="Username"
               variant="outlined"
@@ -54,6 +89,7 @@ function App() {
           </div>
           <div className="txt-btns">
             <TextField
+              onChange={handelPassword}
               id="outlined-basic"
               label="Password"
               variant="outlined"
@@ -81,10 +117,7 @@ function App() {
           </div>
         </div>
         <Button variant="outlined" 
-          onClick={handleClick({
-          vertical: 'top',
-          horizontal: 'right',
-        })}>Login</Button>
+          onClick={()=>{FetchUser()}}>Login</Button>
         <Snackbar
         anchorOrigin={{ vertical, horizontal }}
         open={open}

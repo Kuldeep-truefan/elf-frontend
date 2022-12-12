@@ -16,17 +16,20 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import SmartDisplayIcon from '@mui/icons-material/SmartDisplay';
 // import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import { Button, Typography } from "@mui/material";
 import VideoModal from "./VideoModal";
+import TileController from "./TileController";
 
 function Qc() {
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
+  const [remark, setRemark] = useState("");
+  const [comment, setComment] = useState("");
 
   const [open, setOpen] = useState(false);
 
@@ -42,86 +45,114 @@ function Qc() {
     setOptions(event.target.value);
   };
 
+  const handleChange = (event) => {
+    setRemark(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    setComment(remark);
+    setRemark("");
+  };
+
+  useEffect(() => {
+    setComment(
+        "Hello This Last Comment"
+    );
+  }, []);
+
   return (
     <div className="Qc">
       <Nav />
-
-      <div className="main-tile">
-        <Typography
-          sx={{
-            fontSize: "11px",
-            width: "71.7%",
-            marginLeft: "2.4rem",
-          }}
-        >
-          <span className="video-name-dynamic">Sample_4.mp4</span>
-        </Typography>
-        {/* <TextareaAutosize
+      <TileController/>
+      <div className="tiles">
+        <div className="main-tile">
+          <Typography
+            sx={{
+              // fontSize: "11px",
+              // width: "71.7%",
+              // marginLeft: "2.4rem",
+              position: "relative",
+              right: "10%",
+              paddingLeft: "1rem",
+            }}
+          >
+            <span className="video-name">Sample_4.mp4</span>
+          </Typography>
+          {/* <TextareaAutosize
           className="remark-area"
           aria-label="minimum height"
           minRows={1}
           placeholder="Last Comments"
         /> */}
-        <p className="video-name-dynamic">Audio is not properly comming need changes arrange them in good manner arrange them in good manner them in good manner</p>
-      </div>
-      <div className="main-tiles">
-        {/* <PlayCircleFilledWhiteIcon
+          <p className="video-name-dynamic">{comment}</p>
+        </div>
+        <div className="main-tiles">
+          {/* <PlayCircleFilledWhiteIcon
           sx={{ fontSize: "3rem", marginTop: ".35rem" }}
           onClick={handelClick}
         /> */}
-        <VideoModal onClick={handelClick} open={open} setOpen={setOpen} />
+          <VideoModal onClick={handelClick} open={open} setOpen={setOpen} />
 
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-          <InputLabel id="select-status">Status</InputLabel>
-          <Select
-            labelId="select-status"
-            id="select-status"
-            value={status}
-            label="Status"
-            onChange={handleStatus}
+          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+            <InputLabel id="select-status">Status</InputLabel>
+            <Select
+              labelId="select-status"
+              id="select-status"
+              value={status}
+              label="Status"
+              onChange={handleStatus}
+            >
+              <MenuItem value={20}>Approve</MenuItem>
+              <MenuItem value={10}>Reject</MenuItem>
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+            <InputLabel id="select-options">Options</InputLabel>
+            <Select
+              labelId="select-options"
+              id="select-options"
+              value={option}
+              label="Options"
+              onChange={handleOptions}
+            >
+              <MenuItem value={10}>Need Changes</MenuItem>
+              <MenuItem value={20}>Recheck</MenuItem>
+              <MenuItem value={30}>Lips Not Match</MenuItem>
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+            </Select>
+          </FormControl>
+          <TextareaAutosize
+            className="remark-area"
+            aria-label="minimum height"
+            minRows={2.2}
+            placeholder="Remarks"
+            value={remark}
+            onChange={handleChange}
+          />
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
+            sx={{
+              height: "2.5rem",
+              // marginTop: ".46rem",
+              backgroundColor: "#D7B8FD",
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#7F377F",
+                color: "#fff",
+              },
+            }}
           >
-            <MenuItem value={20}>Approve</MenuItem>
-            <MenuItem value={10}>Reject</MenuItem>
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-          <InputLabel id="select-options">Options</InputLabel>
-          <Select
-            labelId="select-options"
-            id="select-options"
-            value={option}
-            label="Options"
-            onChange={handleOptions}
-          >
-            <MenuItem value={10}>Need Changes</MenuItem>
-            <MenuItem value={20}>Recheck</MenuItem>
-            <MenuItem value={30}>Lips Not Match</MenuItem>
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-          </Select>
-        </FormControl>
-        <TextareaAutosize
-          className="remark-area"
-          aria-label="minimum height"
-          minRows={2.2}
-          placeholder="Remarks"
-        />
-        <Button
-          variant="contained"
-          sx={{ height: "2.5rem", marginTop: ".46rem", backgroundColor:"#D7B8FD" ,color:"white", 
-          '&:hover': {
-            backgroundColor: '#7F377F',
-            color: '#fff',}, 
-          }}
-        >
-          Done
-        </Button>
+            Done
+          </Button>
+        </div>
+        {/* <VideoModal open={open} setOpen={setOpen} /> */}
       </div>
-      {/* <VideoModal open={open} setOpen={setOpen} /> */}
     </div>
   );
 }

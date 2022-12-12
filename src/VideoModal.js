@@ -35,7 +35,7 @@ export default function VideoModal({ open, setOpen }) {
          }}
         onClick={handleOpen}
       />
-      <Modal
+      <Modal 
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -56,7 +56,7 @@ export default function VideoModal({ open, setOpen }) {
             playsInline
             poster="https://www.truefan.in/assets/images/icons/truefan-logo-white.svg"
           >
-            <BigPlayButton position="center" />
+            <BigPlayButton position="center"/>
             <source src={require("./img/Sample_4.mp4")} type="video/mp4" />
             <ControlBar>
               <PlayToggle />
