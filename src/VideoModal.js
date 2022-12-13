@@ -26,7 +26,7 @@ export default function VideoModal({ open, setOpen }) {
     console.log("true");
   };
   const handleClose = () => setOpen(false);
-
+    
   return (
     <div>
       {/* <Button onClick={handleOpen}>Open modal</Button> */}
