@@ -7,6 +7,7 @@ import PlayCircleRounderIcon from "@mui/icons-material/PlayCircleRounded";
 import { BigPlayButton, Player, PlayToggle } from "video-react";
 import "../node_modules/video-react/dist/video-react.css";
 import { ControlBar, PlaybackRateMenuButton } from "video-react";
+import { useState } from "react";
 
 const style = {
   position: "absolute",
@@ -20,20 +21,45 @@ const style = {
   p: 4,
 };
 
-export default function VideoModal({ open, setOpen }) {
+export default function VideoModal({ open, setOpen, item}) {
+  console.log("ITEM", item)
   const handleOpen = () => {
     setOpen(true);
     console.log("true");
   };
+  const [puburl, setPuburl] = useState(false);
   const handleClose = () => setOpen(false);
+  // const [vname, setVname] = useState("");
+
+  // let FetchPlayVideo = async() => {
+  //   fetch(`http://127.0.0.1:7000/log/makepub`)
+  //   .then((res)=> res.json())
+  //   .then((data) => console.log(data));
+  // };
+  let FetchPlayVideo = async() => {
+    fetch("http://127.0.0.1:7000/log/makepub", {
+    method: "POST",
     
+    body: JSON.stringify({
+      fileName: item,
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8"
+  }
+})
+  .then(response => response.json())
+  .then(json => setPuburl(json.publink));
+}
+console.log("puburlllll",puburl)
+
+
   return (
     <div>
       {/* <Button onClick={handleOpen}>Open modal</Button> */}
       <PlayCircleRounderIcon
         sx={{ fontSize: "3rem", marginTop: ".35rem", color:"#D7B8FD"
          }}
-        onClick={handleOpen}
+         onClick={() => {handleOpen(); FetchPlayVideo();}}
       />
       <Modal 
         open={open}
@@ -48,21 +74,23 @@ export default function VideoModal({ open, setOpen }) {
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
           </Typography> */}
+          {puburl && 
           <Player
             // ref={(c) => {
             //   this.player = c;
             // }}
-
+             
             playsInline
-            poster="https://www.truefan.in/assets/images/icons/truefan-logo-white.svg"
+            // poster= {`${puburl}#t=0.8`}
+            //poster="https://www.truefan.in/assets/images/icons/truefan-logo-white.svg"
           >
             <BigPlayButton position="center"/>
-            <source src={require("./img/Sample_4.mp4")} type="video/mp4" />
+            <source src={`${puburl}#t=.1`} type="video/mp4" />
             <ControlBar>
               <PlayToggle />
               <PlaybackRateMenuButton rates={[5, 2, 1, 0.5, 0.1]} />
             </ControlBar>
-          </Player>
+          </Player>}
         </Box>
       </Modal>
     </div>

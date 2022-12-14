@@ -13,5 +13,19 @@ async function LoginUser(username, password) {
     }
 }
 
+// async function MakePublic(filename){
+
+//     let MakePublic = async()=> {
+//         var publink = fetch(`http://127.0.0.1:7000/log/makepub`, {
+//             method: 'POST',
+//             headers: {'Content-Type': 'application/json' }
+//         })
+//         publink.then(response => {
+//             return response.json();
+//         }).then(data => {
+//             console.log("JKJHKHDFK",data);
+//         });
+//     }
+// }
 
 export default LoginUser;

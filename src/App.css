@@ -116,6 +116,7 @@
   font-family: "heiti sc";
   font-weight: bolder;
   position: relative;
+  width: auto;
   /* right: 80%; */
 }
 
