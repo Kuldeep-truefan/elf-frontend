@@ -48,7 +48,7 @@ export default function VideoModal({ open, setOpen, item}) {
   }
 })
   .then(response => response.json())
-  .then(json => setPuburl(json.publink));
+  .then(json => setPuburl(json.data));
 }
 console.log("puburlllll",puburl)
 
@@ -85,7 +85,7 @@ console.log("puburlllll",puburl)
             //poster="https://www.truefan.in/assets/images/icons/truefan-logo-white.svg"
           >
             <BigPlayButton position="center"/>
-            <source src={`${puburl}#t=.1`} type="video/mp4" />
+            <source src={`${puburl}#t=.01`} type="video/mp4" />
             <ControlBar>
               <PlayToggle />
               <PlaybackRateMenuButton rates={[5, 2, 1, 0.5, 0.1]} />

@@ -156,6 +156,6 @@
   left: 21%;
   top: 10%;
   display: flex;
-  /* width: 70%; */
+  justify-content: center;
   position: absolute;
 }
