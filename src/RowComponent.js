@@ -11,7 +11,7 @@ import VideoModal from "./VideoModal";
 import { useState } from "react";
 import Alertbox from "./Alertbox";
 
-const RowComponent = ({ item}) => {
+const RowComponent = ({ item, sbuck, dbuck }) => {
   const [comment, setComment] = useState("");
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
@@ -24,10 +24,10 @@ const RowComponent = ({ item}) => {
     console.log(open);
   };
 
-  const handleAlert = (event) => {
-    setAlertOpen(!alertOpen)
-    console.log(alertOpen)
-  }
+  // const handleAlert = (event) => {
+  //   setAlertOpen(!alertOpen)
+  //   console.log(alertOpen)
+  // }
 
   const handleStatus = (event) => {
     setStatus(event.target.value);
@@ -43,22 +43,25 @@ const RowComponent = ({ item}) => {
     console.log(event.target.value);
   };
 
-  const handleSubmit = () => {
-    // const obj ={
-    //   "video_name": item.video_name,
-    //   "video_status": "Approved",
-    //   "video_options": "Redo Lipsync",
-    //   "video_remarks": "Qc done for this video",
-    //   "btn_done": "Done"
-    // }
-    setComment(remark);
-    setRemark("");
-  };
+  // const handleSubmit = () => {
+  //   // const obj ={
+  //   //   "video_name": item.video_name,
+  //   //   "video_status": "Approved",
+  //   //   "video_options": "Redo Lipsync",
+  //   //   "video_remarks": "Qc done for this video",
+  //   //   "btn_done": "Done"
+  //   // }
+  //   setComment(remark);
+  //   setRemark("");
+  // };
+
   let GetQCDone = async() => {
     console.log("Prining GetQCDone")
     fetch("http://127.0.0.1:7000/log/tilestatus",{
       method:"POST", 
-      body: JSON.stringify({  
+      body: JSON.stringify({ 
+        sourceBucket: sbuck , 
+        destinationBucket: dbuck,  
         videoName: item,
         videoStatus: status,
         videoOption: option,
@@ -112,13 +115,10 @@ const RowComponent = ({ item}) => {
           >
             <MenuItem value={'Approved'}>Approve</MenuItem>
             <MenuItem value={'Rejected'}>Reject</MenuItem>
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
           </Select>
         </FormControl>
         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-          <InputLabel id="select-options">Options</InputLabel>
+          <InputLabel id="select-options">Reject Reason</InputLabel>
           <Select
             labelId="select-options"
             // id="select-options"
@@ -126,12 +126,17 @@ const RowComponent = ({ item}) => {
             label="Options"
             onChange={handleOptions}
           >
-            <MenuItem value={"Need Changes"}>Need Changes</MenuItem>
-            <MenuItem value={"Recheck"}>Recheck</MenuItem>
-            <MenuItem value={"Audio Issue"}>Audio Issue</MenuItem>
-            <MenuItem value="None">
-              <em>None</em>
-            </MenuItem>
+            <MenuItem value={"Redo Lipsync"}>Redo Lipsync</MenuItem>
+            <MenuItem value={"Audio Mistreated"}>Audio Mistreated</MenuItem>
+            <MenuItem value={"Audio Mispronounced"}>Audio Mispronounced</MenuItem>
+            <MenuItem value={"AV Redo"}>AV Redo</MenuItem>
+            <MenuItem value={"AV Sync Mismatch"}>AV Sync Mismatch</MenuItem>
+            <MenuItem value={"Fix hi"}>Fix hi</MenuItem>
+            <MenuItem value={"Trim Reject"}>Trim Reject</MenuItem>
+            <MenuItem value={"Add gap between A & B"}>Add gap between A & B</MenuItem>
+            <MenuItem value={"Reduce gap between A & B"}>Reduce gap between A & B</MenuItem>
+            <MenuItem value={"AV Redo (mistreated)"}>AV Redo (mistreated)</MenuItem>
+            <MenuItem value={"Confirm pronunciation"}>Confirm pronunciation</MenuItem>
           </Select>
         </FormControl>
         <TextareaAutosize

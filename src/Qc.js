@@ -14,30 +14,34 @@ import VideoModal from "./VideoModal";
 import TileController from "./TileController";
 import MakePublic from "./VideoModal";
 import RowComponent from "./RowComponent";
+
 function Qc() {
   const [comment, setComment] = useState("");
   const [link, setLink] = useState([]);
+  const [sbuck, setSbuck] = useState([]); 
+  const [dbuck, setDbuck] = useState([]);  
 
   // console.log("links at 44",link)
 
-  let FetchLink = async () => {
-    fetch("http://127.0.0.1:7000/log/getlink")
-      .then((response) => response.json())
-      .then((data) => setLink(data.filename));
-    // var getlink = await fetch(`http://127.0.0.1:7000/log/getlink`, {
-    //       method: 'GET',
-    //       headers: {'Content-Type': 'application/json' }
-    //     })
-    //     getlink.then(response => {
-    //       return response.json();
-    //     }).then(data => {
-    // setLink(data.filename)
-  };
+  // let FetchLink = async () => {
+  //   fetch("http://127.0.0.1:7000/log/getlink",{
+  //     method: "POST",
+  //     body: JSON.stringify({  
+  //       // bucketName: item,
+        
+  //     }),
+  //     headers: {
+  //       "Content-type": "application/json; charset=UTF-8"
+  //     }
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => setLink(data.filename));
+  // };
 
-  useEffect(() => {
-    setComment("Hello This Last Comment");
-    FetchLink();
-  }, []);
+  // useEffect(() => {
+  //   setComment("Hello This Last Comment");
+  //   FetchLink();
+  // }, []);
 
   // let fetchLinks = async()={
   //   fetch(`http://127.0.0.1:7000/log/getlink`, {
@@ -49,9 +53,9 @@ function Qc() {
   return (
     <div className="Qc">
       <Nav />
-      <TileController FetchLink={FetchLink} />
+      <TileController setLink={setLink} setSbuck={setSbuck} setDbuck={setDbuck}/>
       {link.map((item, index) => {
-        return <RowComponent key={index} item={item} />;
+        return <RowComponent key={index} item={item} sbuck={sbuck} dbuck={dbuck} />;
       })}
     </div>
   );
