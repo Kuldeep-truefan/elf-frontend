@@ -5,7 +5,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import "./App.css";
 import { Button } from "@mui/material";
-
+import CachedRoundedIcon from '@mui/icons-material/CachedRounded';
 function TileController({ setLink, setSbuck, setDbuck}) {
   // else{
   //   setState({ open: false});
@@ -47,14 +47,15 @@ function TileController({ setLink, setSbuck, setDbuck}) {
 
   return (
     <div className="tc">
-      <div>
-        <Button
+      <div className="tc-inner">
+        {/* <Button
           sx={{ borderRadius: "1rem" }}
           variant="outlined"
           // onClick={FetchLink}
         >
           Refresh Tiles
-        </Button>
+        </Button> */}
+        <CachedRoundedIcon/>
         <FormControl sx={{ m: 1, minWidth: 133 }} size="small">
           <InputLabel id="load-buck">Load Bucket</InputLabel>
           <Select
@@ -64,12 +65,11 @@ function TileController({ setLink, setSbuck, setDbuck}) {
             label="Load Bucket"
             onChange={handleLoadBucket}
             // onChange={event => {handleLoadBucket(event); FetchLink()}}
-
-
           >
             <MenuItem value="qc2">qc2</MenuItem>
             <MenuItem value="final-qc">final-qc</MenuItem>
             <MenuItem value="qc-rejects">qc-rejects</MenuItem>
+            <MenuItem value="truefan_no_logo_celeb_videos_bucket_dev">truefan_no_logo_celeb_videos_bucket_dev</MenuItem>
           </Select>
         </FormControl>
 
@@ -85,6 +85,7 @@ function TileController({ setLink, setSbuck, setDbuck}) {
             <MenuItem value="qc2">qc2</MenuItem>
             <MenuItem value="final-qc">final-qc</MenuItem>
             <MenuItem value="rts">RTS</MenuItem>
+            <MenuItem value="qc-rejects">qc-rejects</MenuItem>
           </Select>
         </FormControl>
       </div>

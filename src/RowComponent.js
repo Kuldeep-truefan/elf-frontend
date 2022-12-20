@@ -19,7 +19,7 @@ const RowComponent = ({ item, sbuck, dbuck }) => {
   const [open, setOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false)
 
-  const handelClick = (event) => {
+  const handelClick = () => {
     setOpen(!open);
     console.log(open);
   };
@@ -60,7 +60,7 @@ const RowComponent = ({ item, sbuck, dbuck }) => {
     fetch("http://127.0.0.1:7000/log/tilestatus",{
       method:"POST", 
       body: JSON.stringify({ 
-        sourceBucket: sbuck , 
+        sourceBucket: sbuck, 
         destinationBucket: dbuck,  
         videoName: item,
         videoStatus: status,
@@ -102,7 +102,7 @@ const RowComponent = ({ item, sbuck, dbuck }) => {
             onClick={handelClick}
           /> */}
         {/* <VideoModal onClick={() => {handelClick(); MakePublic();}}  open={open} setOpen={setOpen} /> */}
-        <VideoModal onClick={handelClick} open={open} setOpen={setOpen} item={item}/>
+        <VideoModal onClick={handelClick} open={open} setOpen={setOpen} item={item} sbuck={sbuck}/>
 
         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
           <InputLabel id="select-status">Status</InputLabel>

@@ -21,7 +21,7 @@ const style = {
   p: 4,
 };
 
-export default function VideoModal({ open, setOpen, item}) {
+export default function VideoModal({ open, setOpen, item, sbuck}) {
   console.log("ITEM", item)
   const handleOpen = () => {
     setOpen(true);
@@ -42,13 +42,14 @@ export default function VideoModal({ open, setOpen, item}) {
     
     body: JSON.stringify({
       fileName: item,
+      buckName: sbuck 
     }),
     headers: {
       "Content-type": "application/json; charset=UTF-8"
   }
 })
   .then(response => response.json())
-  .then(json => setPuburl(json.data));
+  .then(json => setPuburl(json.publink));
 }
 console.log("puburlllll",puburl)
 
