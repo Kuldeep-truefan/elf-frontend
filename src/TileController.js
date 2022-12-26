@@ -6,6 +6,7 @@ import Select from "@mui/material/Select";
 import "./App.css";
 import { Button } from "@mui/material";
 import CachedRoundedIcon from '@mui/icons-material/CachedRounded';
+
 function TileController({ setLink, setSbuck, setDbuck}) {
   // else{
   //   setState({ open: false});
@@ -27,7 +28,7 @@ function TileController({ setLink, setSbuck, setDbuck}) {
   };
 
   let FetchLink = async () => {
-    fetch("http://127.0.0.1:7000/log/getlink",{
+    fetch("http://127.0.0.1:8000/log/getlink",{
       method: "POST",
       body: JSON.stringify({  
         bucketName: loadbucket,
@@ -40,10 +41,9 @@ function TileController({ setLink, setSbuck, setDbuck}) {
       .then((data) => setLink(data.filename));
   };
 
-  useEffect(() => {
+  const handleClick = () => {
     FetchLink();
-  }, [loadbucket])
-
+  }
 
   return (
     <div className="tc">
@@ -55,8 +55,7 @@ function TileController({ setLink, setSbuck, setDbuck}) {
         >
           Refresh Tiles
         </Button> */}
-        <CachedRoundedIcon/>
-        <FormControl sx={{ m: 1, minWidth: 133 }} size="small">
+        <FormControl sx={{ m: 1, minWidth: 133, position:"relative"}} size="small">
           <InputLabel id="load-buck">Load Bucket</InputLabel>
           <Select
             labelId="load-buck-lab"
@@ -69,17 +68,17 @@ function TileController({ setLink, setSbuck, setDbuck}) {
             <MenuItem value="qc2">qc2</MenuItem>
             <MenuItem value="final-qc">final-qc</MenuItem>
             <MenuItem value="qc-rejects">qc-rejects</MenuItem>
-            <MenuItem value="truefan_no_logo_celeb_videos_bucket_dev">truefan_no_logo_celeb_videos_bucket_dev</MenuItem>
+            <MenuItem value="truefan_no_logo_celeb_videos_bucket_dev">rts</MenuItem>
           </Select>
         </FormControl>
 
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+        <FormControl sx={{ m: 1, minWidth: 120, position:"relative"}} size="small">
           <InputLabel id="load-move">Move To</InputLabel>
           <Select
             labelId="load-move-lab"
             id="load-move-id"
             value={destbucket}
-            label="Load Bucket"
+           label="Load Bucket"
             onChange={handleDestBucket}
           >
             <MenuItem value="qc2">qc2</MenuItem>
@@ -88,6 +87,7 @@ function TileController({ setLink, setSbuck, setDbuck}) {
             <MenuItem value="qc-rejects">qc-rejects</MenuItem>
           </Select>
         </FormControl>
+        <Button variant="contained" href="#contained-buttons" onClick = {handleClick}>Refresh</Button>
       </div>
     </div>
   );

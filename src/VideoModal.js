@@ -8,6 +8,7 @@ import { BigPlayButton, Player, PlayToggle } from "video-react";
 import "../node_modules/video-react/dist/video-react.css";
 import { ControlBar, PlaybackRateMenuButton } from "video-react";
 import { useState } from "react";
+import { WebSocket } from 'ws';
 
 const style = {
   position: "absolute",
@@ -21,6 +22,18 @@ const style = {
   p: 4,
 };
 
+// const ws = new WebSocket('ws://127.0.0.1:7000/ws/ac/');
+// console.log("Print", ws)
+// // const Websoc = () => {
+
+// ws.onmessage = (event) => {
+//   console.log(event.data);
+// };
+
+// ws.send('Hello, server!');
+
+// ws.close();
+
 export default function VideoModal({ open, setOpen, item, sbuck}) {
   console.log("ITEM", item)
   const handleOpen = () => {
@@ -29,8 +42,9 @@ export default function VideoModal({ open, setOpen, item, sbuck}) {
   };
   const [puburl, setPuburl] = useState(false);
   const handleClose = () => setOpen(false);
+  
   // const [vname, setVname] = useState("");
-
+  
   // let FetchPlayVideo = async() => {
   //   fetch(`http://127.0.0.1:7000/log/makepub`)
   //   .then((res)=> res.json())

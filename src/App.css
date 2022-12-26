@@ -102,10 +102,12 @@
 }
 
 .tiles{
-  margin-top: 5.3rem;
+  margin-top: 1.3rem;
   width: 70%;
   margin-left: auto;
   margin-right: auto;
+  position: relative;
+  top: 4rem;
 }
 
 .remark-area{
@@ -161,11 +163,17 @@
 
 /*Component: TileController (TC) */
 .tc{
-  left: 21%;
+  /* left: 21%;
   top: 10%;
   display: flex;
   justify-content: center;
   position: absolute;
+  top: 4rem; */
+  right: 22.4%;
+  top: 10%;
+  display: flex;
+  justify-content: center;
+  position: relative;
   top: 4rem;
 
 }
@@ -179,3 +187,4 @@
   width: 50%;
   margin-left: 3%!important;
 }
+

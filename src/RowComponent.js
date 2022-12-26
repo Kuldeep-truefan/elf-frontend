@@ -11,7 +11,7 @@ import VideoModal from "./VideoModal";
 import { useState } from "react";
 import Alertbox from "./Alertbox";
 
-const RowComponent = ({ item, sbuck, dbuck }) => {
+const RowComponent = ({ item, sbuck, dbuck, handleClickSendMessage }) => {
   const [comment, setComment] = useState("");
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
@@ -31,6 +31,7 @@ const RowComponent = ({ item, sbuck, dbuck }) => {
 
   const handleStatus = (event) => {
     setStatus(event.target.value);
+    handleClickSendMessage()
     console.log("Event For handelStatus",event.target.value)
   };
   const handleOptions = (event) => {
@@ -57,7 +58,7 @@ const RowComponent = ({ item, sbuck, dbuck }) => {
 
   let GetQCDone = async() => {
     console.log("Prining GetQCDone")
-    fetch("http://127.0.0.1:7000/log/tilestatus",{
+    fetch("http://127.0.0.1:8000/log/tilestatus",{
       method:"POST", 
       body: JSON.stringify({ 
         sourceBucket: sbuck, 

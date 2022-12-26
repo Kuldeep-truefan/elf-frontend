@@ -27,7 +27,7 @@ export default function Alertbox({ open, setOpen, item, status, option, remark }
 
   let GetQCDone = async() => {
     console.log("Prining GetQCDone")
-    fetch("http://127.0.0.1:7000/log/tilestatus",{
+    fetch("http://127.0.0.1:8000/log/tilestatus",{
       method:"POST", 
       body: JSON.stringify({  
         videoName: item,

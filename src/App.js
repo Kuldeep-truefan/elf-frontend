@@ -47,14 +47,15 @@ function App() {
 
 
   let FetchUser = async()=> {
-    fetch(`http://127.0.0.1:7000/log/api/token`, {
+    fetch(`http://127.0.0.1:7000/log/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username, password: password})
-    }).then(res=>{
-      if (res.status == 200) {
-        setState({ open: true });
-        navigate('/qc');
+      }).then(res=>{
+        if (res.status == 200) {
+          setState({ open: true });
+          navigate('/qc');
+          localStorage.setItem('username', JSON.stringify(username))
       }
       // else{
       //   setState({ open: false});

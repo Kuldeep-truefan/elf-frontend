@@ -4,7 +4,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 // import SmartDisplayIcon from '@mui/icons-material/SmartDisplay';
 // import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
@@ -12,53 +12,53 @@ import TextareaAutosize from "@mui/material/TextareaAutosize";
 import { Button, Typography } from "@mui/material";
 import VideoModal from "./VideoModal";
 import TileController from "./TileController";
-import MakePublic from "./VideoModal";
 import RowComponent from "./RowComponent";
+import useWebSocket, { ReadyState } from 'react-use-websocket';
+
+// import Websoc from "./Websoc";
 
 function Qc() {
   const [comment, setComment] = useState("");
   const [link, setLink] = useState([]);
-  const [sbuck, setSbuck] = useState([]); 
-  const [dbuck, setDbuck] = useState([]);  
+  const [sbuck, setSbuck] = useState([]);
+  const [dbuck, setDbuck] = useState([]);
 
-  // console.log("links at 44",link)
+  //Public API that will echo messages sent to it back to the client
+  const [socketUrl, setSocketUrl] = useState('ws://127.0.0.1:8000/socket.io/');
+  const [messageHistory, setMessageHistory] = useState([]);
 
-  // let FetchLink = async () => {
-  //   fetch("http://127.0.0.1:7000/log/getlink",{
-  //     method: "POST",
-  //     body: JSON.stringify({  
-  //       // bucketName: item,
-        
-  //     }),
-  //     headers: {
-  //       "Content-type": "application/json; charset=UTF-8"
-  //     }
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => setLink(data.filename));
-  // };
+  const { sendMessage, lastMessage, readyState,  } = useWebSocket(socketUrl,{
+    onMessage:(mess)=>{
+      console.log("message",mess)
+    }
+  });
 
-  // useEffect(() => {
-  //   setComment("Hello This Last Comment");
-  //   FetchLink();
-  // }, []);
+  useEffect(() => {
+    if (lastMessage !== null) {
+      setMessageHistory((prev) => prev.concat(lastMessage));
+    }
+  }, [lastMessage, setMessageHistory]);
 
-  // let fetchLinks = async()={
-  //   fetch(`http://127.0.0.1:7000/log/getlink`, {
-  //     method: 'GET',
-  //     headers: { 'Content-Type': 'application/json' },
-  //     body: JSON.stringify({ username: username, password: password})
-  //   })
+  console.log(messageHistory);
+
+  const handleClickSendMessage = useCallback(() => sendMessage('Hello'), []);
+
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: 'Connecting',
+    [ReadyState.OPEN]: 'Open',
+    [ReadyState.CLOSING]: 'Closing',
+    [ReadyState.CLOSED]: 'Closed',
+    [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
+  }[readyState];
   
   return (
     <div className="Qc">
       <Nav />
       <TileController setLink={setLink} setSbuck={setSbuck} setDbuck={setDbuck}/>
       {link.map((item, index) => {
-        return <RowComponent key={index} item={item} sbuck={sbuck} dbuck={dbuck} />;
+        return <RowComponent key={index} handleClickSendMessage={handleClickSendMessage} item={item} sbuck={sbuck} dbuck={dbuck} />;
       })}
     </div>
   );
 }
-
 export default Qc;
