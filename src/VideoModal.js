@@ -34,7 +34,7 @@ const style = {
 
 // ws.close();
 
-export default function VideoModal({ open, setOpen, item, sbuck}) {
+export default function VideoModal({ open, setOpen, item, sbuck, sendMessage}) {
   console.log("ITEM", item)
   const handleOpen = () => {
     setOpen(true);
@@ -51,7 +51,7 @@ export default function VideoModal({ open, setOpen, item, sbuck}) {
   //   .then((data) => console.log(data));
   // };
   let FetchPlayVideo = async() => {
-    fetch("http://127.0.0.1:7000/log/makepub", {
+    fetch("http://127.0.0.1:8000/log/makepub", {
     method: "POST",
     
     body: JSON.stringify({
@@ -74,8 +74,9 @@ console.log("puburlllll",puburl)
       <PlayCircleRounderIcon
         sx={{ fontSize: "3rem", marginTop: ".35rem", color:"#D7B8FD"
          }}
-         onClick={() => {handleOpen(); FetchPlayVideo();}}
+         onClick={() => {handleOpen(); FetchPlayVideo(); sendMessage({video_id: item})}}
       />
+   
       <Modal 
         open={open}
         onClose={handleClose}

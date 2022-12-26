@@ -5,13 +5,13 @@ import Select from "@mui/material/Select";
 import "./App.css";
 // import SmartDisplayIcon from '@mui/icons-material/SmartDisplay';
 // import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import { Button, Typography } from "@mui/material";
+import { Button, Chip, Typography } from "@mui/material";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import VideoModal from "./VideoModal";
 import { useState } from "react";
 import Alertbox from "./Alertbox";
 
-const RowComponent = ({ item, sbuck, dbuck, handleClickSendMessage }) => {
+const RowComponent = ({ item, sbuck, dbuck, handleClickSendMessage, emittedData }) => {
   const [comment, setComment] = useState("");
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
@@ -31,7 +31,6 @@ const RowComponent = ({ item, sbuck, dbuck, handleClickSendMessage }) => {
 
   const handleStatus = (event) => {
     setStatus(event.target.value);
-    handleClickSendMessage()
     console.log("Event For handelStatus",event.target.value)
   };
   const handleOptions = (event) => {
@@ -89,6 +88,11 @@ const RowComponent = ({ item, sbuck, dbuck, handleClickSendMessage }) => {
         >
           <span className="video-name">{item}</span>
         </Typography>
+       {emittedData?.video_id===item && 
+       
+       
+       <Chip label={`In progress: ${emittedData?.user}`} color="primary" />}
+        
         {/* <TextareaAutosize
             className="remark-area"
             aria-label="minimum height"
@@ -103,7 +107,7 @@ const RowComponent = ({ item, sbuck, dbuck, handleClickSendMessage }) => {
             onClick={handelClick}
           /> */}
         {/* <VideoModal onClick={() => {handelClick(); MakePublic();}}  open={open} setOpen={setOpen} /> */}
-        <VideoModal onClick={handelClick} open={open} setOpen={setOpen} item={item} sbuck={sbuck}/>
+        <VideoModal onClick={handelClick} sendMessage={handleClickSendMessage} open={open} setOpen={setOpen} item={item} sbuck={sbuck}/>
 
         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
           <InputLabel id="select-status">Status</InputLabel>

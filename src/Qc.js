@@ -22,14 +22,20 @@ function Qc() {
   const [link, setLink] = useState([]);
   const [sbuck, setSbuck] = useState([]);
   const [dbuck, setDbuck] = useState([]);
+  const [username, setUsername] = useState(localStorage.getItem('username'));
+
+  const [emittedData, setemittedData] = useState({})
 
   //Public API that will echo messages sent to it back to the client
   const [socketUrl, setSocketUrl] = useState('ws://127.0.0.1:8000/socket.io/');
   const [messageHistory, setMessageHistory] = useState([]);
 
   const { sendMessage, lastMessage, readyState,  } = useWebSocket(socketUrl,{
-    onMessage:(mess)=>{
-      console.log("message",mess)
+    onMessage:(message)=>{
+      console.log(message)
+      const data =JSON.parse(message?.data);
+      setemittedData(data)
+      console.log("message",message)
     }
   });
 
@@ -41,7 +47,11 @@ function Qc() {
 
   console.log(messageHistory);
 
-  const handleClickSendMessage = useCallback(() => sendMessage('Hello'), []);
+  const handleClickSendMessage = useCallback((payload) => sendMessage(JSON.stringify({
+    user: username,
+    ...payload
+  })), [username]); 
+  console.log(localStorage.getItem('username'))
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: 'Connecting',
@@ -56,7 +66,7 @@ function Qc() {
       <Nav />
       <TileController setLink={setLink} setSbuck={setSbuck} setDbuck={setDbuck}/>
       {link.map((item, index) => {
-        return <RowComponent key={index} handleClickSendMessage={handleClickSendMessage} item={item} sbuck={sbuck} dbuck={dbuck} />;
+        return <RowComponent key={index} handleClickSendMessage={handleClickSendMessage} emittedData={emittedData}  item={item} sbuck={sbuck} dbuck={dbuck} />;
       })}
     </div>
   );
