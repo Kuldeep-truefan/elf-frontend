@@ -1,7 +1,7 @@
 async function LoginUser(username, password) {
     try {
 
-        let userDetails = await API.post('http://127.0.0.1:8000/log/api/token');
+        let userDetails = await API.post('http://127.0.0.1:8000/log/login');
         // if (userDetails.isExistingUser) {
         //     console.log(userDetails,"userdetails")
         // }

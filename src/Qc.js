@@ -27,7 +27,8 @@ function Qc() {
   const [emittedData, setemittedData] = useState({})
 
   //Public API that will echo messages sent to it back to the client
-  const [socketUrl, setSocketUrl] = useState('ws://127.0.0.1:8000/socket.io/');
+  const [socketUrl, setSocketUrl] = useState('ws://34.122.118.251:8000/socket.io/');
+  
   const [messageHistory, setMessageHistory] = useState([]);
 
   const { sendMessage, lastMessage, readyState,  } = useWebSocket(socketUrl,{
@@ -66,7 +67,7 @@ function Qc() {
       <Nav />
       <TileController setLink={setLink} setSbuck={setSbuck} setDbuck={setDbuck}/>
       {link.map((item, index) => {
-        return <RowComponent key={index} handleClickSendMessage={handleClickSendMessage} emittedData={emittedData}  item={item} sbuck={sbuck} dbuck={dbuck} />;
+        return <RowComponent key={index} setLink={setLink} handleClickSendMessage={handleClickSendMessage} emittedData={emittedData}  item={item} sbuck={sbuck} dbuck={dbuck} />;
       })}
     </div>
   );

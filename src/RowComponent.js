@@ -11,13 +11,20 @@ import VideoModal from "./VideoModal";
 import { useState } from "react";
 import Alertbox from "./Alertbox";
 
-const RowComponent = ({ item, sbuck, dbuck, handleClickSendMessage, emittedData }) => {
+const RowComponent = ({
+  item,
+  sbuck,
+  dbuck,
+  handleClickSendMessage,
+  emittedData,
+  setLink
+}) => {
   const [comment, setComment] = useState("");
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
   const [remark, setRemark] = useState("");
   const [open, setOpen] = useState(false);
-  const [alertOpen, setAlertOpen] = useState(false)
+  const [alertOpen, setAlertOpen] = useState(false);
 
   const handelClick = () => {
     setOpen(!open);
@@ -31,7 +38,7 @@ const RowComponent = ({ item, sbuck, dbuck, handleClickSendMessage, emittedData 
 
   const handleStatus = (event) => {
     setStatus(event.target.value);
-    console.log("Event For handelStatus",event.target.value)
+    console.log("Event For handelStatus", event.target.value);
   };
   const handleOptions = (event) => {
     setOptions(event.target.value);
@@ -55,13 +62,13 @@ const RowComponent = ({ item, sbuck, dbuck, handleClickSendMessage, emittedData 
   //   setRemark("");
   // };
 
-  let GetQCDone = async() => {
-    console.log("Prining GetQCDone")
-    fetch("http://127.0.0.1:8000/log/tilestatus",{
-      method:"POST", 
-      body: JSON.stringify({ 
-        sourceBucket: sbuck, 
-        destinationBucket: dbuck,  
+  let GetQCDone = async () => {
+    console.log("Prining GetQCDone");
+    fetch("http://34.122.118.251/:8000/log/tilestatus", {
+      method: "POST",
+      body: JSON.stringify({
+        sourceBucket: sbuck,
+        destinationBucket: dbuck,
         videoName: item,
         videoStatus: status,
         videoOption: option,
@@ -76,23 +83,24 @@ const RowComponent = ({ item, sbuck, dbuck, handleClickSendMessage, emittedData 
   return (
     <div className="tiles">
       <div className="main-tile">
-        <Typography
-          sx={{
-            // fontSize: "11px",
-            // width: "71.7%",
-            // marginLeft: "2.4rem",
-            position: "relative",
-            right: "10%",
-            paddingLeft: "1rem",
-          }}
-        >
-          <span className="video-name">{item}</span>
-        </Typography>
-       {emittedData?.video_id===item && 
-       
-       
-       <Chip label={`In progress: ${emittedData?.user}`} color="primary" />}
-        
+        <div className="main-tile-head">
+          <Typography
+          className="video-name"
+            sx={{
+              // fontSize: "11px",
+              // width: "71.7%",
+              // marginLeft: "2.4rem",
+              // position: "relative",
+              // right: "10%",
+              paddingLeft: "1rem",
+            }}
+          >{item}
+          </Typography>
+          {emittedData?.video_id === item && (
+            <Chip label={`In progress: ${emittedData?.user}`} sx={{ml:"5px", backgroundColor: 'white'}}/>
+          )}
+        </div>
+
         {/* <TextareaAutosize
             className="remark-area"
             aria-label="minimum height"
@@ -107,7 +115,14 @@ const RowComponent = ({ item, sbuck, dbuck, handleClickSendMessage, emittedData 
             onClick={handelClick}
           /> */}
         {/* <VideoModal onClick={() => {handelClick(); MakePublic();}}  open={open} setOpen={setOpen} /> */}
-        <VideoModal onClick={handelClick} sendMessage={handleClickSendMessage} open={open} setOpen={setOpen} item={item} sbuck={sbuck}/>
+        <VideoModal
+          onClick={handelClick}
+          sendMessage={handleClickSendMessage}
+          open={open}
+          setOpen={setOpen}
+          item={item}
+          sbuck={sbuck}
+        />
 
         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
           <InputLabel id="select-status">Status</InputLabel>
@@ -118,8 +133,8 @@ const RowComponent = ({ item, sbuck, dbuck, handleClickSendMessage, emittedData 
             label="Status"
             onChange={handleStatus}
           >
-            <MenuItem value={'Approved'}>Approve</MenuItem>
-            <MenuItem value={'Rejected'}>Reject</MenuItem>
+            <MenuItem value={"Approved"}>Approve</MenuItem>
+            <MenuItem value={"Rejected"}>Reject</MenuItem>
           </Select>
         </FormControl>
         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -133,15 +148,25 @@ const RowComponent = ({ item, sbuck, dbuck, handleClickSendMessage, emittedData 
           >
             <MenuItem value={"Redo Lipsync"}>Redo Lipsync</MenuItem>
             <MenuItem value={"Audio Mistreated"}>Audio Mistreated</MenuItem>
-            <MenuItem value={"Audio Mispronounced"}>Audio Mispronounced</MenuItem>
+            <MenuItem value={"Audio Mispronounced"}>
+              Audio Mispronounced
+            </MenuItem>
             <MenuItem value={"AV Redo"}>AV Redo</MenuItem>
             <MenuItem value={"AV Sync Mismatch"}>AV Sync Mismatch</MenuItem>
             <MenuItem value={"Fix hi"}>Fix hi</MenuItem>
             <MenuItem value={"Trim Reject"}>Trim Reject</MenuItem>
-            <MenuItem value={"Add gap between A & B"}>Add gap between A & B</MenuItem>
-            <MenuItem value={"Reduce gap between A & B"}>Reduce gap between A & B</MenuItem>
-            <MenuItem value={"AV Redo (mistreated)"}>AV Redo (mistreated)</MenuItem>
-            <MenuItem value={"Confirm pronunciation"}>Confirm pronunciation</MenuItem>
+            <MenuItem value={"Add gap between A & B"}>
+              Add gap between A & B
+            </MenuItem>
+            <MenuItem value={"Reduce gap between A & B"}>
+              Reduce gap between A & B
+            </MenuItem>
+            <MenuItem value={"AV Redo (mistreated)"}>
+              AV Redo (mistreated)
+            </MenuItem>
+            <MenuItem value={"Confirm pronunciation"}>
+              Confirm pronunciation
+            </MenuItem>
           </Select>
         </FormControl>
         <TextareaAutosize
@@ -153,26 +178,26 @@ const RowComponent = ({ item, sbuck, dbuck, handleClickSendMessage, emittedData 
           onChange={handleChange}
         />
         <Button
-        onClick={GetQCDone}
-        variant="contained"
-        sx={{
-          height: "2.5rem",
-          // marginTop: ".46rem",
-          backgroundColor: "#D7B8FD",
-          color: "white",
-          "&:hover": {
-            backgroundColor: "#7F377F",
-            color: "#fff",
-          },
-        }}
-      >
-        Done
-      </Button>
+          onClick={GetQCDone}
+          variant="contained"
+          sx={{
+            height: "2.5rem",
+            // marginTop: ".46rem",
+            backgroundColor: "#D7B8FD",
+            color: "white",
+            "&:hover": {
+              backgroundColor: "#7F377F",
+              color: "#fff",
+            },
+          }}
+        >
+          Done
+        </Button>
         {/* <Alertbox 
         open={alertOpen} setOpen={setAlertOpen} item={item} status={status} remark={remark} option= {option} onClick={handleAlert}
         /> */}
       </div>
-      
+
       {/* <VideoModal open={open} setOpen={setOpen} /> */}
     </div>
   );

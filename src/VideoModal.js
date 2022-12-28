@@ -51,9 +51,9 @@ export default function VideoModal({ open, setOpen, item, sbuck, sendMessage}) {
   //   .then((data) => console.log(data));
   // };
   let FetchPlayVideo = async() => {
-    fetch("http://127.0.0.1:8000/log/makepub", {
+    fetch("http://34.122.118.251/:8000/log/makepub", {
     method: "POST",
-    
+
     body: JSON.stringify({
       fileName: item,
       buckName: sbuck 
@@ -72,8 +72,7 @@ console.log("puburlllll",puburl)
     <div>
       {/* <Button onClick={handleOpen}>Open modal</Button> */}
       <PlayCircleRounderIcon
-        sx={{ fontSize: "3rem", marginTop: ".35rem", color:"#D7B8FD"
-         }}
+        sx={{ fontSize: "3rem", marginTop: ".35rem", color:"#D7B8FD"}}
          onClick={() => {handleOpen(); FetchPlayVideo(); sendMessage({video_id: item})}}
       />
    

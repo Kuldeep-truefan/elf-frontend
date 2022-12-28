@@ -10,12 +10,15 @@ import { useState } from "react";
 
 function Nav() {
   const navigate = useNavigate();
-  const handleClick = () => navigate("/login");
+  const handleClick = () => document.location.replace("/login");
   const [state, setState] = useState("false");
   const handleMenu = () => {
     setState(!state);
     console.log("State", state);
   };
+  function clearLocalStorage() {
+    localStorage.clear();
+}
   return (
     <div className="Nav">
       {/* <MenuRoundedIcon fontSize='large'  style={{ color: 'white' }}/> */}
@@ -28,7 +31,11 @@ function Nav() {
           admin
         </h4>
         <Button
-          onClick={handleClick}
+          // onClick={();, clearLocalStorage();}
+          onClick={() => {
+            clearLocalStorage();
+            handleClick();
+          }}
           className="logout-btn"
           variant="outlined"
           style={{ color: "white", border: "0.5px solid white" }}

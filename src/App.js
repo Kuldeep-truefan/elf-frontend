@@ -47,20 +47,16 @@ function App() {
 
 
   let FetchUser = async()=> {
-    fetch(`http://127.0.0.1:7000/log/login`, {
+    fetch(`http://34.122.118.251/:8000/log/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username, password: password})
-      }).then(res=>{
-        if (res.status == 200) {
+      }).then(res=>res.json()).then((data) => {
           setState({ open: true });
+          localStorage.setItem('username', JSON.stringify(data.username))
+          localStorage.setItem('authToken', JSON.stringify(data.access))
           navigate('/qc');
-          localStorage.setItem('username', JSON.stringify(username))
-      }
-      // else{
-      //   setState({ open: false});
-      // }
-      console.log('Response',res)})
+      })
   }
   return (
     <div className="App">

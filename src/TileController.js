@@ -28,7 +28,7 @@ function TileController({ setLink, setSbuck, setDbuck}) {
   };
 
   let FetchLink = async () => {
-    fetch("http://127.0.0.1:8000/log/getlink",{
+    fetch("http://34.122.118.251/:8000/log/getlink",{
       method: "POST",
       body: JSON.stringify({  
         bucketName: loadbucket,
@@ -87,7 +87,7 @@ function TileController({ setLink, setSbuck, setDbuck}) {
             <MenuItem value="qc-rejects">qc-rejects</MenuItem>
           </Select>
         </FormControl>
-        <Button variant="contained" href="#contained-buttons" onClick = {handleClick}>Refresh</Button>
+        <Button variant="contained" href="#contained-buttons" onClick = {handleClick} sx={{background: '#D7B8FD', '&:hover':{backgroundColor: '#7F377F'}}}>Refresh</Button>
       </div>
     </div>
   );
