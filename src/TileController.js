@@ -68,7 +68,7 @@ function TileController({ setLink, setSbuck, setDbuck}) {
             <MenuItem value="qc2">qc2</MenuItem>
             <MenuItem value="final-qc">final-qc</MenuItem>
             <MenuItem value="qc-rejects">qc-rejects</MenuItem>
-            <MenuItem value="truefan_no_logo_celeb_videos_bucket_dev">rts</MenuItem>
+            <MenuItem value="truefan_no_logo_celeb_videos_bucket">rts</MenuItem>
           </Select>
         </FormControl>
 
