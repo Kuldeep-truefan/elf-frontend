@@ -64,7 +64,7 @@ const RowComponent = ({
 
   let GetQCDone = async () => {
     console.log("Prining GetQCDone");
-    fetch("http://34.122.118.251/:8000/log/tilestatus", {
+    fetch("http://34.122.118.251:8000/log/tilestatus", {
       method: "POST",
       body: JSON.stringify({
         sourceBucket: sbuck,

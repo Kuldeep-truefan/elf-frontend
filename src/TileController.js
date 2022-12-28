@@ -28,7 +28,7 @@ function TileController({ setLink, setSbuck, setDbuck}) {
   };
 
   let FetchLink = async () => {
-    fetch("http://34.122.118.251/:8000/log/getlink",{
+    fetch("http://34.122.118.251:8000/log/getlink",{
       method: "POST",
       body: JSON.stringify({  
         bucketName: loadbucket,
