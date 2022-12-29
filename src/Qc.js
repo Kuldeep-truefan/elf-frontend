@@ -35,6 +35,7 @@ function Qc() {
     onMessage:(message)=>{
       console.log(message)
       const data =JSON.parse(message?.data);
+      debugger;
       setemittedData(data)
       console.log("message",message)
     }
