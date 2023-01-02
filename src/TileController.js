@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import "./App.css";
 import { Button } from "@mui/material";
-import CachedRoundedIcon from '@mui/icons-material/CachedRounded';
+import { useNavigate } from "react-router-dom";
 
 function TileController({ setLink, setSbuck, setDbuck}) {
   // else{
@@ -15,6 +15,8 @@ function TileController({ setLink, setSbuck, setDbuck}) {
   // const [handlestatus, setHandelstatus] = useState("");
   const [loadbucket, setLoadbucket] = useState("");
   const [destbucket, setDestMove] = useState("");
+  const navigate = useNavigate();
+  const accessToken = localStorage.getItem('authToken');
 
   const handleLoadBucket = (event) => {
     setLoadbucket(event.target.value);
@@ -28,23 +30,31 @@ function TileController({ setLink, setSbuck, setDbuck}) {
   };
 
   let FetchLink = async () => {
-    fetch("http://34.122.118.251:8000/log/getlink",{
-      method: "POST",
-      body: JSON.stringify({  
-        bucketName: loadbucket,
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8"
-      }
-    })
+    if (!accessToken){
+      navigate('/')
+    }
+    try{
+        fetch("http://34.122.118.251:8000/log/getlink",{
+        // fetch("http://127.0.0.1:8000/log/getlink",{
+        method: "POST",
+        body: JSON.stringify({  
+          bucketName: loadbucket,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
       .then((response) => response.json())
       .then((data) => setLink(data.filename));
-  };
-
+    }
+    catch (error) {
+      console.log("Error occured", error)
+    }
+  }
   const handleClick = () => {
     FetchLink();
   }
-
   return (
     <div className="tc">
       <div className="tc-inner">

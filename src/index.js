@@ -9,8 +9,6 @@ import {
   Routes,
   BrowserRouter,
 } from "react-router-dom";
-import Snackbar from '@mui/material/Snackbar';
-import Button from '@mui/material/Button';
 import Qc from "./Qc";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -18,7 +16,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<App />}></Route>
+        <Route path="/" element={<App />}></Route>
         <Route path="/qc" element={<Qc />}></Route>
       </Routes>
     </BrowserRouter>

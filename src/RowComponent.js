@@ -3,13 +3,11 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import "./App.css";
-// import SmartDisplayIcon from '@mui/icons-material/SmartDisplay';
-// import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import { Button, Chip, Typography } from "@mui/material";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import VideoModal from "./VideoModal";
 import { useState } from "react";
-import Alertbox from "./Alertbox";
+import {useNavigate } from "react-router-dom";
 
 const RowComponent = ({
   item,
@@ -19,22 +17,19 @@ const RowComponent = ({
   emittedData,
   setLink
 }) => {
-  const [comment, setComment] = useState("");
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
   const [remark, setRemark] = useState("");
   const [open, setOpen] = useState(false);
-  const [alertOpen, setAlertOpen] = useState(false);
+  // const [alertOpen, setAlertOpen] = useState(false);
+  const navigate = useNavigate();
+  const accessToken = localStorage.getItem('access_token');
 
   const handelClick = () => {
     setOpen(!open);
     console.log(open);
   };
 
-  // const handleAlert = (event) => {
-  //   setAlertOpen(!alertOpen)
-  //   console.log(alertOpen)
-  // }
 
   const handleStatus = (event) => {
     setStatus(event.target.value);
@@ -50,36 +45,35 @@ const RowComponent = ({
     console.log(event.target.value);
   };
 
-  // const handleSubmit = () => {
-  //   // const obj ={
-  //   //   "video_name": item.video_name,
-  //   //   "video_status": "Approved",
-  //   //   "video_options": "Redo Lipsync",
-  //   //   "video_remarks": "Qc done for this video",
-  //   //   "btn_done": "Done"
-  //   // }
-  //   setComment(remark);
-  //   setRemark("");
-  // };
-
   let GetQCDone = async () => {
-    console.log("Prining GetQCDone");
-    fetch("http://34.122.118.251:8000/log/tilestatus", {
-      method: "POST",
-      body: JSON.stringify({
-        sourceBucket: sbuck,
-        destinationBucket: dbuck,
-        videoName: item,
-        videoStatus: status,
-        videoOption: option,
-        videoRemarks: remark,
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8"
+    console.log("Checking the access token");
+    if (!accessToken) {
+      navigate('');
+    }
+    try{
+      fetch("http://34.122.118.251:8000/log/tilestatus", {
+          // fetch("http://127.0.0.1:8000/log/tilestatus", {
+          method: "POST",
+          body: JSON.stringify({
+            sourceBucket: sbuck,
+            destinationBucket: dbuck,
+            videoName: item,
+            videoStatus: status,
+            videoOption: option,
+            videoRemarks: remark,
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            Authorization: `Bearer ${accessToken}`
+          }
+        })
+        .then(response => response.json()).then((data) => console.log("data", data))
       }
-    })
-    .then(response => response.json())
-  }
+      catch (error) {
+        console.log("Error occured", error)
+      }
+    }
+    
   return (
     <div className="tiles">
       <div className="main-tile">
@@ -101,20 +95,9 @@ const RowComponent = ({
           )}
         </div>
 
-        {/* <TextareaAutosize
-            className="remark-area"
-            aria-label="minimum height"
-            minRows={1}
-            placeholder="Last Comments"
-          /> */}
         <p className="video-name-dynamic">No Comment Found</p>
       </div>
       <div className="main-tiles">
-        {/* <PlayCircleFilledWhiteIcon
-            sx={{ fontSize: "3rem", marginTop: ".35rem" }}
-            onClick={handelClick}
-          /> */}
-        {/* <VideoModal onClick={() => {handelClick(); MakePublic();}}  open={open} setOpen={setOpen} /> */}
         <VideoModal
           onClick={handelClick}
           sendMessage={handleClickSendMessage}
@@ -148,25 +131,15 @@ const RowComponent = ({
           >
             <MenuItem value={"Redo Lipsync"}>Redo Lipsync</MenuItem>
             <MenuItem value={"Audio Mistreated"}>Audio Mistreated</MenuItem>
-            <MenuItem value={"Audio Mispronounced"}>
-              Audio Mispronounced
-            </MenuItem>
+            <MenuItem value={"Audio Mispronounced"}>Audio Mispronounced</MenuItem>
             <MenuItem value={"AV Redo"}>AV Redo</MenuItem>
             <MenuItem value={"AV Sync Mismatch"}>AV Sync Mismatch</MenuItem>
             <MenuItem value={"Fix hi"}>Fix hi</MenuItem>
             <MenuItem value={"Trim Reject"}>Trim Reject</MenuItem>
-            <MenuItem value={"Add gap between A & B"}>
-              Add gap between A & B
-            </MenuItem>
-            <MenuItem value={"Reduce gap between A & B"}>
-              Reduce gap between A & B
-            </MenuItem>
-            <MenuItem value={"AV Redo (mistreated)"}>
-              AV Redo (mistreated)
-            </MenuItem>
-            <MenuItem value={"Confirm pronunciation"}>
-              Confirm pronunciation
-            </MenuItem>
+            <MenuItem value={"Add gap between A & B"}>Add gap between A & B</MenuItem>
+            <MenuItem value={"Reduce gap between A & B"}>Reduce gap between A & B</MenuItem>
+            <MenuItem value={"AV Redo (mistreated)"}>AV Redo (mistreated)</MenuItem>
+            <MenuItem value={"Confirm pronunciation"}>Confirm pronunciation</MenuItem>
           </Select>
         </FormControl>
         <TextareaAutosize

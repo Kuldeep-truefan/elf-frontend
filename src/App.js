@@ -8,7 +8,7 @@ import {
   FormGroup,
   Typography,
 } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import Snackbar from '@mui/material/Snackbar';
 import { useNavigate } from "react-router-dom";
 
@@ -35,10 +35,6 @@ function App() {
     setUsername(text)
     // console.log("usnerame",event.target.value)
   }
-
-  // useEffect(()=>{
-  //   console.log(username, 'anshul login')
-  // },[username])
 
   const handelPassword = (event) => {
     setPassword(event.target.value)
