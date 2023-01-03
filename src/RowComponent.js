@@ -23,7 +23,7 @@ const RowComponent = ({
   const [open, setOpen] = useState(false);
   // const [alertOpen, setAlertOpen] = useState(false);
   const navigate = useNavigate();
-  const accessToken = localStorage.getItem('access_token');
+  const accessToken = localStorage.getItem('authToken');
 
   const handelClick = () => {
     setOpen(!open);
