@@ -51,10 +51,9 @@ function Qc() {
   
   return (
     <div className="Qc">
-      <Nav />
       <TileController setLink={setLink} setSbuck={setSbuck} setDbuck={setDbuck}/>
       {link.map((item, index) => {
-        return <RowComponent key={index} setLink={setLink} handleClickSendMessage={handleClickSendMessage} emittedData={emittedData}  item={item} sbuck={sbuck} dbuck={dbuck} />;
+        return <RowComponent key={index} setLink={setLink} handleClickSendMessage={handleClickSendMessage} emittedData={emittedData}  item={item} sbuck={sbuck} dbuck={dbuck}  index={index} link={link}/>;
       })}
     </div>
   );

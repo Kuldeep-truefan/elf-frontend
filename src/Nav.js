@@ -9,6 +9,7 @@ function Nav() {
   const navigate = useNavigate();
   const handleClick = () => document.location.replace('/');
   const [state, setState] = useState("false");
+  const showusername = localStorage.getItem("username").split('"')
   const handleMenu = () => {
     setState(!state);
     console.log("State", state);
@@ -25,7 +26,7 @@ function Nav() {
       </div>
       <div className="logout-nav">
         <h4 className="user-name" fontFamily={"Courier"}>
-          admin
+          {showusername[1]}
         </h4>
         <Button
           // onClick={();, clearLocalStorage();}

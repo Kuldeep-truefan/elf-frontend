@@ -3,7 +3,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import "./App.css";
-import { Button, Chip, Typography } from "@mui/material";
+import { Button, Chip, FormHelperText, Typography } from "@mui/material";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import VideoModal from "./VideoModal";
 import { useState } from "react";
@@ -15,7 +15,9 @@ const RowComponent = ({
   dbuck,
   handleClickSendMessage,
   emittedData,
-  setLink
+  setLink,
+  index,
+  link
 }) => {
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
@@ -23,17 +25,26 @@ const RowComponent = ({
   const [open, setOpen] = useState(false);
   // const [alertOpen, setAlertOpen] = useState(false);
   const navigate = useNavigate();
+  // const[required,setRequired]=useState(false)
   const accessToken = localStorage.getItem('authToken');
 
   const handelClick = () => {
+
     setOpen(!open);
     console.log(open);
   };
+  console.log(item,index,"============================");
 
 
   const handleStatus = (event) => {
     setStatus(event.target.value);
-    console.log("Event For handelStatus", event.target.value);
+    // if(event.target.value==="Rejected"){
+    //   setRequired(true)
+    // }
+    // else if(event.target.value==="Approved"){
+    //   setRequired(false)
+    // }
+    // console.log("Event For handelStatus", event.target.value);
   };
   const handleOptions = (event) => {
     setOptions(event.target.value);
@@ -50,9 +61,11 @@ const RowComponent = ({
     if (!accessToken) {
       navigate('/');
     }
+    const remainingData=link.filter((x)=>x!==item)
+    setLink(remainingData)
     try{
-      fetch("http://34.29.72.93:8000/log/tilestatus", {
-          // fetch("http://127.0.0.1:8000/log/tilestatus", {
+      // fetch("http://34.29.72.93:8000/log/tilestatus", {
+          fetch("http://127.0.0.1:8000/log/tilestatus", {
           method: "POST",
           body: JSON.stringify({
             sourceBucket: sbuck,
@@ -67,13 +80,19 @@ const RowComponent = ({
             Authorization: `Bearer ${accessToken}`
           }
         })
-        .then(response => response.json()).then((data) => console.log("data", data))
+        .then(response => response.json()).then((data) =>data.success?setLink(remainingData):console.log("not success"))
       }
       catch (error) {
         console.log("Error occured", error)
       }
     }
-    
+    // const remainingData=link.filter((x)=>x!==item)
+
+    // const checking=()=>{
+    //   const remainingData=link.filter((x)=>x!==item)
+    //   console.log(remainingData,"checking")
+
+    // }
   return (
     <div className="tiles">
       <div className="main-tile">
@@ -106,7 +125,6 @@ const RowComponent = ({
           item={item}
           sbuck={sbuck}
         />
-
         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
           <InputLabel id="select-status">Status</InputLabel>
           <Select
@@ -120,15 +138,14 @@ const RowComponent = ({
             <MenuItem value={"Rejected"}>Reject</MenuItem>
           </Select>
         </FormControl>
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+        <FormControl sx={{ m: 1, minWidth: 120 }} size="small" >
           <InputLabel id="select-options">Reject Reason</InputLabel>
           <Select
             labelId="select-options"
             // id="select-options"
             value={option}
             label="Options"
-            onChange={handleOptions}
-          >
+            onChange={handleOptions}>
             <MenuItem value={"Redo Lipsync"}>Redo Lipsync</MenuItem>
             <MenuItem value={"Audio Mistreated"}>Audio Mistreated</MenuItem>
             <MenuItem value={"Audio Mispronounced"}>Audio Mispronounced</MenuItem>
@@ -141,15 +158,16 @@ const RowComponent = ({
             <MenuItem value={"AV Redo (mistreated)"}>AV Redo (mistreated)</MenuItem>
             <MenuItem value={"Confirm pronunciation"}>Confirm pronunciation</MenuItem>
           </Select>
+          {/* {required && <FormHelperText>This is required!</FormHelperText>} */}
         </FormControl>
         <TextareaAutosize
+          required={true}
           className="remark-area"
           aria-label="minimum height"
           minRows={2.2}
           placeholder="Remarks"
           value={remark}
-          onChange={handleChange}
-        />
+          onChange={handleChange}/>
         <Button
           onClick={GetQCDone}
           variant="contained"

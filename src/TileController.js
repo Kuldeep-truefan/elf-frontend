@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -17,6 +17,31 @@ function TileController({ setLink, setSbuck, setDbuck}) {
   const [destbucket, setDestMove] = useState("");
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('authToken');
+  // {label:"test-qc2",value:"dev-ans-test-qc2"}, {label:"test-final",value:"dev-ans-test-final"},
+  const [loadbucketoption, setLoadbucketoption] = useState([{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}])
+  const [movebucketoption, setMovebucketoption] = useState([{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}, {label:"qc-rejects",value:"qc-rejects"}])
+  const defaultloadbucketoption = [{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}]
+  const defaultmovebucketoption = [{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}, {label:"qc-rejects",value:"qc-rejects"}]
+
+  useEffect(() => {
+    setMovebucketoption(prevState=>{
+      const filteredOptions = defaultloadbucketoption.filter(bucket=>bucket?.value!==loadbucket);
+      return filteredOptions;
+    })
+    // console.log("test",movebucketoption);
+    // const filteredOptions = movebucketoption?.filter(bucket=>bucket?.value!==loadbucket);
+    //   console.log("test",filteredOptions)
+  }, [loadbucket])
+
+  useEffect(() => {
+    setLoadbucketoption(prevState=>{
+      const filteredOptions = defaultmovebucketoption.filter(bucket=>bucket?.value!==destbucket);
+      return filteredOptions;
+    })
+  }, [destbucket])
+
+  console.log(loadbucket);
+  
 
   const handleLoadBucket = (event) => {
     setLoadbucket(event.target.value);
@@ -34,8 +59,8 @@ function TileController({ setLink, setSbuck, setDbuck}) {
       navigate('/')
     }
     try{
-        fetch("http://34.29.72.93:8000/log/getlink",{
-        // fetch("http://127.0.0.1:8000/log/getlink",{
+        // fetch("http://34.29.72.93:8000/log/getlink",{
+        fetch("http://127.0.0.1:8000/log/getlink",{
         method: "POST",
         body: JSON.stringify({  
           bucketName: loadbucket,
@@ -46,7 +71,8 @@ function TileController({ setLink, setSbuck, setDbuck}) {
         }
       })
       .then((response) => response.json())
-      .then((data) => setLink(data.filename));
+      .then((data) => setLink(data.filename))
+      // .then((data) => console.log("Datatatatatatatatatat", data));
     }
     catch (error) {
       console.log("Error occured", error)
@@ -75,10 +101,7 @@ function TileController({ setLink, setSbuck, setDbuck}) {
             onChange={handleLoadBucket}
             // onChange={event => {handleLoadBucket(event); FetchLink()}}
           >
-            <MenuItem value="qc2">qc2</MenuItem>
-            <MenuItem value="final-qc">final-qc</MenuItem>
-            <MenuItem value="qc-rejects">qc-rejects</MenuItem>
-            <MenuItem value="truefan_no_logo_celeb_videos_bucket">rts</MenuItem>
+            {loadbucketoption?.map(bucket => <MenuItem value={bucket.value}>{bucket.label}</MenuItem>)}
           </Select>
         </FormControl>
 
@@ -91,10 +114,7 @@ function TileController({ setLink, setSbuck, setDbuck}) {
            label="Load Bucket"
             onChange={handleDestBucket}
           >
-            <MenuItem value="qc2">qc2</MenuItem>
-            <MenuItem value="final-qc">final-qc</MenuItem>
-            <MenuItem value="truefan_no_logo_celeb_videos_bucket">rts</MenuItem>
-            <MenuItem value="qc-rejects">qc-rejects</MenuItem>
+            {movebucketoption?.map(bucket => <MenuItem value={bucket.value}>{bucket.label}</MenuItem>)} 
           </Select>
         </FormControl>
         <Button variant="contained" href="#contained-buttons" onClick = {handleClick} sx={{background: '#D7B8FD', '&:hover':{backgroundColor: '#7F377F'}}}>Refresh</Button>
