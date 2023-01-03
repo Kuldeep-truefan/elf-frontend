@@ -26,7 +26,7 @@ function Nav() {
       </div>
       <div className="logout-nav">
         <h4 className="user-name" fontFamily={"Courier"}>
-          {showusername[1]}
+          {showusername&&showusername[1]}
         </h4>
         <Button
           // onClick={();, clearLocalStorage();}
