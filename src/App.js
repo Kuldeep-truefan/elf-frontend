@@ -44,6 +44,8 @@ function App() {
 
   let FetchUser = async()=> {
     fetch(`http://34.122.118.251:8000/log/login`, {
+    // fetch(`http://127.0.01:8000/log/login`, {
+
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username, password: password})

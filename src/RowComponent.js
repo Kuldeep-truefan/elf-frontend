@@ -48,7 +48,7 @@ const RowComponent = ({
   let GetQCDone = async () => {
     console.log("Checking the access token");
     if (!accessToken) {
-      navigate('');
+      navigate('/');
     }
     try{
       fetch("http://34.122.118.251:8000/log/tilestatus", {
