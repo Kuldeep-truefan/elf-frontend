@@ -59,8 +59,8 @@ function TileController({ setLink, setSbuck, setDbuck}) {
       navigate('/')
     }
     try{
-        // fetch("http://34.29.72.93:8000/log/getlink",{
-        fetch("http://127.0.0.1:8000/log/getlink",{
+        fetch("http://34.29.72.93:8000/log/getlink",{
+        // fetch("http://127.0.0.1:8000/log/getlink",{
         method: "POST",
         body: JSON.stringify({  
           bucketName: loadbucket,
