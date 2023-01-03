@@ -9,7 +9,11 @@ function Nav() {
   const navigate = useNavigate();
   const handleClick = () => document.location.replace('/');
   const [state, setState] = useState("false");
-  const showusername = localStorage.getItem("username").split('"')
+  const showname = localStorage.getItem("username")
+  console.log("showroom",showname);
+
+  const showusername = showname&&showname.split('"')
+  console.log("showusername",showusername);
   const handleMenu = () => {
     setState(!state);
     console.log("State", state);
