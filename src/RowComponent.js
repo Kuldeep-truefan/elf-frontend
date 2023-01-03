@@ -51,7 +51,7 @@ const RowComponent = ({
       navigate('/');
     }
     try{
-      fetch("http://34.133.68.118:8000/log/tilestatus", {
+      fetch("http://34.29.72.93:8000/log/tilestatus", {
           // fetch("http://127.0.0.1:8000/log/tilestatus", {
           method: "POST",
           body: JSON.stringify({
