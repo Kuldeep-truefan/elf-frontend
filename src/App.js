@@ -43,7 +43,7 @@ function App() {
 
 
   let FetchUser = async()=> {
-    fetch(`http://34.122.118.251:8000/log/login`, {
+    fetch(`http://34.133.68.118:8000/log/login`, {
     // fetch(`http://127.0.01:8000/log/login`, {
 
         method: 'POST',

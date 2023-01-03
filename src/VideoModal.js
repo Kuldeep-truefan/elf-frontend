@@ -48,7 +48,7 @@ export default function VideoModal({ open, setOpen, item, sbuck, sendMessage}) {
   //   .then((data) => console.log(data));
   // };
   let FetchPlayVideo = async() => {
-    fetch("http://34.122.118.251:8000/log/makepub", {
+    fetch("http://34.133.68.118:8000/log/makepub", {
     // fetch("http://127.0.0.1:8000/log/makepub", {
     method: "POST",
     body: JSON.stringify({
