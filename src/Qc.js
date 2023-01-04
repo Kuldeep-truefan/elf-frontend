@@ -9,6 +9,7 @@ function Qc() {
   const [link, setLink] = useState([]);
   const [sbuck, setSbuck] = useState([]);
   const [dbuck, setDbuck] = useState([]);
+  const [destbucket, setDestMove] = useState("");
   const [username, setUsername] = useState(localStorage.getItem('username'));
 
   const [emittedData, setemittedData] = useState({})
@@ -51,9 +52,10 @@ function Qc() {
   
   return (
     <div className="Qc">
-      <TileController setLink={setLink} setSbuck={setSbuck} setDbuck={setDbuck}/>
+      <Nav />
+      <TileController setLink={setLink} setSbuck={setSbuck} setDbuck={setDbuck} destbucket={destbucket} setDestMove={setDestMove} />
       {link.map((item, index) => {
-        return <RowComponent key={index} setLink={setLink} handleClickSendMessage={handleClickSendMessage} emittedData={emittedData}  item={item} sbuck={sbuck} dbuck={dbuck}  index={index} link={link}/>;
+        return <RowComponent key={index} setLink={setLink} handleClickSendMessage={handleClickSendMessage} destbucket={destbucket}  emittedData={emittedData}  item={item} sbuck={sbuck} dbuck={dbuck}  index={index} link={link}/>;
       })}
     </div>
   );

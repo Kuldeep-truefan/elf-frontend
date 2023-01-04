@@ -6,7 +6,7 @@ import "./App.css";
 import { Button, Chip, FormHelperText, Typography } from "@mui/material";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import VideoModal from "./VideoModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {useNavigate } from "react-router-dom";
 
 const RowComponent = ({
@@ -17,11 +17,13 @@ const RowComponent = ({
   emittedData,
   setLink,
   index,
-  link
+  link,
+  destbucket 
 }) => {
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
   const [remark, setRemark] = useState("");
+  const [isDisabled, setIsDisabled] = useState(true);
   const [open, setOpen] = useState(false);
   // const [alertOpen, setAlertOpen] = useState(false);
   const navigate = useNavigate();
@@ -93,6 +95,17 @@ const RowComponent = ({
     //   console.log(remainingData,"checking")
 
     // }
+    useEffect(() => {
+      if(!destbucket) {
+        setIsDisabled(true) 
+      }
+      else if (option && status === 'Rejected' ) setIsDisabled(false) 
+      else if (status && status !== 'Rejected') {
+        setIsDisabled(false)
+      } else {
+        setIsDisabled(true)
+      }
+    }, [status, option, destbucket])
   return (
     <div className="tiles">
       <div className="main-tile">
@@ -136,10 +149,11 @@ const RowComponent = ({
           >
             <MenuItem value={"Approved"}>Approve</MenuItem>
             <MenuItem value={"Rejected"}>Reject</MenuItem>
+            <MenuItem value=""><em>None</em></MenuItem>
           </Select>
         </FormControl>
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small" >
-          <InputLabel id="select-options">Reject Reason</InputLabel>
+        <FormControl sx={{ m: 1, minWidth: 220 }} size="small" >
+          <InputLabel id="select-options">Reason</InputLabel>
           <Select
             labelId="select-options"
             // id="select-options"
@@ -157,6 +171,7 @@ const RowComponent = ({
             <MenuItem value={"Reduce gap between A & B"}>Reduce gap between A & B</MenuItem>
             <MenuItem value={"AV Redo (mistreated)"}>AV Redo (mistreated)</MenuItem>
             <MenuItem value={"Confirm pronunciation"}>Confirm pronunciation</MenuItem>
+            <MenuItem value=""><em>None</em></MenuItem>
           </Select>
           {/* {required && <FormHelperText>This is required!</FormHelperText>} */}
         </FormControl>
@@ -171,6 +186,7 @@ const RowComponent = ({
         <Button
           onClick={GetQCDone}
           variant="contained"
+          disabled={isDisabled}
           sx={{
             height: "2.5rem",
             // marginTop: ".46rem",

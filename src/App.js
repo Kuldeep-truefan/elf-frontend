@@ -63,9 +63,9 @@ function App() {
           <div className="wel-div">
             <div>
               <Typography level="h4" component="h1" fontFamily={'Courier'} fontWeight={'semibold'}>
-                <b>Welcome!</b>
+                <b>Welcome To Elf Dashboard!!</b>{'\n'}
               </Typography>
-              <Typography level="body2" fontFamily={'Courier'} fontWeight={'semibold'}>Sign in to continue.</Typography>
+              <Typography level="body2" fontFamily={'Courier'} fontWeight={'semibold'}><b><i>!!! Tell me the password I'll let you in !!! </i></b></Typography>
             </div>
           </div>
         <div className="main-txt-btns">

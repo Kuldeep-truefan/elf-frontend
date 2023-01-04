@@ -10,14 +10,13 @@ function Nav() {
   const handleClick = () => document.location.replace('/');
   const [state, setState] = useState("false");
   const showname = localStorage.getItem("username")
-  console.log("showroom",showname);
-
   const showusername = showname&&showname.split('"')
-  console.log("showusername",showusername);
+
   const handleMenu = () => {
     setState(!state);
     console.log("State", state);
   };
+  
   function clearLocalStorage() {
     localStorage.clear();
 }

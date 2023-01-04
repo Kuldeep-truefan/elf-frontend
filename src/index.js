@@ -18,13 +18,12 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-    <Nav />
+      {/* <Nav /> */}
       <Routes>
         <Route path="/" element={<App />}/>
-        <Route path="/" element={<PrivateRoute/>}>
+        <Route path="/" element={<PrivateRoute/>}/>
         <Route path="/qc" element={<Qc />}/>
         <Route path="/nf" element={<PageNotFound/>}/>
-        </Route>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

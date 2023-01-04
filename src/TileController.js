@@ -4,17 +4,19 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import "./App.css";
-import { Button } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 import { useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 
-function TileController({ setLink, setSbuck, setDbuck}) {
+function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove}) {
   // else{
   //   setState({ open: false});
   // }
   // const [bucket, setBucket] = useState("");
   // const [handlestatus, setHandelstatus] = useState("");
   const [loadbucket, setLoadbucket] = useState("");
-  const [destbucket, setDestMove] = useState("");
+  
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('authToken');
   // {label:"test-qc2",value:"dev-ans-test-qc2"}, {label:"test-final",value:"dev-ans-test-final"},
@@ -42,7 +44,6 @@ function TileController({ setLink, setSbuck, setDbuck}) {
 
   console.log(loadbucket);
   
-
   const handleLoadBucket = (event) => {
     setLoadbucket(event.target.value);
     setSbuck(event.target.value)
