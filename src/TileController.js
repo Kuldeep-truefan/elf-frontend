@@ -16,23 +16,19 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove})
   // const [bucket, setBucket] = useState("");
   // const [handlestatus, setHandelstatus] = useState("");
   const [loadbucket, setLoadbucket] = useState("");
-  
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('authToken');
   // {label:"test-qc2",value:"dev-ans-test-qc2"}, {label:"test-final",value:"dev-ans-test-final"},
-  const [loadbucketoption, setLoadbucketoption] = useState([{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}])
-  const [movebucketoption, setMovebucketoption] = useState([{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}, {label:"qc-rejects",value:"qc-rejects"}])
-  const defaultloadbucketoption = [{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}]
-  const defaultmovebucketoption = [{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}, {label:"qc-rejects",value:"qc-rejects"}]
+  const [loadbucketoption, setLoadbucketoption] = useState([{label:"test-qc2",value:"dev-ans-test-qc2"}, {label:"test-final",value:"dev-ans-test-final"},{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}])
+  const [movebucketoption, setMovebucketoption] = useState([{label:"test-qc2",value:"dev-ans-test-qc2"}, {label:"test-final",value:"dev-ans-test-final"},{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}, {label:"qc-rejects",value:"qc-rejects"}])
+  const defaultloadbucketoption = [{label:"test-qc2",value:"dev-ans-test-qc2"}, {label:"test-final",value:"dev-ans-test-final"},{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}]
+  const defaultmovebucketoption = [{label:"test-qc2",value:"dev-ans-test-qc2"}, {label:"test-final",value:"dev-ans-test-final"},{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}, {label:"qc-rejects",value:"qc-rejects"}]
 
   useEffect(() => {
     setMovebucketoption(prevState=>{
       const filteredOptions = defaultloadbucketoption.filter(bucket=>bucket?.value!==loadbucket);
       return filteredOptions;
     })
-    // console.log("test",movebucketoption);
-    // const filteredOptions = movebucketoption?.filter(bucket=>bucket?.value!==loadbucket);
-    //   console.log("test",filteredOptions)
   }, [loadbucket])
 
   useEffect(() => {
@@ -92,8 +88,8 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove})
         >
           Refresh Tiles
         </Button> */}
-        <FormControl sx={{ m: 1, minWidth: 133, position:"relative"}} size="small">
-          <InputLabel id="load-buck">Load Bucket</InputLabel>
+        <FormControl sx={{ m: 1, minWidth: 133}} size="small">
+          <InputLabel id="load-buck">Load From</InputLabel>
           <Select
             labelId="load-buck-lab"
             id="load-buck-id"
@@ -106,7 +102,7 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove})
           </Select>
         </FormControl>
 
-        <FormControl sx={{ m: 1, minWidth: 120, position:"relative"}} size="small">
+        <FormControl sx={{ m: 1, minWidth: 120}} size="small">
           <InputLabel id="load-move">Move To</InputLabel>
           <Select
             labelId="load-move-lab"

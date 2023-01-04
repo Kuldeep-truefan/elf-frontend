@@ -16,6 +16,8 @@ function Qc() {
 
   //Public API that will echo messages sent to it back to the client
   const [socketUrl, setSocketUrl] = useState('ws://34.29.72.93:8000/socket.io/');
+  // const [socketUrl, setSocketUrl] = useState('ws://127.0.0.1:8000/socket.io/');
+
   
   const [messageHistory, setMessageHistory] = useState([]);
 
