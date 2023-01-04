@@ -8,6 +8,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
+import { BASE_URL } from "./constants/constant";
 
 function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove}) {
   // else{
@@ -56,8 +57,7 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove})
       navigate('/')
     }
     try{
-        fetch("http://34.29.72.93:8000/log/getlink",{
-        // fetch("http://127.0.0.1:8000/log/getlink",{
+        fetch(`${BASE_URL}/log/getlink`,{
         method: "POST",
         body: JSON.stringify({  
           bucketName: loadbucket,

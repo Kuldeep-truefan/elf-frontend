@@ -11,6 +11,7 @@ import {
 import { useState} from "react";
 import Snackbar from '@mui/material/Snackbar';
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "./constants/constant";
 
 function App() {
   const navigate = useNavigate();
@@ -41,11 +42,8 @@ function App() {
     console.log("password",event.target.value)
   }
 
-
   let FetchUser = async()=> {
-    fetch(`http://34.29.72.93:8000/log/login`, {
-    // fetch(`http://127.0.01:8000/log/login`, {
-
+    fetch(`${BASE_URL}/log/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username, password: password})

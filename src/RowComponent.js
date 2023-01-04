@@ -8,6 +8,7 @@ import TextareaAutosize from "@mui/material/TextareaAutosize";
 import VideoModal from "./VideoModal";
 import { useEffect, useState } from "react";
 import {useNavigate } from "react-router-dom";
+import { BASE_URL } from "./constants/constant";
 
 const RowComponent = ({
   item,
@@ -35,7 +36,7 @@ const RowComponent = ({
     setOpen(!open);
     console.log(open);
   };
-  console.log(item,index,"============================");
+
 
 
   const handleStatus = (event) => {
@@ -66,8 +67,7 @@ const RowComponent = ({
     const remainingData=link.filter((x)=>x!==item)
     setLink(remainingData)
     try{
-      fetch("http://34.29.72.93:8000/log/tilestatus", {
-          // fetch("http://127.0.0.1:8000/log/tilestatus", {
+      fetch(`${BASE_URL}/log/tilestatus`, {
           method: "POST",
           body: JSON.stringify({
             sourceBucket: sbuck,

@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import TileController from "./TileController";
 import RowComponent from "./RowComponent";
 import useWebSocket, { ReadyState } from 'react-use-websocket';
+import { WEB_BASE_URL } from "./constants/constant";
 
 function Qc() {
   const [link, setLink] = useState([]);
@@ -15,9 +16,7 @@ function Qc() {
   const [emittedData, setemittedData] = useState({})
 
   //Public API that will echo messages sent to it back to the client
-  const [socketUrl, setSocketUrl] = useState('ws://34.29.72.93:8000/socket.io/');
-  // const [socketUrl, setSocketUrl] = useState('ws://127.0.0.1:8000/socket.io/');
-
+  const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/socket.io/`);
   
   const [messageHistory, setMessageHistory] = useState([]);
 
@@ -56,7 +55,7 @@ function Qc() {
     <div className="Qc">
       <Nav />
       <TileController setLink={setLink} setSbuck={setSbuck} setDbuck={setDbuck} destbucket={destbucket} setDestMove={setDestMove} />
-      {link.map((item, index) => {
+      {link?.map((item, index) => {
         return <RowComponent key={index} setLink={setLink} handleClickSendMessage={handleClickSendMessage} destbucket={destbucket}  emittedData={emittedData}  item={item} sbuck={sbuck} dbuck={dbuck}  index={index} link={link}/>;
       })}
     </div>

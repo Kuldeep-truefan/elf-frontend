@@ -6,6 +6,7 @@ import { BigPlayButton, Player, PlayToggle } from "video-react";
 import "../node_modules/video-react/dist/video-react.css";
 import { ControlBar, PlaybackRateMenuButton } from "video-react";
 import { useState } from "react";
+import { BASE_URL } from "./constants/constant";
 
 const style = {
   position: "absolute",
@@ -48,8 +49,7 @@ export default function VideoModal({ open, setOpen, item, sbuck, sendMessage}) {
   //   .then((data) => console.log(data));
   // };
   let FetchPlayVideo = async() => {
-    fetch("http://34.29.72.93:8000/log/makepub", {
-    // fetch("http://127.0.0.1:8000/log/makepub", {
+    fetch(`${BASE_URL}/log/makepub`, {
     method: "POST",
     body: JSON.stringify({
       fileName: item,
