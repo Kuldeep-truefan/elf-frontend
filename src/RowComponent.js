@@ -193,7 +193,7 @@ const RowComponent = ({
             backgroundColor: "#D7B8FD",
             color: "white",
             "&:hover": {
-              backgroundColor: "#7F377F",
+              backgroundColor: "#ad6efb",
               color: "#fff",
             },
           }}

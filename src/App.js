@@ -41,6 +41,10 @@ function App() {
     setPassword(event.target.value)
     console.log("password",event.target.value)
   }
+//   const myStyle={
+//     backgroundColor: "#ba57e8",
+//     height: "100vh"
+// };
 
   let FetchUser = async()=> {
     fetch(`${BASE_URL}/log/login`, {
@@ -56,6 +60,7 @@ function App() {
   }
   return (
     <div className="App">
+      {/* <div style={myStyle}></div> */}
       <div className="login-div">
         <img src={logo}></img>
           <div className="wel-div">

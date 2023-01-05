@@ -21,9 +21,12 @@ root.render(
       {/* <Nav /> */}
       <Routes>
         <Route path="/" element={<App />}/>
-        <Route path="/" element={<PrivateRoute/>}/>
+        {/* Private Routes Should come under this. */}
+        <Route path="/" element={<PrivateRoute/>}>
         <Route path="/qc" element={<Qc />}/>
         <Route path="/nf" element={<PageNotFound/>}/>
+        </Route>
+      
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
