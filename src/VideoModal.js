@@ -4,7 +4,7 @@ import Modal from "@mui/material/Modal";
 import PlayCircleRounderIcon from "@mui/icons-material/PlayCircleRounded";
 import { BigPlayButton, Player, PlayToggle } from "video-react";
 import "../node_modules/video-react/dist/video-react.css";
-import { ControlBar, PlaybackRateMenuButton } from "video-react";
+import { ControlBar, PlaybackRateMenuButton, ReplayControl } from "video-react";
 import { useState } from "react";
 import { BASE_URL } from "./constants/constant";
 
@@ -20,17 +20,6 @@ const style = {
   p: 4,
 };
 
-// const ws = new WebSocket('ws://127.0.0.1:7000/ws/ac/');
-// console.log("Print", ws)
-// // const Websoc = () => {
-
-// ws.onmessage = (event) => {
-//   console.log(event.data);
-// };
-
-// ws.send('Hello, server!');
-
-// ws.close();
 
 export default function VideoModal({ open, setOpen, item, sbuck, sendMessage}) {
   console.log("ITEM", item)
@@ -87,20 +76,13 @@ console.log("puburlllll",puburl)
             Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
           </Typography> */}
           {puburl && 
-          <Player
-            // ref={(c) => {
-            //   this.player = c;
-            // }}
-             
-            playsInline
-            // poster= {`${puburl}#t=0.8`}
-            //poster="https://www.truefan.in/assets/images/icons/truefan-logo-white.svg"
-          >
+          <Player playsInline>
             <BigPlayButton position="center"/>
             <source src={`${puburl}#t=.01`} type="video/mp4" />
             <ControlBar>
               <PlayToggle />
               <PlaybackRateMenuButton rates={[5, 2, 1, 0.5, 0.1]} />
+              <ReplayControl seconds={5}/>
             </ControlBar>
           </Player>}
         </Box>

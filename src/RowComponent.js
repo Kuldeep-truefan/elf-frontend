@@ -147,8 +147,8 @@ const RowComponent = ({
             label="Status"
             onChange={handleStatus}
           >
-            <MenuItem value={"Approved"}>Approve</MenuItem>
-            <MenuItem value={"Rejected"}>Reject</MenuItem>
+            <MenuItem value={"Approved"}>Approved</MenuItem>
+            <MenuItem value={"Rejected"}>Rejected</MenuItem>
             <MenuItem value=""><em>None</em></MenuItem>
           </Select>
         </FormControl>
