@@ -50,7 +50,8 @@ function Qc() {
     [ReadyState.CLOSED]: 'Closed',
     [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
   }[readyState];
-  
+   
+  console.log(setLink, 'setlink')
   return (
     <div className="Qc">
       <Nav />

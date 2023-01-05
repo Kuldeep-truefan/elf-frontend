@@ -37,18 +37,10 @@ const RowComponent = ({
     console.log(open);
   };
 
-
-
   const handleStatus = (event) => {
     setStatus(event.target.value);
-    // if(event.target.value==="Rejected"){
-    //   setRequired(true)
-    // }
-    // else if(event.target.value==="Approved"){
-    //   setRequired(false)
-    // }
-    // console.log("Event For handelStatus", event.target.value);
   };
+
   const handleOptions = (event) => {
     setOptions(event.target.value);
     console.log(event.target.value);
@@ -61,6 +53,12 @@ const RowComponent = ({
 
   let GetQCDone = async () => {
     console.log("Checking the access token");
+   const saveStatus = status
+   const saveOption= option
+   const saveRemark = remark
+   setStatus('')
+   setOptions('')
+   setRemark('')
     if (!accessToken) {
       navigate('/');
     }
@@ -73,16 +71,18 @@ const RowComponent = ({
             sourceBucket: sbuck,
             destinationBucket: dbuck,
             videoName: item,
-            videoStatus: status,
-            videoOption: option,
-            videoRemarks: remark,
+            videoStatus: saveStatus,
+            videoOption: saveOption,
+            videoRemarks: saveRemark,
           }),
           headers: {
             "Content-type": "application/json; charset=UTF-8",
             Authorization: `Bearer ${accessToken}`
           }
         })
-        .then(response => response.json()).then((data) =>data.success?setLink(remainingData):console.log("not success"))
+        .then(response => response.json()).then((data) =>{ 
+          data.success?setLink(remainingData):console.log("not success") 
+      })
       }
       catch (error) {
         console.log("Error occured", error)
