@@ -1,10 +1,10 @@
-import "./App.css";
-import Nav from "./Nav";
+import "../App.css";
+import Nav from "../Nav";
 import { useEffect, useState, useCallback } from "react";
-import TileController from "./TileController";
-import RowComponent from "./RowComponent";
+import TileController from "../components/qc/TileController";
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-import { WEB_BASE_URL } from "./constants/constant";
+import { WEB_BASE_URL } from "../constants/constant";
+import RowComponent from "../components/qc/RowComponent";
 
 function Qc() {
   const [link, setLink] = useState([]);
@@ -22,12 +22,17 @@ function Qc() {
 
   const { sendMessage, lastMessage, readyState,  } = useWebSocket(socketUrl,{
     onMessage:(message)=>{
-      console.log(message)
+      console.log(message, "------------------")
       const data =JSON.parse(message?.data);
-      setemittedData(data)
+      if(data?.msg==="updated"){
+
+      }
+      setemittedData(JSON.parse(data?.data))
+      // console.log("qc",J);
       console.log("message",message)
     }
   });
+
 
   useEffect(() => {
     if (lastMessage !== null) {
@@ -40,7 +45,8 @@ function Qc() {
   const handleClickSendMessage = useCallback((payload) => sendMessage(JSON.stringify({
     user: username,
     ...payload
-  })), [username]); 
+  })),[username]);
+  
   console.log(localStorage.getItem('username'))
 
   const connectionStatus = {
@@ -51,11 +57,11 @@ function Qc() {
     [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
   }[readyState];
    
-  console.log(setLink, 'setlink')
+  // console.log(setLink, 'setlink')
   return (
     <div className="Qc">
       <Nav />
-      <TileController setLink={setLink} setSbuck={setSbuck} setDbuck={setDbuck} destbucket={destbucket} setDestMove={setDestMove} />
+      <TileController setLink={setLink} setSbuck={setSbuck} emittedData={emittedData} setDbuck={setDbuck} destbucket={destbucket} setDestMove={setDestMove} />
       {link?.map((item, index) => {
         return <RowComponent key={index} setLink={setLink} handleClickSendMessage={handleClickSendMessage} destbucket={destbucket}  emittedData={emittedData}  item={item} sbuck={sbuck} dbuck={dbuck}  index={index} link={link}/>;
       })}

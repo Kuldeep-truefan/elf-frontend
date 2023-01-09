@@ -2,13 +2,14 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import "./App.css";
+import "../../App.css";
 import { Button, Chip, FormHelperText, Typography } from "@mui/material";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
-import VideoModal from "./VideoModal";
+
 import { useEffect, useState } from "react";
 import {useNavigate } from "react-router-dom";
-import { BASE_URL } from "./constants/constant";
+import VideoModal from "./VideoModal";
+import { BASE_URL } from "../../constants/constant";
 
 const RowComponent = ({
   item,
@@ -26,7 +27,6 @@ const RowComponent = ({
   const [remark, setRemark] = useState("");
   const [isDisabled, setIsDisabled] = useState(true);
   const [open, setOpen] = useState(false);
-  // const [alertOpen, setAlertOpen] = useState(false);
   const navigate = useNavigate();
   // const[required,setRequired]=useState(false)
   const accessToken = localStorage.getItem('authToken');
@@ -48,11 +48,13 @@ const RowComponent = ({
 
   const handleChange = (event) => {
     setRemark(event.target.value);
-    console.log(event.target.value);
+    // console.log(event.target.value);
   };
 
   let GetQCDone = async () => {
-    console.log("Checking the access token");
+    // console.log("Checking the access token");
+    handleClickSendMessage({msg:"updated",video_id:item})
+
    const saveStatus = status
    const saveOption= option
    const saveRemark = remark
@@ -81,20 +83,13 @@ const RowComponent = ({
           }
         })
         .then(response => response.json()).then((data) =>{ 
-          data.success?setLink(remainingData):console.log("not success") 
+          data.success?setLink(remainingData):console.log("No Data Found"); 
       })
       }
       catch (error) {
         console.log("Error occured", error)
       }
     }
-    // const remainingData=link.filter((x)=>x!==item)
-
-    // const checking=()=>{
-    //   const remainingData=link.filter((x)=>x!==item)
-    //   console.log(remainingData,"checking")
-
-    // }
     useEffect(() => {
       if(!destbucket) {
         setIsDisabled(true) 
@@ -106,6 +101,7 @@ const RowComponent = ({
         setIsDisabled(true)
       }
     }, [status, option, destbucket])
+
   return (
     <div className="tiles">
       <div className="main-tile">
@@ -122,8 +118,8 @@ const RowComponent = ({
             }}
           >{item}
           </Typography>
-          {emittedData?.video_id === item && (
-            <Chip label={`In progress: ${emittedData?.user}`} sx={{ml:"5px", backgroundColor: 'white'}}/>
+          {JSON.parse(emittedData)?.filter(data=>data?.video_id===item)?.length>0   && (
+            <Chip label={`In progress: ${JSON.parse(emittedData)?.filter(data=>data?.video_id===item)?.[0]?.user}`} sx={{ml:"5px", backgroundColor: 'white'}}/>
           )}
         </div>
 

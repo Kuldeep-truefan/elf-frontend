@@ -3,10 +3,10 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import PlayCircleRounderIcon from "@mui/icons-material/PlayCircleRounded";
 import { BigPlayButton, Player, PlayToggle } from "video-react";
-import "../node_modules/video-react/dist/video-react.css";
+import "../../../node_modules/video-react/dist/video-react.css";
 import { ControlBar, PlaybackRateMenuButton, ReplayControl } from "video-react";
 import { useState } from "react";
-import { BASE_URL } from "./constants/constant";
+import { BASE_URL } from "../../constants/constant";
 
 const style = {
   position: "absolute",
@@ -22,7 +22,7 @@ const style = {
 
 
 export default function VideoModal({ open, setOpen, item, sbuck, sendMessage}) {
-  console.log("ITEM", item)
+  // console.log("ITEM", item)
   const handleOpen = () => {
     setOpen(true);
     console.log("true");
@@ -30,13 +30,6 @@ export default function VideoModal({ open, setOpen, item, sbuck, sendMessage}) {
   const [puburl, setPuburl] = useState(false);
   const handleClose = () => setOpen(false);
   
-  // const [vname, setVname] = useState("");
-  
-  // let FetchPlayVideo = async() => {
-  //   fetch(`http://127.0.0.1:7000/log/makepub`)
-  //   .then((res)=> res.json())
-  //   .then((data) => console.log(data));
-  // };
   let FetchPlayVideo = async() => {
     fetch(`${BASE_URL}/log/makepub`, {
     method: "POST",
@@ -45,18 +38,15 @@ export default function VideoModal({ open, setOpen, item, sbuck, sendMessage}) {
       buckName: sbuck 
     }),
     headers: {
-      "Content-type": "application/json; charset=UTF-8"
+      "Content-type": "application/json"
   }
 })
   .then(response => response.json())
   .then(json => setPuburl(json.publink));
 }
-console.log("puburlllll",puburl)
-
 
   return (
     <div>
-      {/* <Button onClick={handleOpen}>Open modal</Button> */}
       <PlayCircleRounderIcon
         sx={{ fontSize: "3rem", marginTop: ".35rem", color:"#D7B8FD"}}
          onClick={() => {handleOpen(); FetchPlayVideo(); sendMessage({video_id: item})}}
@@ -67,14 +57,8 @@ console.log("puburlllll",puburl)
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-      >
+>
         <Box sx={style}>
-          {/* <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography> */}
           {puburl && 
           <Player playsInline>
             <BigPlayButton position="center"/>
