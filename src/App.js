@@ -70,7 +70,7 @@ function App() {
               <Typography level="h4" component="h1" fontFamily={'Courier'} fontWeight={'semibold'}>
                 <b>Welcome To Elf Dashboard!!</b>{'\n'}
               </Typography>
-              <Typography level="body2" fontFamily={'Courier'} fontWeight={'semibold'}><b><i>!!! Tell me the password I'll let you in !!! </i></b></Typography>
+              <Typography level="body2" fontFamily={'Courier'} fontWeight={'semibold'}><b>Please Login</b></Typography>
             </div>
           </div>
         <div className="main-txt-btns">

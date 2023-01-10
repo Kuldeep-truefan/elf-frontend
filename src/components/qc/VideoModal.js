@@ -7,6 +7,7 @@ import "../../../node_modules/video-react/dist/video-react.css";
 import { ControlBar, PlaybackRateMenuButton, ReplayControl } from "video-react";
 import { useState } from "react";
 import { BASE_URL } from "../../constants/constant";
+import ReactLoading from "react-loading";
 
 const style = {
   position: "absolute",
@@ -23,28 +24,48 @@ const style = {
 
 export default function VideoModal({ open, setOpen, item, sbuck, sendMessage}) {
   // console.log("ITEM", item)
+  const [puburl, setPuburl] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const handleOpen = () => {
     setOpen(true);
     console.log("true");
   };
-  const [puburl, setPuburl] = useState(false);
-  const handleClose = () => setOpen(false);
-  
+  const handleClose = () => {
+    console.log("false")
+    setPuburl(false)
+    setOpen(false)};
+   
   let FetchPlayVideo = async() => {
-    fetch(`${BASE_URL}/log/makepub`, {
-    method: "POST",
-    body: JSON.stringify({
-      fileName: item,
-      buckName: sbuck 
-    }),
-    headers: {
-      "Content-type": "application/json"
-  }
-})
-  .then(response => response.json())
-  .then(json => setPuburl(json.publink));
-}
-
+       return new Promise(function(resolve, reject) {
+        try{
+          setLoading(true)
+          fetch(`${BASE_URL}/log/makepub`, {
+          method: "POST",
+          body: JSON.stringify({
+            fileName: item,
+            buckName: sbuck 
+          }),
+          headers: {
+            "Content-type": "application/json"
+        }
+      })
+        .then(response => response.json())
+        .then(json => { 
+          resolve(json);
+          });
+      }
+      catch{
+        reject("error")
+      }
+    }).then(
+      result => {
+          setLoading(false);
+          setPuburl(result.publink)
+      }, // shows "done!" after 1 second
+      error => alert(error) // doesn't run
+    );
+    };
   return (
     <div>
       <PlayCircleRounderIcon
@@ -69,6 +90,7 @@ export default function VideoModal({ open, setOpen, item, sbuck, sendMessage}) {
               <ReplayControl seconds={5}/>
             </ControlBar>
           </Player>}
+          {loading&&<Box sx={{display:"flex",justifyContent:"center",width:"100%"}}>Loading...<ReactLoading type="balls" color="#black"/></Box>}
         </Box>
       </Modal>
     </div>

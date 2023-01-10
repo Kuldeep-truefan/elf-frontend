@@ -9,14 +9,15 @@ import Box from '@mui/material/Box';
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import { BASE_URL } from "../../constants/constant";
+import ReactLoading from "react-loading";
 
 function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, emittedData}) {
   const [loadbucket, setLoadbucket] = useState("");
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('authToken');
+  const [loading, setLoading] = useState(false);
   
   // PROD ENV BUCKETS
-  // {label:"test-qc2",value:"dev-ans-test-qc2"}, {label:"test-final",value:"dev-ans-test-final"},
   const [loadbucketoption, setLoadbucketoption] = useState([{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}])
   const [movebucketoption, setMovebucketoption] = useState([{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}, {label:"qc-rejects",value:"qc-rejects"}])
   const defaultloadbucketoption = [{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}]
@@ -50,6 +51,7 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, 
       navigate('/')
     }
     try{
+        setLoading(true); // Set loading before sending API request
         fetch(`${BASE_URL}/log/getlink`,{
         method: "POST",
         body: JSON.stringify({  
@@ -62,8 +64,10 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, 
       })
       .then((response) => response.json())
       .then((data) => setLink(data.filename))
+      setLoading(false); // Stop loading
     }
     catch (error) {
+      setLoading(false);
       console.log("Error occured", error)
     }
   }
