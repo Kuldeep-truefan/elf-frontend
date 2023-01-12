@@ -7,7 +7,7 @@ import Stack from "@mui/material/Stack";
 import ReactAudioPlayer from 'react-audio-player';
 import audio from '../../assets/audio/jf-raw_aabheri.wav'
 
-const AudioModal = () => {
+const AudioQcPlayer = () => {
   return (
     <div>
       <Stack style={{position:"relative"}} direction="row" alignItems="center" spacing={2}>
@@ -17,25 +17,15 @@ const AudioModal = () => {
         </Button> */}
           <ReactAudioPlayer
             src = {audio}
-            autoPlay
+            volume
+            crossOrigin
+            className
             controls
             />
-        <p style={{position:"absolute", top:"2px", left:"10%", fontSize:"12px"}}>Attach Audio</p>
-        <ReactAudioPlayer
-            src = {audio}
-            autoPlay
-            controls
-            />
-        <p style={{position:"absolute", top:"2px", left:"45%", fontSize:"12px"}}>Last Audio</p>
-        <ReactAudioPlayer
-            src = {audio}
-            autoPlay
-            controls
-            />
-        <p style={{position:"absolute", top:"2px", left:"77%", fontSize:"12px"}}>Remarks Audio</p>
+        <p style={{position:"absolute", top:"2px", left:"35%", fontSize:"12px"}}>Audio File</p>
       </Stack>
     </div>
   );
 };
 
-export default AudioModal;
+export default AudioQcPlayer;

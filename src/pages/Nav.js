@@ -1,8 +1,8 @@
-import "./App.css";
-import logo1 from "./img/logo1.png";
+import "../../src/App.css"; 
+import logo1 from "../assets/img/logo1.png";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "./Sidebar";
+import Sidebar from "../components/Sidebar";
 import { useState } from "react";
 
 function Nav() {

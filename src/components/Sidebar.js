@@ -125,12 +125,12 @@ export default function PersistentDrawerLeft() {
           {[
             "DASHBOARD",
             "QUALITY CHECK",
+            "AUDIO MISPRONOUNCED",
+            "AUDIO QC",
             "SIMPLIFIED NAMES",
             "REDO LIP SYNC",
-            "AUDIO MISPRONOUNC",
-            "AUDIO MISTREATED",
           ].map((text, index) => (
-            <ListItem key={text}  onClick={()=>navigate(text==="QUALITY CHECK"?"/qc":"/nf")}>
+            <ListItem key={text} onClick={()=>navigate(text==="QUALITY CHECK"?"/qc":text==="AUDIO MISPRONOUNCED"?"/am":text==="AUDIO QC"?"/audioqc":"/nf")}>
               <ListItemButton>
                 <ListItemIcon>
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}

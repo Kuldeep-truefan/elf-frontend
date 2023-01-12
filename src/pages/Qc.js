@@ -1,5 +1,4 @@
 import "../App.css";
-import Nav from "../Nav";
 import { useEffect, useState, useCallback } from "react";
 import TileController from "../components/qc/TileController";
 import useWebSocket, { ReadyState } from 'react-use-websocket';
@@ -60,7 +59,7 @@ function Qc() {
   // console.log(setLink, 'setlink')
   return (
     <div className="Qc">
-      <Nav />
+
       <TileController setLink={setLink} setSbuck={setSbuck} emittedData={emittedData} setDbuck={setDbuck} destbucket={destbucket} setDestMove={setDestMove} />
       {link?.map((item, index) => {
         return <RowComponent key={index} setLink={setLink} handleClickSendMessage={handleClickSendMessage} destbucket={destbucket}  emittedData={emittedData}  item={item} sbuck={sbuck} dbuck={dbuck}  index={index} link={link}/>;

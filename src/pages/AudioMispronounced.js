@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../constants/constant";
 import AudioModal from "../components/am/AudioModal";
-import Nav from "../Nav";
+
 
 const AudioMispronounced = ({
   item,
@@ -25,7 +25,7 @@ const AudioMispronounced = ({
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
   const [remark, setRemark] = useState("");
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   // const[required,setRequired]=useState(false)
@@ -52,7 +52,7 @@ const AudioMispronounced = ({
 
   useEffect(() => {
     if (!destbucket) {
-      setIsDisabled(true);
+      setIsDisabled(false);
     } else if (option && status === "Rejected") setIsDisabled(false);
     else if (status && status !== "Rejected") {
       setIsDisabled(false);
@@ -61,7 +61,7 @@ const AudioMispronounced = ({
     }
   }, [status, option, destbucket]);
   return (
-    <div className="tiles">
+    <div className="am-tiles">
       <div className="main-tile">
         <div className="main-tile-head">
           <Typography
@@ -75,21 +75,20 @@ const AudioMispronounced = ({
               paddingLeft: "1rem",
             }}
           >
-            ritesh-singh_jk_bw_240620.wav
+            ritesh-singh.wav
           </Typography>
           {emittedData?.video_id === item && (
             <Chip
-              label={`In progress: ${emittedData?.user}`}
+              label={`In progress: admin`}
               sx={{ ml: "5px", backgroundColor: "white" }}
             />
           )}
         </div>
-
         <p className="video-name-dynamic">No Comment Found</p>
       </div>
-      <div className="main-tiles">
+      <div className="am-main-tiles">
       <AudioModal/>
-        <TextareaAutosize
+        {/* <TextareaAutosize
           required={true}
           className="remark-area"
           aria-label="minimum height"
@@ -97,7 +96,7 @@ const AudioMispronounced = ({
           placeholder="Remarks"
           value= ""
           onChange={handleChange}
-        />
+        /> */}
         <Button
           variant="contained"
           disabled={isDisabled}
