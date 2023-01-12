@@ -1,5 +1,6 @@
 import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -67,6 +68,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function PersistentDrawerLeft() {
+  const navigate=useNavigate()
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -122,13 +124,13 @@ export default function PersistentDrawerLeft() {
         <List>
           {[
             "DASHBOARD",
-            "QUALITY",
+            "QUALITY CHECK",
             "SIMPLIFIED NAMES",
             "REDO LIP SYNC",
             "AUDIO MISPRONOUNC",
             "AUDIO MISTREATED",
           ].map((text, index) => (
-            <ListItem key={text} disablePadding>
+            <ListItem key={text}  onClick={()=>navigate(text==="QUALITY CHECK"?"/qc":"/nf")}>
               <ListItemButton>
                 <ListItemIcon>
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
@@ -141,7 +143,7 @@ export default function PersistentDrawerLeft() {
         <Divider />
         <List>
           {["OPTION"].map((text, index) => (
-            <ListItem key={text} disablePadding>
+            <ListItem key={text} disablePadding >
               <ListItemButton>
                 <ListItemIcon>
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}

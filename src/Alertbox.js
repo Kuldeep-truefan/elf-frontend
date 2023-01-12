@@ -27,7 +27,7 @@ export default function Alertbox({ open, setOpen, item, status, option, remark }
 
   let GetQCDone = async() => {
     console.log("Prining GetQCDone")
-    fetch("http://127.0.0.1:7000/log/tilestatus",{
+    fetch("http://34.29.72.93:8000/log/tilestatus",{
       method:"POST", 
       body: JSON.stringify({  
         videoName: item,
@@ -73,7 +73,6 @@ export default function Alertbox({ open, setOpen, item, status, option, remark }
         <Fade in={open}>
           <Box sx={style}>
             <Typography
-
         sx={{padding: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center'}}
             >This Video will transferred to Finalm QC Folder {item}</Typography>
           <Button variant="outlined" onClick={GetQCDone} sx={{position: 'relative', left: '27%', bottom: '5%'}}>Yes!! Make it Final</Button>

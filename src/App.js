@@ -8,9 +8,10 @@ import {
   FormGroup,
   Typography,
 } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import Snackbar from '@mui/material/Snackbar';
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "./constants/constant";
 
 function App() {
   const navigate = useNavigate();
@@ -36,41 +37,40 @@ function App() {
     // console.log("usnerame",event.target.value)
   }
 
-  // useEffect(()=>{
-  //   console.log(username, 'anshul login')
-  // },[username])
-
   const handelPassword = (event) => {
     setPassword(event.target.value)
     console.log("password",event.target.value)
   }
-
+//   const myStyle={
+//     backgroundColor: "#ba57e8",
+//     height: "100vh"
+// };
 
   let FetchUser = async()=> {
-    fetch(`http://127.0.0.1:7000/log/api/token`, {
+    fetch(`${BASE_URL}/log/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username, password: password})
-    }).then(res=>{
-      if (res.status == 200) {
-        setState({ open: true });
-        navigate('/qc');
-      }
-      // else{
-      //   setState({ open: false});
-      // }
-      console.log('Response',res)})
+      }).then(res=>res.json()).then((data) => {
+          setState({ open: true });
+
+          localStorage.setItem('username', data.username)
+          console.log("Username in App js", data.username);
+          localStorage.setItem('authToken', JSON.stringify(data.access))
+          navigate('/qc');
+      })
   }
   return (
     <div className="App">
+      {/* <div style={myStyle}></div> */}
       <div className="login-div">
         <img src={logo}></img>
           <div className="wel-div">
             <div>
               <Typography level="h4" component="h1" fontFamily={'Courier'} fontWeight={'semibold'}>
-                <b>Welcome!</b>
+                <b>Welcome To Elf Dashboard!!</b>{'\n'}
               </Typography>
-              <Typography level="body2" fontFamily={'Courier'} fontWeight={'semibold'}>Sign in to continue.</Typography>
+              <Typography level="body2" fontFamily={'Courier'} fontWeight={'semibold'}><b>Please Login</b></Typography>
             </div>
           </div>
         <div className="main-txt-btns">
