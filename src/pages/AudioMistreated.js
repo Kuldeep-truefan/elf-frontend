@@ -1,17 +1,18 @@
+import React from 'react'
+import AudioMistreatedTile from '../components/aumistreated/AudioMistreatedTile'
+
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import "../App.css";
 import { Button, Chip, FormHelperText, Typography } from "@mui/material";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../constants/constant";
-import AudioModal from "../components/am/AudioModal";
 
 
-const AudioMispronounced = ({
+const AudioMistreated = ({
   item,
   sbuck,
   dbuck,
@@ -61,9 +62,8 @@ const AudioMispronounced = ({
     }
   }, [status, option, destbucket]);
   return (
-    <div className="am-tiles">
-        <h1 className='heading-screens'>Audio Mispronounced</h1>
-
+    <div className="amt-tiles">
+        <h1 className='heading-screens'>Audio Mistreated</h1>
       <div className="main-tile">
         <div className="main-tile-head">
           <Typography
@@ -89,7 +89,7 @@ const AudioMispronounced = ({
         <p className="video-name-dynamic">No Comment Found</p>
       </div>
       <div className="am-main-tiles">
-      <AudioModal/>
+      <AudioMistreatedTile/>
         {/* <TextareaAutosize
           required={true}
           className="remark-area"
@@ -145,7 +145,7 @@ const AudioMispronounced = ({
         <p className="video-name-dynamic">No Comment Found</p>
       </div>
       <div className="am-main-tiles">
-      <AudioModal/>
+      <AudioMistreatedTile/>
         {/* <TextareaAutosize
           required={true}
           className="remark-area"
@@ -180,4 +180,4 @@ const AudioMispronounced = ({
   );
 };
 
-export default AudioMispronounced;
+export default AudioMistreated;

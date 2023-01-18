@@ -10,6 +10,10 @@ import AudioMispronounced from "./pages/AudioMispronounced";
 import Qc from "./pages/Qc";
 import Nav from './pages/Nav';
 import AudioQc from './pages/AudioQc';
+import RedoLipSync from './pages/RedoLipSync';
+import SimplifiedNames from './pages/SimplifiedNames';
+import AudioMistreated from './pages/AudioMistreated';
+import ConfirmPronunciation from './pages/ConfirmPronunciation';
 
 const App = () => {
   const location = useLocation();
@@ -21,6 +25,11 @@ const App = () => {
         <Route path="/qc" element={<Qc />}/>
         <Route path="/am" element={<AudioMispronounced />}/>
         <Route path="/audioqc" element={<AudioQc/>}/>
+        <Route path="/redlip" element={<RedoLipSync/>}/>
+        <Route path="/simpname" element={<SimplifiedNames/>}/>
+        <Route path="/audiomt" element={<AudioMistreated/>}/>
+        <Route path="/confpron" element={<ConfirmPronunciation/>}/>    
+        <Route path="*" element={<PageNotFound/>}/>  
         <Route path="/nf" element={<PageNotFound/>}/>
         </Route>
       </Routes>

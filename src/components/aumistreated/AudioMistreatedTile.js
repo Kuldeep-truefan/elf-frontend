@@ -7,8 +7,8 @@ import Stack from "@mui/material/Stack";
 import ReactAudioPlayer from 'react-audio-player';
 import locaudio from '../../assets/audio/jf-raw_aabheri.wav'
 
-const AudioModal = () => {
-  const [showModal, setShowModal] = useState({attach:false, last:false , remark:false })
+const AudioMistreatedTile = () => {
+  const [showModal, setShowModal] = useState({raw:false, treated:false})
 
   const [aaudio, setAudio] = useState();
   const previewFile = (e) => {
@@ -32,37 +32,38 @@ const AudioModal = () => {
       {/* <Button variant="contained" component="label">
       Attach Audio
     </Button> */}
-        {!showModal.last?
-        <Button variant="contained" component="label" onClick={()=> setShowModal({...showModal,last:!showModal.last})}>
-          Last Audio
+        {!showModal.raw?
+        <Button variant="contained" component="label" onClick={()=> setShowModal({...showModal,raw:!showModal.raw})}>
+          Raw Audio
         </Button>:<ReactAudioPlayer
-          src = {locaudio}
+          src = {aaudio}
           controls
           />
-        } {showModal.attach&&<p style={{position:"absolute", top:"2px", left:"10%", fontSize:"12px"}}>Last Audio</p>}
+        } {showModal.raw&&<p style={{position:"absolute", top:"2px", left:"55%", fontSize:"12px"}}>Raw Audio</p>}
         
-        {!showModal.remark?
-        <Button variant="contained" component="label" onClick={()=> setShowModal({...showModal,remark:!showModal.remark})}>
-          Remarks Audio
+        {!showModal.treated?
+        <Button variant="contained" component="label" onClick={()=> setShowModal({...showModal,treated:!showModal.treated})}>
+          Treated Audio
         </Button>:<ReactAudioPlayer
-            src = {locaudio}
+          src = {aaudio}
           controls
           />
-        } {showModal.attach&&<p style={{position:"absolute", top:"2px", left:"10%", fontSize:"12px"}}>Remarks Audio</p>}
-        
+        } {showModal.treated&&<p style={{position:"absolute", top:"2px", left:"70%", fontSize:"12px"}}>Treated Audio</p>}
         {/* <ReactAudioPlayer
             src={locaudio}
             controls
+            volume
             />
-        <p style={{position:"absolute", top:"2px", left:"45%", fontSize:"12px"}}>Last Audio</p> */}
+        <p style={{position:"absolute", top:"2px", left:"45%", fontSize:"12px"}}>Raw Audio</p> */}
         {/* <ReactAudioPlayer
             src = {locaudio}
             controls
+            volume
             />
-        <p style={{position:"absolute", top:"2px", left:"77%", fontSize:"12px"}}>Remarks Audio</p> */}
+        <p style={{position:"absolute", top:"2px", left:"77%", fontSize:"12px"}}>Treated Audio</p> */}
       </Stack>
     </div>
   );
 };
 
-export default AudioModal;
+export default AudioMistreatedTile;

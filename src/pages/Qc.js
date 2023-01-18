@@ -59,7 +59,7 @@ function Qc() {
   // console.log(setLink, 'setlink')
   return (
     <div className="Qc">
-
+      <h1 className="video-qc-heading">Video Qc</h1>
       <TileController setLink={setLink} setSbuck={setSbuck} emittedData={emittedData} setDbuck={setDbuck} destbucket={destbucket} setDestMove={setDestMove} />
       {link?.map((item, index) => {
         return <RowComponent key={index} setLink={setLink} handleClickSendMessage={handleClickSendMessage} destbucket={destbucket}  emittedData={emittedData}  item={item} sbuck={sbuck} dbuck={dbuck}  index={index} link={link}/>;

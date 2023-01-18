@@ -129,8 +129,10 @@ export default function PersistentDrawerLeft() {
             "AUDIO QC",
             "SIMPLIFIED NAMES",
             "REDO LIP SYNC",
+            "AUDIO MISTREATED",
+            "CONFIRM PRONUNCIATION",
           ].map((text, index) => (
-            <ListItem key={text} onClick={()=>navigate(text==="QUALITY CHECK"?"/qc":text==="AUDIO MISPRONOUNCED"?"/am":text==="AUDIO QC"?"/audioqc":"/nf")}>
+            <ListItem key={text} onClick={()=>navigate(text==="QUALITY CHECK"?"/qc":text==="AUDIO MISPRONOUNCED"?"/am":text==="AUDIO QC"?"/audioqc":text==="REDO LIP SYNC"?"/redlip":text==="SIMPLIFIED NAMES"?"/simpname":text==="AUDIO MISTREATED"?"/audiomt":text==="CONFIRM PRONUNCIATION"?"/confpron":"/nf")}>
               <ListItemButton>
                 <ListItemIcon>
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}

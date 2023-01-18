@@ -61,6 +61,7 @@ const AudioQc = ({
     }, [status, option, destbucket]);
     return (
       <div className="am-tiles">
+        <h1 className='heading-screens'>Audio Qc</h1>
         <div className="main-tile">
           <div className="main-tile-head">
             <Typography
@@ -89,20 +90,22 @@ const AudioQc = ({
         <AudioQcPlayer/>
         <AudioRecorders/>
         {/* <SettingsVoiceRoundedIcon/> */}
-          <TextareaAutosize
-            required={true}
-            className="remark-area"
-            aria-label="minimum height"
-            minRows={2.2}
-            placeholder="Remarks"
-            value= ""
-            onChange={handleChange}
+        <TextareaAutosize
+          required={true}
+          className="remark-area"
+          aria-label="minimum height"
+          minRows={2.2}
+          placeholder="Remarks"
+          value={remark}
+          onChange={handleChange}
           />
+          <div>
           <Button
             variant="contained"
             disabled={isDisabled}
             sx={{
               height: "2.5rem",
+              marginRight: "1rem",
               // marginTop: ".46rem",
               backgroundColor: "#D7B8FD",
               color: "white",
@@ -112,7 +115,7 @@ const AudioQc = ({
               },
             }}
           >
-            Approve
+          Approve
           </Button>
           <Button
             variant="contained"
@@ -130,6 +133,7 @@ const AudioQc = ({
           >
             Reject
           </Button>
+          </div>
         </div> 
       </div>
     );
