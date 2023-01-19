@@ -27,6 +27,9 @@ const AudioMispronounced = ({
   const [remark, setRemark] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [sendFile, setSendFile] = useState("")
+  const [folderName, setFolderName] = useState("");
+
   const navigate = useNavigate();
   // const[required,setRequired]=useState(false)
   const accessToken = localStorage.getItem("authToken");
@@ -49,6 +52,31 @@ const AudioMispronounced = ({
     setRemark(event.target.value);
     console.log(event.target.value);
   };
+
+  const handelFormData = (event) => {
+    setSendFile(event.targetfiles[0])
+  }
+
+  let UploadAudioFileMispronounced = async () =>{
+    try{
+      const formData = new FormData();
+      formData.append('file', {
+        uri: folderName,
+        name: `${sendFile}`,
+        type: 'audio/wav'
+      })
+      fetch(`${BASE_URL}/audio/audio_mispronounced`,{
+        method: "POST",
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+        body: formData
+      })
+    }catch (error){
+      console.log("Error Occured", error);
+    }
+  };
+
 
   useEffect(() => {
     if (!destbucket) {
@@ -90,15 +118,6 @@ const AudioMispronounced = ({
       </div>
       <div className="am-main-tiles">
       <AudioModal/>
-        {/* <TextareaAutosize
-          required={true}
-          className="remark-area"
-          aria-label="minimum height"
-          minRows={2.2}
-          placeholder="Remarks"
-          value= ""
-          onChange={handleChange}
-        /> */}
         <Button
           variant="contained"x
           disabled={isDisabled}
