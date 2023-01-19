@@ -27,7 +27,7 @@ const AudioMispronounced = ({
   const [remark, setRemark] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [sendFile, setSendFile] = useState("")
+  const [sendFile, setSendFile] = useState(null)
   const [folderName, setFolderName] = useState("");
 
   const navigate = useNavigate();
@@ -53,27 +53,57 @@ const AudioMispronounced = ({
     console.log(event.target.value);
   };
 
-  const handelFormData = (event) => {
-    setSendFile(event.targetfiles[0])
+  const handleFolderName = (event) => {
+    console.log("Foldername")
+    setFolderName(event.target.value) 
   }
+  
+  const handleFile = (event) => {
+    // const audioUrl = URL.createObjectURL(event.target.files[0]);
+    setSendFile(event.target.files[0])
+  }
+  console.log("sendFile", sendFile)
 
   let UploadAudioFileMispronounced = async () =>{
+    // console.log("It is working");
+    // try{
+    //   const request = {
+    //     "audio": "sendFile.wav",
+    //     "folderName": "ak"
+    //   }
+    //   const formData = new FormData();
+    //   // formData.append('file', {url: folderName, name: `${sendFile}`, type: 'audio/wav'})
+    //   formData.append('audio',sendFile)
+    //   formData.append('folderName', "ak")
+    //   console.log("formdata", formData);
+    //   fetch(`${BASE_URL}/audio/audio_mispronounced`,{
+    //     method: "POST",
+    //     headers: {
+    //       'Content-Type': 'multipart/form-data'
+    //     },
+    //     body: formData
+    //   })
+    // }catch (error){
+    //   console.log("Error Occured", error);
+    // }
     try{
-      const formData = new FormData();
-      formData.append('file', {
-        uri: folderName,
-        name: `${sendFile}`,
-        type: 'audio/wav'
-      })
-      fetch(`${BASE_URL}/audio/audio_mispronounced`,{
-        method: "POST",
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        },
-        body: formData
-      })
-    }catch (error){
-      console.log("Error Occured", error);
+      let myHeaders = new Headers();
+      myHeaders.append("Cookie", "csrftoken=L2ETtVsdGnxYzQ4llNrKESv7Evm5nGa5N7SWvkTt488G43CzM7AnoWHJoxr8GNSC");
+  
+      let formdata = new FormData();
+      formdata.append("audio", sendFile);
+      formdata.append("folderName", "jk");
+  
+      let requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: formdata,
+      };
+      const response = await fetch("http://127.0.0.1:8000/audio/audio_mispronounced", requestOptions);
+      const convertToText = await response.text();
+      return convertToText 
+    }catch(error){
+      console.log(error);
     }
   };
 
@@ -96,6 +126,7 @@ const AudioMispronounced = ({
         <div className="main-tile-head">
           <Typography
             className="video-name"
+            onChange={handleFolderName}
             sx={{
               // fontSize: "11px",
               // width: "71.7%",
@@ -105,7 +136,7 @@ const AudioMispronounced = ({
               paddingLeft: "1rem",
             }}
           >
-            ritesh-singh.wav
+            ak
           </Typography>
           {emittedData?.video_id === item && (
             <Chip
@@ -117,9 +148,12 @@ const AudioMispronounced = ({
         <p className="video-name-dynamic">No Comment Found</p>
       </div>
       <div className="am-main-tiles">
-      <AudioModal/>
+      <AudioModal
+      onChange={handleFile}
+      />
         <Button
-          variant="contained"x
+          onClick = {UploadAudioFileMispronounced}
+          variant="contained"
           disabled={isDisabled}
           sx={{
             height: "2.5rem",
@@ -151,6 +185,7 @@ const AudioMispronounced = ({
               // right: "10%",
               paddingLeft: "1rem",
             }}
+            onChange={handleFolderName}
           >
             ritesh-singh.wav
           </Typography>
@@ -165,16 +200,8 @@ const AudioMispronounced = ({
       </div>
       <div className="am-main-tiles">
       <AudioModal/>
-        {/* <TextareaAutosize
-          required={true}
-          className="remark-area"
-          aria-label="minimum height"
-          minRows={2.2}
-          placeholder="Remarks"
-          value= ""
-          onChange={handleChange}
-        /> */}
         <Button
+          onClick = {UploadAudioFileMispronounced}
           variant="contained"
           disabled={isDisabled}
           sx={{
@@ -190,11 +217,7 @@ const AudioMispronounced = ({
         >
           Done
         </Button>
-        {/* <Alertbox 
-        open={alertOpen} setOpen={setAlertOpen} item={item} status={status} remark={remark} option= {option} onClick={handleAlert}
-        /> */}
       </div>
-      {/* <VideoModal open={open} setOpen={setOpen} /> */}
     </div>
   );
 };

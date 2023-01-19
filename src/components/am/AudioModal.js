@@ -7,7 +7,9 @@ import Stack from "@mui/material/Stack";
 import ReactAudioPlayer from "react-audio-player";
 import locaudio from "../../assets/audio/jf-raw_aabheri.wav";
 
-const AudioModal = () => {
+const AudioModal = ({
+  onChange
+}) => {
   const [showModal, setShowModal] = useState({
     attach: false,
     last: false,
@@ -33,7 +35,7 @@ const AudioModal = () => {
         {/* <input type="file" onChange={previewFile} /> */}
         <div style={{ width: "300px" }}>
           {!aaudio ? (
-            <input type="file" onChange={previewFile} />
+            <input type="file" onChange={onChange} />
           ) : (
             <audio src={aaudio} controls />
           )}
