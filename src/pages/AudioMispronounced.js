@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../constants/constant";
 import AudioModal from "../components/am/AudioModal";
-
+import CachedTwoToneIcon from "@mui/icons-material/CachedTwoTone";
 
 const AudioMispronounced = ({
   item,
@@ -27,9 +27,8 @@ const AudioMispronounced = ({
   const [remark, setRemark] = useState("");
   const [isDisabled, setIsDisabled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [sendFile, setSendFile] = useState(null)
-  const [folderName, setFolderName] = useState("");
-
+  const [audioFile, setAudioFile] = useState([]);
+  const [folderName, setFolderName] = useState("ak");
   const navigate = useNavigate();
   // const[required,setRequired]=useState(false)
   const accessToken = localStorage.getItem("authToken");
@@ -54,170 +53,144 @@ const AudioMispronounced = ({
   };
 
   const handleFolderName = (event) => {
-    console.log("Foldername")
-    setFolderName(event.target.value) 
-  }
-  
-  const handleFile = (event) => {
-    // const audioUrl = URL.createObjectURL(event.target.files[0]);
-    setSendFile(event.target.files[0])
-  }
-  console.log("sendFile", sendFile)
+    setFolderName(event.target.value);
+    console.log("Foldername", event.target.value);
+  };
 
-  let UploadAudioFileMispronounced = async () =>{
-    // console.log("It is working");
-    // try{
-    //   const request = {
-    //     "audio": "sendFile.wav",
-    //     "folderName": "ak"
-    //   }
-    //   const formData = new FormData();
-    //   // formData.append('file', {url: folderName, name: `${sendFile}`, type: 'audio/wav'})
-    //   formData.append('audio',sendFile)
-    //   formData.append('folderName', "ak")
-    //   console.log("formdata", formData);
-    //   fetch(`${BASE_URL}/audio/audio_mispronounced`,{
-    //     method: "POST",
-    //     headers: {
-    //       'Content-Type': 'multipart/form-data'
-    //     },
-    //     body: formData
-    //   })
-    // }catch (error){
-    //   console.log("Error Occured", error);
-    // }
-    try{
+  let UploadAudioFileMispronounced = async () => {
+    try {
       let myHeaders = new Headers();
-      myHeaders.append("Cookie", "csrftoken=L2ETtVsdGnxYzQ4llNrKESv7Evm5nGa5N7SWvkTt488G43CzM7AnoWHJoxr8GNSC");
-  
+      myHeaders.append(
+        "Cookie",
+        "csrftoken=L2ETtVsdGnxYzQ4llNrKESv7Evm5nGa5N7SWvkTt488G43CzM7AnoWHJoxr8GNSC"
+      );
+
       let formdata = new FormData();
-      formdata.append("audio", sendFile);
-      formdata.append("folderName", "jk");
-  
+      // formdata.append("audio", sendFile.file);
+      formdata.append("folderName", folderName);
+
       let requestOptions = {
-        method: 'POST',
+        method: "POST",
         headers: myHeaders,
         body: formdata,
       };
-      const response = await fetch("http://127.0.0.1:8000/audio/audio_mispronounced", requestOptions);
+      const response = await fetch(
+        "http://127.0.0.1:8000/audio/audio_mispronounced",
+        requestOptions
+      );
       const convertToText = await response.text();
-      return convertToText 
-    }catch(error){
+      return convertToText;
+    } catch (error) {
       console.log(error);
     }
   };
 
+  let FetchAudioMisTiles = async () => {
+    console.log("In FetchAudioMisTiles");
 
-  useEffect(() => {
-    if (!destbucket) {
-      setIsDisabled(false);
-    } else if (option && status === "Rejected") setIsDisabled(false);
-    else if (status && status !== "Rejected") {
-      setIsDisabled(false);
-    } else {
-      setIsDisabled(true);
+    if (!accessToken) {
+      navigate("/");
     }
-  }, [status, option, destbucket]);
+    try {
+      // setLoading(true); // Set loading before sending API request
+      fetch(`${BASE_URL}/audio/audiomis`, {
+        method: "GET",
+        // body: JSON.stringify({
+        //   bucketName: loadbucket,
+        // }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => setAudioFile(data.filename))
+        .then((data) => console.log(data));
+      // setLoading(false); // Stop loading
+    } catch (error) {
+      // setLoading(false);
+      console.log("Error occured", error);
+    }
+  };
+
+  // useEffect(() => {
+  //   if (!destbucket) {
+  //     setIsDisabled(false);
+  //   } else if (option && status === "Rejected") setIsDisabled(false);
+  //   else if (status && status !== "Rejected") {
+  //     setIsDisabled(false);
+  //   } else {
+  //     setIsDisabled(true);
+  //   }
+  // }, [status, option, destbucket]);
   return (
     <div className="am-tiles">
-        <h1 className='heading-screens'>Audio Mispronounced</h1>
-
-      <div className="main-tile">
-        <div className="main-tile-head">
-          <Typography
-            className="video-name"
-            onChange={handleFolderName}
-            sx={{
-              // fontSize: "11px",
-              // width: "71.7%",
-              // marginLeft: "2.4rem",
-              // position: "relative",
-              // right: "10%",
-              paddingLeft: "1rem",
-            }}
-          >
-            ak
-          </Typography>
-          {emittedData?.video_id === item && (
-            <Chip
-              label={`In progress: admin`}
-              sx={{ ml: "5px", backgroundColor: "white" }}
-            />
-          )}
-        </div>
-        <p className="video-name-dynamic">No Comment Found</p>
-      </div>
-      <div className="am-main-tiles">
-      <AudioModal
-      onChange={handleFile}
-      />
+      <h1 className="heading-screens">Audio Mispronounced</h1>
+      <div className="audio-refresh-btn">
         <Button
-          onClick = {UploadAudioFileMispronounced}
+          onClick={FetchAudioMisTiles}
           variant="contained"
+          disableElevation
           disabled={isDisabled}
-          sx={{
-            height: "2.5rem",
-            // marginTop: ".46rem",
-            backgroundColor: "#D7B8FD",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#ad6efb",
-              color: "#fff",
-            },
-          }}
+          // sx={{
+          //   height: "2.5rem",
+          //   // marginTop: ".46rem",
+          //   backgroundColor: "#D7B8FD",
+          //   color: "white",
+          //   "&:hover": {
+          //     backgroundColor: "#ad6efb",
+          //     color: "#fff",
+          //   },
+          // }}
         >
-          Done
-        </Button>
-        {/* <Alertbox 
-        open={alertOpen} setOpen={setAlertOpen} item={item} status={status} remark={remark} option= {option} onClick={handleAlert}
-        /> */}
-      </div>
-      <br/>
-      <div className="main-tile">
-        <div className="main-tile-head">
-          <Typography
-            className="video-name"
-            sx={{
-              // fontSize: "11px",
-              // width: "71.7%",
-              // marginLeft: "2.4rem",
-              // position: "relative",
-              // right: "10%",
-              paddingLeft: "1rem",
-            }}
-            onChange={handleFolderName}
-          >
-            ritesh-singh.wav
-          </Typography>
-          {emittedData?.video_id === item && (
-            <Chip
-              label={`In progress: admin`}
-              sx={{ ml: "5px", backgroundColor: "white" }}
-            />
-          )}
-        </div>
-        <p className="video-name-dynamic">No Comment Found</p>
-      </div>
-      <div className="am-main-tiles">
-      <AudioModal/>
-        <Button
-          onClick = {UploadAudioFileMispronounced}
-          variant="contained"
-          disabled={isDisabled}
-          sx={{
-            height: "2.5rem",
-            // marginTop: ".46rem",
-            backgroundColor: "#D7B8FD",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#ad6efb",
-              color: "#fff",
-            },
-          }}
-        >
-          Done
+          GET AUDIOS 
         </Button>
       </div>
+      {audioFile?.map((value, index) => (
+        <div className="au-mis">
+          <div className="main-tile">
+            <div className="main-tile-head">
+              <Typography
+                className="video-name"
+                onChange={handleFolderName}
+                sx={{
+                  paddingLeft: "1rem",
+                }}
+              >
+                {value}
+              </Typography>
+              {emittedData?.video_id === item && (
+                <Chip
+                  label={`In progress: admin`}
+                  sx={{ ml: "5px", backgroundColor: "white" }}
+                />
+              )}
+            </div>
+            <p className="video-name-dynamic">No Comment Found</p>
+          </div>
+          <div className="am-main-tiles">
+            <AudioModal 
+            value={value}/>
+            <Button
+              onClick={UploadAudioFileMispronounced}
+              variant="contained"
+              disabled={isDisabled}
+              sx={{
+                height: "2.5rem",
+                // marginTop: ".46rem",
+                backgroundColor: "#D7B8FD",
+                color: "white",
+                "&:hover": {
+                  backgroundColor: "#ad6efb",
+                  color: "#fff",
+                },
+              }}
+            >
+              Done
+            </Button>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

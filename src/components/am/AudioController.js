@@ -1,1 +1,0 @@
-// Only once button to refresh the tiles

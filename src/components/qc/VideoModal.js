@@ -23,7 +23,6 @@ const style = {
 
 
 export default function VideoModal({ open, setOpen, item, sbuck, sendMessage}) {
-  // console.log("ITEM", item)
   const [puburl, setPuburl] = useState(false);
   const [loading, setLoading] = useState(false);
 

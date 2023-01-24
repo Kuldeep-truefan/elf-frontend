@@ -292,3 +292,23 @@
   font-family: Heiti SC;
   margin-bottom: -50px;
 }
+
+
+.au-mis{
+  margin-top: 1rem;
+}
+
+.css-hip9hq-MuiPaper-root-MuiAppBar-root{
+  background-color: #000 !important;
+}
+
+.audio-refresh-btn{
+  display: flex;
+  position: relative;
+  justify-content: flex-end;
+  top: -10px;
+}
+
+.css-1yo1jo6-MuiStack-root>:not(style)+:not(style){
+  background-color: solid #7F377F;
+}
