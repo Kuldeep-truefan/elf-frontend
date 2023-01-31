@@ -4,6 +4,7 @@ import TileController from "../components/qc/TileController";
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { WEB_BASE_URL } from "../constants/constant";
 import RowComponent from "../components/qc/RowComponent";
+// import { AnimationWrapper } from 'react-hover-animation'
 
 function Qc() {
   const [link, setLink] = useState([]);
@@ -24,7 +25,6 @@ function Qc() {
       console.log(message, "------------------")
       const data =JSON.parse(message?.data);
       if(data?.msg==="updated"){
-
       }
       setemittedData(JSON.parse(data?.data))
       // console.log("qc",J);
@@ -59,7 +59,9 @@ function Qc() {
   // console.log(setLink, 'setlink')
   return (
     <div className="Qc">
+
       <h1 className="video-qc-heading">Video Qc</h1>
+
       <TileController setLink={setLink} setSbuck={setSbuck} emittedData={emittedData} setDbuck={setDbuck} destbucket={destbucket} setDestMove={setDestMove} />
       {link?.map((item, index) => {
         return <RowComponent key={index} setLink={setLink} handleClickSendMessage={handleClickSendMessage} destbucket={destbucket}  emittedData={emittedData}  item={item} sbuck={sbuck} dbuck={dbuck}  index={index} link={link}/>;

@@ -114,7 +114,7 @@ const AudioQc = ({
           </div>
           <div className="am-main-tiles">
             <AudioQcPlayer />
-            <AudioRecorders />
+            <AudioRecorders value={value}/>
             {/* <SettingsVoiceRoundedIcon/> */}
             <TextareaAutosize
               required={true}

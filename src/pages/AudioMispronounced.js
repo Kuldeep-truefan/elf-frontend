@@ -1,29 +1,11 @@
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 import "../App.css";
 import { Button, Chip, FormHelperText, Typography } from "@mui/material";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../constants/constant";
 import AudioModal from "../components/am/AudioModal";
 
-const AudioMispronounced = ({
-  item,
-  sbuck,
-  dbuck,
-  handleClickSendMessage,
-  emittedData,
-  setLink,
-  index,
-  link,
-  destbucket,
-}) => {
-  const [status, setStatus] = useState("");
-  const [option, setOptions] = useState("");
-  const [remark, setRemark] = useState("");
+const AudioMispronounced = ({ item, emittedData , sendFile}) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [open, setOpen] = useState(false);
   const [audioFile, setAudioFile] = useState([]);
@@ -37,52 +19,40 @@ const AudioMispronounced = ({
     console.log(open);
   };
 
-  const handleStatus = (event) => {
-    setStatus(event.target.value);
-  };
+  // const handleFolderName = (event) => {
+  //   setFolderName(event.target.value);
+  //   console.log("Foldername", event.target.value);
+  // };
 
-  const handleOptions = (event) => {
-    setOptions(event.target.value);
-    console.log(event.target.value);
-  };
 
-  const handleChange = (event) => {
-    setRemark(event.target.value);
-    console.log(event.target.value);
-  };
+  // let UploadAudioFileMispronounced = async (event, fileName, subBuckName) => {
+  //   try {
+  //     let myHeaders = new Headers();
+  //     myHeaders.append(
+  //       "Cookie", 
+  //       "csrftoken=L2ETtVsdGnxYzQ4llNrKESv7Evm5nGa5N7SWvkTt488G43CzM7AnoWHJoxr8GNSC"
+  //     );
+  //     // console.log(audiodata, "AUDIODATA");
+  //     let formdata = new FormData();
+  //     formdata.append("audioData", sendFile.file);
+  //     formdata.append("fileName", `${fileName}.wav`);
+  //     formdata.append("folderName", `${subBuckName}-raw`);
 
-  const handleFolderName = (event) => {
-    setFolderName(event.target.value);
-    console.log("Foldername", event.target.value);
-  };
-
-  let UploadAudioFileMispronounced = async () => {
-    try {
-      let myHeaders = new Headers();
-      myHeaders.append(
-        "Cookie",
-        "csrftoken=L2ETtVsdGnxYzQ4llNrKESv7Evm5nGa5N7SWvkTt488G43CzM7AnoWHJoxr8GNSC"
-      );
-
-      let formdata = new FormData();
-      // formdata.append("audio", sendFile.file);
-      formdata.append("folderName", folderName);
-
-      let requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: formdata,
-      };
-      const response = await fetch(
-        "http://127.0.0.1:8000/audio/audio_mispronounced",
-        requestOptions
-      );
-      const convertToText = await response.text();
-      return convertToText;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     let requestOptions = {
+  //       method: "POST",
+  //       headers: myHeaders,
+  //       body: formdata,
+  //     };
+  //     const response = await fetch(
+  //       `${BASE_URL}/audio/audio_mispronounced`,
+  //       requestOptions
+  //     );
+  //     const convertToText = await response.text();
+  //     return convertToText;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   let FetchAudioMisTiles = async () => {
     if (!accessToken) {
@@ -142,13 +112,14 @@ const AudioMispronounced = ({
           GET AUDIO Mispronounced
         </Button>
       </div>
+      
       {audioFile?.map((value, index) => (
-        <div className="au-mis">
+        <div key={index} className="au-mis">
           <div className="main-tile">
             <div className="main-tile-head">
               <Typography
                 className="video-name"
-                onChange={handleFolderName}
+                // onChange={handleFolderName}
                 sx={{
                   paddingLeft: "1rem",
                 }}
@@ -165,41 +136,7 @@ const AudioMispronounced = ({
             <p className="video-name-dynamic">No Comment Found</p>
           </div>
           <div className="am-main-tiles">
-            <AudioModal 
-            value={value}/>
-            <Button
-              // onClick={UploadAudioFileMispronounced}
-              variant="contained"
-              sx={{
-                height: "2.5rem",
-                // marginTop: ".46rem",
-                backgroundColor: "#D7B8FD",
-                color: "white",
-                "&:hover": {
-                  backgroundColor: "#ad6efb",
-                  color: "#fff",
-                },
-              }}
-            >
-              Audio Uncracked
-            </Button>
-            <Button
-              onClick={UploadAudioFileMispronounced}
-              variant="contained"
-              disabled={isDisabled}
-              sx={{
-                height: "2.5rem",
-                // marginTop: ".46rem",
-                backgroundColor: "#D7B8FD",
-                color: "white",
-                "&:hover": {
-                  backgroundColor: "#ad6efb",
-                  color: "#fff",
-                },
-              }}
-            >
-              Done
-            </Button>
+            <AudioModal value={value} sendFile={sendFile}/>
           </div>
         </div>
       ))}
