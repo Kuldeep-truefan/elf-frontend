@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../constants/constant";
 import AudioModal from "../components/am/AudioModal";
-import CachedTwoToneIcon from "@mui/icons-material/CachedTwoTone";
 
 const AudioMispronounced = ({
   item,
@@ -86,8 +85,6 @@ const AudioMispronounced = ({
   };
 
   let FetchAudioMisTiles = async () => {
-    console.log("In FetchAudioMisTiles");
-
     if (!accessToken) {
       navigate("/");
     }
@@ -112,7 +109,6 @@ const AudioMispronounced = ({
       console.log("Error occured", error);
     }
   };
-
   // useEffect(() => {
   //   if (!destbucket) {
   //     setIsDisabled(false);
@@ -143,7 +139,7 @@ const AudioMispronounced = ({
           //   },
           // }}
         >
-          GET AUDIOS 
+          GET AUDIO Mispronounced
         </Button>
       </div>
       {audioFile?.map((value, index) => (
@@ -171,6 +167,22 @@ const AudioMispronounced = ({
           <div className="am-main-tiles">
             <AudioModal 
             value={value}/>
+            <Button
+              // onClick={UploadAudioFileMispronounced}
+              variant="contained"
+              sx={{
+                height: "2.5rem",
+                // marginTop: ".46rem",
+                backgroundColor: "#D7B8FD",
+                color: "white",
+                "&:hover": {
+                  backgroundColor: "#ad6efb",
+                  color: "#fff",
+                },
+              }}
+            >
+              Audio Uncracked
+            </Button>
             <Button
               onClick={UploadAudioFileMispronounced}
               variant="contained"

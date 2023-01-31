@@ -5,7 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import ReactAudioPlayer from "react-audio-player";
-import locaudio from "../../assets/audio/jf-raw_aabheri.wav";
+// import locaudio from "../../assets/audio/jf-raw_aabheri.wav";
 import { BASE_URL } from "../../constants/constant";
 
 const AudioModal = ({
@@ -22,7 +22,7 @@ const AudioModal = ({
   };
   console.log("sendFile--==-----", sendFile)
   const fileFirstName = value.split("_")[0]
-  const fileBucket = value.split("_")[1]
+  const fileBucket = value.split("_")[1]  
   console.log('fileFirstName',fileFirstName);
   const [showModal, setShowModal] = useState({
     attach: false,
@@ -48,7 +48,7 @@ const AudioModal = ({
          fileName: fileFirstName&&`${fileFirstName}.wav`,
          buckName: "dev-ans-test-final",
         //  subpath:fileBucket&&`${fileBucket}-raw`
-        subpath:'ak'
+         subpath:fileBucket&&`${fileBucket}`
       }),
        headers: {
          "Content-type": "application/json"
@@ -152,7 +152,7 @@ const AudioModal = ({
           //   Remarks Audio
           // </Button>
         ) : (
-          <ReactAudioPlayer src={locaudio} controls />
+          <ReactAudioPlayer src={audioUrl} controls />
         )}{" "}
         {showModal.attach && (
           <p

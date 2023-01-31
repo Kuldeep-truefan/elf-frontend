@@ -4,7 +4,7 @@ import ConfirmPronTile from '../components/confirmpronunciation/ConfirmPronTile'
 const ConfirmPronunciation = () => {
   return (
     <div>
-    <ConfirmPronTile/>
+      <ConfirmPronTile/>
     </div>
   )
 }

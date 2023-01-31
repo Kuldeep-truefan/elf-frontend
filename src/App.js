@@ -22,6 +22,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Login />}/>
         <Route path="/" element={<PrivateRoute/>}>
+          
         <Route path="/qc" element={<Qc />}/>
         <Route path="/am" element={<AudioMispronounced />}/>
         <Route path="/audioqc" element={<AudioQc/>}/>
@@ -29,6 +30,7 @@ const App = () => {
         <Route path="/simpname" element={<SimplifiedNames/>}/>
         <Route path="/audiomt" element={<AudioMistreated/>}/>
         <Route path="/confpron" element={<ConfirmPronunciation/>}/>    
+
         <Route path="*" element={<PageNotFound/>}/>  
         <Route path="/nf" element={<PageNotFound/>}/>
         </Route>

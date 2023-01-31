@@ -5,7 +5,6 @@ import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import ReactAudioPlayer from 'react-audio-player';
-import locaudio from '../../assets/audio/jf-raw_aabheri.wav'
 import { BASE_URL } from "../../constants/constant";
 
 const AudioModal = () => {

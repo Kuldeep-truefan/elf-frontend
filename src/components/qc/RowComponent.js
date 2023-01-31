@@ -104,7 +104,6 @@ const RowComponent = ({
   return (
     <div className="tiles">
       <div className="main-tile">
-      
         <div className="main-tile-head">
           <Typography
             className="video-name"

@@ -159,6 +159,23 @@ const ConfirmPronTile = (
             },
           }}
         >
+          Refunded
+        </Button>
+        <Button
+          // onClick={GetQCDone}
+          variant="contained"
+          // disabled={isDisabled}
+          sx={{
+            height: "2.5rem",
+            // marginTop: ".46rem",
+            backgroundColor: "#D7B8FD",
+            color: "white",
+            "&:hover": {
+              backgroundColor: "#ad6efb",
+              color: "#fff",
+            },
+          }}
+        >
           Confirmed
         </Button>
       </div>
