@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../constants/constant";
 import AudioModal from "../components/am/AudioModal";
+import ColorCheckboxes from "../components/CheckBoxPick.js/ColorCheckboxes";
 
 const AudioMispronounced = ({ item, emittedData , sendFile}) => {
   const [isDisabled, setIsDisabled] = useState(false);
@@ -90,7 +91,7 @@ const AudioMispronounced = ({ item, emittedData , sendFile}) => {
   //   }
   // }, [status, option, destbucket]);
   return (
-    <div className="am-tiles">
+    <div className="aumis-tiles">
       <h1 className="heading-screens">Audio Mispronounced</h1>
       <div className="audio-refresh-btn">
         <Button
@@ -116,6 +117,7 @@ const AudioMispronounced = ({ item, emittedData , sendFile}) => {
       {audioFile?.map((value, index) => (
         <div key={index} className="au-mis">
           <div className="main-tile">
+          <ColorCheckboxes/>
             <div className="main-tile-head">
               <Typography
                 className="video-name"

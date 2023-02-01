@@ -65,6 +65,8 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import logo1 from "../assets/img/logo1.png";
 import { useNavigate } from "react-router-dom";
+import { useState , useEffect} from "react";
+
 
 const pages = [
   "",
@@ -79,8 +81,8 @@ const pages = [
 const settings = ["Profile", "Dashboard", "Logout"];
 
 function Nav() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -97,9 +99,8 @@ function Nav() {
     setAnchorElUser(null);
   };
   const navigate = useNavigate();
-
+  
   return (
-    <div>
       <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
@@ -247,7 +248,6 @@ function Nav() {
           </Toolbar>
         </Container>
       </AppBar>
-    </div>
   );
 }
 export default Nav;

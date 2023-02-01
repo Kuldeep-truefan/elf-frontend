@@ -87,6 +87,7 @@ export default function VideoModal({ open, setOpen, item, sbuck, sendMessage}) {
               <PlayToggle />
               <PlaybackRateMenuButton rates={[5, 2, 1, 0.5, 0.1]} />
               <ReplayControl seconds={5}/>
+             
             </ControlBar>
           </Player>}
           {loading&&<Box sx={{display:"flex",justifyContent:"center",width:"100%"}}>Loading...<ReactLoading type="balls" color="#black"/></Box>}

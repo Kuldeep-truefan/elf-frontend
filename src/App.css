@@ -246,7 +246,14 @@
   position: relative;
   top: 4rem;
 }
-
+.aumis-tiles{
+  margin-top: 1.3rem;
+  width: 90.3%;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  top: 4rem;
+}
 .sn-tiles{
   margin-top: 1.3rem;
   width: 60%;
@@ -319,3 +326,9 @@
 .css-1yo1jo6-MuiStack-root>:not(style)+:not(style){
   background-color: solid #7F377F;
 }
+
+.css-1yo1jo6-MuiStack-root>:not(style)+:not(style){
+  margin: 0 !important;
+  margin-left: 78px !important;
+}
+
