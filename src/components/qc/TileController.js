@@ -71,6 +71,7 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, 
       console.log("Error occured", error)
     }
   }
+  
   const handleClick = () => {
     FetchLink();
   }

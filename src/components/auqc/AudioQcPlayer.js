@@ -7,7 +7,9 @@ import Stack from "@mui/material/Stack";
 import ReactAudioPlayer from 'react-audio-player';
 import { BASE_URL } from "../../constants/constant";
 
-const AudioModal = () => {
+const AudioModal = ({
+    value
+  }) => {
   const [showAudio, setShowAudio] = useState({afile:false})
 
   const [aaudio, setAudio] = useState();
@@ -16,7 +18,7 @@ const AudioModal = () => {
     setAudio(audioUrl);
   };
   
-  let FetchAudioQc = async() => {
+  let FetchAudioQc = async(audioQcFileName, qcBucketName) => {
     return new Promise(function(resolve, reject) {
      try{
       //  setLoading(true)
@@ -24,10 +26,9 @@ const AudioModal = () => {
        method: "POST",
        body: JSON.stringify({
         //  fileName: fileFirstName&&`${fileFirstName}.wav`,
-         fileName: 'ak-raw_Samarpita.wav',
-         buckName: "dev-ans-test-final",
-        //  subpath:fileBucket&&`${fileBucket}-raw`
-        subpath:'ak'
+         fileName: `${audioQcFileName}.wav`,
+         buckName: 'dev-ans-test-final',
+         subpath:`${qcBucketName}-raw`
       }),
        headers: {
          "Content-type": "application/json"
@@ -55,7 +56,7 @@ const AudioModal = () => {
       <Stack style={{position:"relative"}} direction="row" alignItems="center" spacing={2}>
         {!showAudio.afile?
         <Button variant="contained" component="label" onClick={()=> {
-          FetchAudioQc()
+          FetchAudioQc(value.split("_")[0], value.split("_")[1])
           setShowAudio({...showAudio,afile:!showAudio.afile})}
         }
         >

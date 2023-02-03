@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
@@ -12,17 +12,21 @@ const accessToken = localStorage.getItem("authToken");
 const AudioModal = ({ value}) => {
   const [sendFile, setSendFile] = useState(null);
 
-  const handleFile = (event) => {
-    const audioUrl = URL.createObjectURL(event.target.files[0]);
-    setSendFile({
-      url: audioUrl,
-      file: event.target.files[0],
-    });
-  };
-  // console.log(File[0].name);
+  // console.log(audioUrl);
   const fileFirstName = value.split("_")[0];
   const fileBucket = value.split("_")[1];
-  console.log("fileFirstName", fileFirstName);
+  
+  const handleFile = (event) => {
+    if (`${event.target.files[0]?.name}.wav` !== `${fileFirstName}.wav`){
+      alert("Filename not correct")
+    }else if(`${event.target.files[0]?.name}.wav` === `${fileFirstName}.wav`){
+      const audioUrl = URL.createObjectURL(event.target.files[0]);
+      setSendFile({
+        url: audioUrl,
+        file: event.target.files[0],
+      });
+    }
+  };
 
   const [showModal, setShowModal] = useState({
     attach: false,
@@ -37,22 +41,18 @@ const AudioModal = ({ value}) => {
     setAudio(audioUrl);
   };
   const [showAlert, setShowAlert] = useState(false);
-  const handleYes = () => {
-    showAlert(false);
-  };
-  const handleNo = () => {
-    showAlert(false);
-  };
+
   // const alertUncracked = () => {
   //   alert("Are you sure!!");
   // };
 
 
-  const showConfirmBox = () => {
-    if (window.confirm("Do you want to proceed?")) {
-      alert();
-    } 
-  };  
+  // const showConfirmBox = () => {
+  //   if (window.confirm("Do you want to proceed?")) {
+  //     alert();
+  //   } 
+  //   alert("Do you want to proceed")
+  // };    
 
   // const alertUncracked = () => {
   //   let text = "Press a button!\nEither OK or Cancel.";
@@ -232,8 +232,9 @@ const AudioModal = ({ value}) => {
         <Button
           onClick={() => {
             // alertUncracked();
-            showConfirmBox();
-            AudioUncracked(value.split("_")[3].split(".")[0]);
+            if (window.confirm("Do you want to proceed?")) {
+              AudioUncracked(value.split("_")[3].split(".")[0]);
+            } 
           }}
           variant="contained"
           sx={{

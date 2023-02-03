@@ -25,6 +25,7 @@ const AudioQc = ({
   const [audioQcFiles, setAudioQcFiles] = useState([]);
   const [isDisabled, setIsDisabled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [recordedAudio, setRecordedAudio] = useState();
   const navigate = useNavigate();
   // const[required,setRequired]=useState(false)
   const accessToken = localStorage.getItem("authToken");
@@ -35,13 +36,66 @@ const AudioQc = ({
   };
 
   // const handleStatus = (event) => {
-  //   setStatus(event.target.value);
+  //   setRemark(event.target.value);
   // };
 
   // const handleOptions = (event) => {
   //   setOptions(event.target.value);
   //   console.log(event.target.value);
   // };
+
+
+  let UploadAudioRecored = async (fullFileName, vidAuRec) => {
+    try {
+      let myHeaders = new Headers();
+      myHeaders.append(
+        "Cookie",
+        "csrftoken=L2ETtVsdGnxYzQ4llNrKESv7Evm5nGa5N7SWvkTt488G43CzM7AnoWHJoxr8GNSC"
+      );
+
+      let formdata = new FormData();
+      formdata.append("fileName", fullFileName);
+      formdata.append("file", recordedAudio);
+      formdata.append("folderName", 'audio-remarks');
+      formdata.append("videoId", vidAuRec);
+      console.log(recordedAudio, "recordedAudio------>>>>>>");
+
+      let requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: formdata,
+      };
+      const response = await fetch(`${BASE_URL}/audio/upload-rec-auqc-file`,
+        requestOptions
+      );
+      const convertToText = await response.text();
+      return convertToText;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  let UpdateQcComtStatus = async (audioQcStatus, audioId, remark) => {
+    try{
+        fetch(`${BASE_URL}/audio/qccommentstatus`,{
+        method: "POST",
+        body: JSON.stringify({  
+          audioStatus: audioQcStatus,
+          audioQcId: audioId,
+          audioQcRemarks: remark
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+      // .then((response) => response.json())
+      // .then((data) => setLink(data.filename))
+      // setLoading(false); // Stop loading
+    }
+    catch (error) {
+      console.log("Error occured", error)
+    }
+  }
 
   const handleChange = (event) => {
     setRemark(event.target.value);
@@ -50,7 +104,6 @@ const AudioQc = ({
 
   let FetchAudioQcTiles = async () => {
     console.log("In FetchAudioMisTiles");
-
     if (!accessToken) {
       navigate("/");
     }
@@ -65,17 +118,17 @@ const AudioQc = ({
       })
         .then((response) => response.json())
         .then((data) => setAudioQcFiles(data.filename))
-        .then((data) => console.log(data));
+        // .then((data) => console.log(data));
       // setLoading(false); // Stop loading
     } catch (error) {
       // setLoading(false);
       console.log("Error occured", error);
     }
-  };
+  };  
 
   return (
     <div className="am-tiles">
-      <h1 className="heading-screens">Audio Qc</h1>
+      <h1 className="heading-screens">Audio QC</h1>
       <div className="audio-refresh-btn">
         <Button
           onClick={FetchAudioQcTiles}
@@ -113,8 +166,8 @@ const AudioQc = ({
             <p className="video-name-dynamic">No Comment Found</p>
           </div>
           <div className="am-main-tiles">
-            <AudioQcPlayer />
-            <AudioRecorders value={value}/>
+            <AudioQcPlayer value={value}/>
+            <AudioRecorders setRecordedAudio={setRecordedAudio}/>
             {/* <SettingsVoiceRoundedIcon/> */}
             <TextareaAutosize
               required={true}
@@ -129,6 +182,9 @@ const AudioQc = ({
               <Button
                 variant="contained"
                 disabled={isDisabled}
+                onClick={() =>{
+                  UpdateQcComtStatus("Approved",value.split("_")[3].split("_")[0])
+                }}
                 sx={{
                   height: "2.5rem",
                   marginRight: "1rem",
@@ -146,6 +202,10 @@ const AudioQc = ({
               <Button
                 variant="contained"
                 disabled={isDisabled}
+                onClick={() =>{
+                  UpdateQcComtStatus("Rejected", value.split("_")[3].split(".")[0], remark)
+                  UploadAudioRecored(value, value.split("_")[3].split(".")[0])
+                }}
                 sx={{
                   height: "2.5rem",
                   // marginTop: ".46rem",
