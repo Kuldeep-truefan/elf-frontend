@@ -58,7 +58,6 @@ const AudioQc = ({
       formdata.append("file", recordedAudio);
       formdata.append("folderName", 'audio-remarks');
       formdata.append("videoId", vidAuRec);
-      console.log(recordedAudio, "recordedAudio------>>>>>>");
 
       let requestOptions = {
         method: "POST",
@@ -74,14 +73,15 @@ const AudioQc = ({
       console.log(error);
     }
   };
-  let UpdateQcComtStatus = async (audioQcStatus, audioId, remark) => {
+  let UpdateQcComtStatus = async (audioQcStatus, audioId, remark, blobToDelete) => {
     try{
         fetch(`${BASE_URL}/audio/qccommentstatus`,{
         method: "POST",
         body: JSON.stringify({  
-          audioStatus: audioQcStatus,
+          audioQc: audioQcStatus,
           audioQcId: audioId,
-          audioQcRemarks: remark
+          audioQcRemarks: remark,
+          deleteBlob: blobToDelete? blobToDelete:''
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
@@ -183,7 +183,7 @@ const AudioQc = ({
                 variant="contained"
                 disabled={isDisabled}
                 onClick={() =>{
-                  UpdateQcComtStatus("Approved",value.split("_")[3].split("_")[0])
+                  UpdateQcComtStatus("Approved",value.split("_")[3].split(".")[0],'',value)
                 }}
                 sx={{
                   height: "2.5rem",
@@ -203,7 +203,7 @@ const AudioQc = ({
                 variant="contained"
                 disabled={isDisabled}
                 onClick={() =>{
-                  UpdateQcComtStatus("Rejected", value.split("_")[3].split(".")[0], remark)
+                  UpdateQcComtStatus("Rejected", value.split("_")[3].split(".")[0], remark, '')
                   UploadAudioRecored(value, value.split("_")[3].split(".")[0])
                 }}
                 sx={{
