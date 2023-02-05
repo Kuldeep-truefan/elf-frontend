@@ -3,6 +3,16 @@
   background-color: rebeccapurple;
 }
 
+.home-div{
+  display: flex;
+  align-items: center;
+  height: 498px;
+  width: 50%;
+  border: 3px #782836;
+  margin-left: 50%;
+  background: beige;
+}
+
 .main-txt-btns{
   padding-top: 2rem;
 }

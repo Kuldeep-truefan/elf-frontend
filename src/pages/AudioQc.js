@@ -19,31 +19,13 @@ const AudioQc = ({
   link,
   destbucket,
 }) => {
-  const [status, setStatus] = useState("");
-  const [option, setOptions] = useState("");
   const [remark, setRemark] = useState("");
   const [audioQcFiles, setAudioQcFiles] = useState([]);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [open, setOpen] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState();
   const navigate = useNavigate();
   // const[required,setRequired]=useState(false)
   const accessToken = localStorage.getItem("authToken");
-
-  const handelClick = () => {
-    setOpen(!open);
-    console.log(open);
-  };
-
-  // const handleStatus = (event) => {
-  //   setRemark(event.target.value);
-  // };
-
-  // const handleOptions = (event) => {
-  //   setOptions(event.target.value);
-  //   console.log(event.target.value);
-  // };
-
 
   let UploadAudioRecored = async (fullFileName, vidAuRec) => {
     try {
@@ -56,7 +38,6 @@ const AudioQc = ({
       let formdata = new FormData();
       formdata.append("fileName", fullFileName);
       formdata.append("file", recordedAudio);
-      formdata.append("folderName", 'audio-remarks');
       formdata.append("videoId", vidAuRec);
 
       let requestOptions = {
@@ -121,7 +102,6 @@ const AudioQc = ({
         // .then((data) => console.log(data));
       // setLoading(false); // Stop loading
     } catch (error) {
-      // setLoading(false);
       console.log("Error occured", error);
     }
   };  
@@ -140,7 +120,7 @@ const AudioQc = ({
         </Button>
       </div>
       {audioQcFiles?.map((value, index) => (
-        <div className="au-mis">
+        <div key={index} className="au-mis">
           <div className="main-tile">
             <div className="main-tile-head">
               <Typography

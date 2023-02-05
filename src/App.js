@@ -14,6 +14,7 @@ import RedoLipSync from './pages/RedoLipSync';
 import SimplifiedNames from './pages/SimplifiedNames';
 import AudioMistreated from './pages/AudioMistreated';
 import ConfirmPronunciation from './pages/ConfirmPronunciation';
+import Dashboard from './pages/Dashboard';
 
 const App = () => {
   const location = useLocation();
@@ -22,7 +23,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Login />}/>
         <Route path="/" element={<PrivateRoute/>}>
-          
+        <Route path="/home" element={<Dashboard />}/>
         <Route path="/qc" element={<Qc />}/>
         <Route path="/am" element={<AudioMispronounced />}/>
         <Route path="/audioqc" element={<AudioQc/>}/>

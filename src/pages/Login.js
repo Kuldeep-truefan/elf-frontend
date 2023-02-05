@@ -94,7 +94,8 @@ function Login() {
               label="Password"
               variant="outlined"
               sx={{
-                width: 300
+                width: 300,
+                shrink:true
             }}
             />
           </div>

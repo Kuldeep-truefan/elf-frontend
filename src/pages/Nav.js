@@ -1,54 +1,4 @@
 import "../../src/App.css";
-// import logo1 from "../assets/img/logo1.png";
-// import { Button } from "@mui/material";
-// import { useNavigate } from "react-router-dom";
-// import Sidebar from "../components/Sidebar";
-// import { useState } from "react";
-
-// function Nav() {
-//   const navigate = useNavigate();
-//   const handleClick = () => document.location.replace('/');
-//   const [state, setState] = useState("false");
-//   const showname = localStorage.getItem("username")
-
-//   const handleMenu = () => {
-//     setState(!state);
-//     console.log("State", state);
-//   };
-
-//   function clearLocalStorage() {
-//     localStorage.clear();
-// }
-//   return (
-//     <div className="Nav">
-//       {/* <MenuRoundedIcon fontSize='large'  style={{ color: 'white' }}/> */}
-//       <Sidebar onClick={handleMenu} />
-//       <div className="main-logo">
-//         <img src={logo1} />
-//       </div>
-//       <div className="logout-nav">
-//         <h4 className="user-name" fontFamily={"Courier"}>
-//           {showname&&showname}
-//         </h4>
-//         <Button
-//           // onClick={();, clearLocalStorage();}
-//           onClick={() => {
-//             clearLocalStorage();
-//             handleClick();
-//           }}
-//           className="logout-btn"
-//           variant="outlined"
-//           style={{ color: "white", border: "0.5px solid white" }}
-//         >
-//           Logout
-//         </Button>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Nav;
-
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -69,7 +19,7 @@ import { useState , useEffect} from "react";
 
 
 const pages = [
-  "",
+  "Dashboard",
   "QUALITY CHECK",
   "AUDIO MISPRONOUNCED",
   "AUDIO QC",
@@ -78,12 +28,13 @@ const pages = [
   "AUDIO MISTREATED",
   "CONFIRM PRONUNCIATION",
 ];
+
 const settings = ["Profile", "Dashboard", "Logout"];
 
 function Nav() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-
+  const showname = localStorage.getItem("username")
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -100,30 +51,16 @@ function Nav() {
   };
   const navigate = useNavigate();
   
+  const clearLogout = () => {
+      localStorage.clear();
+    }
+  const handleClick = () => document.location.replace('/');
   return (
       <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
-            <img src={logo1} />
-
-            {/* <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            ELF 
-          </Typography> */}
+            <img src={logo1} sx={{  }}/>
 
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
@@ -185,28 +122,30 @@ function Nav() {
             >
               LOGO
             </Typography>
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
                 <Button
                   key={page}
                   onClick={() => {
                     handleCloseNavMenu();
                     navigate(
-                      page === "QUALITY CHECK"
+                      page === "Dashboard"
+                        ? "/home"
+                      :page === "QUALITY CHECK"
                         ? "/qc"
-                        : page === "AUDIO MISPRONOUNCED"
-                        ? "/am"
-                        : page === "AUDIO QC"
-                        ? "/audioqc"
-                        : page === "REDO LIP SYNC"
-                        ? "/redlip"
-                        : page === "SIMPLIFIED NAMES"
-                        ? "/simpname"
-                        : page === "AUDIO MISTREATED"
-                        ? "/audiomt"
-                        : page === "CONFIRM PRONUNCIATION"
-                        ? "/confpron"
-                        : "/nf"
+                      : page === "AUDIO MISPRONOUNCED"
+                      ? "/am"
+                      : page === "AUDIO QC"
+                      ? "/audioqc"
+                      : page === "REDO LIP SYNC"
+                      ? "/redlip"
+                      : page === "SIMPLIFIED NAMES"
+                      ? "/simpname"
+                      : page === "AUDIO MISTREATED"
+                      ? "/audiomt"
+                      : page === "CONFIRM PRONUNCIATION"
+                      ? "/confpron"
+                      : "/nf"
                     );
                   }}
                   sx={{ my: 2, color: "white", display: "block" }}
@@ -214,37 +153,48 @@ function Nav() {
                   {page}
                 </Button>
               ))}
-            </Box>
+              </Box>
 
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title={showname}>
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar alt={showname} src="/static/images/avatar/2.jpg" />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {settings.map((setting) => (
+                    <MenuItem key={setting} 
+                    onClick={() =>{
+                    handleCloseUserMenu();
+                    if (setting === "Logout"){
+                      clearLogout()
+                      handleClick()
+                      } else if (setting === "Dashboard"){
+                        navigate('/home')
+                      } else if (setting === "Profile"){
+                        navigate('/')
+                      }
+                    }}>
+                      <Typography textAlign="center">{setting}</Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
           </Toolbar>
         </Container>
       </AppBar>
