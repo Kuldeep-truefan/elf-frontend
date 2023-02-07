@@ -3,6 +3,16 @@
   background-color: rebeccapurple;
 }
 
+.home-div{
+  display: flex;
+  align-items: center;
+  height: 498px;
+  width: 50%;
+  border: 3px #782836;
+  margin-left: 50%;
+  background: beige;
+}
+
 .main-txt-btns{
   padding-top: 2rem;
 }
@@ -49,6 +59,9 @@
   padding-right: 0.5rem;
 }
 
+.navbar-main{
+  width: auto;
+}
 .main-logo {
   position: absolute;
   right: 45%;
@@ -122,9 +135,8 @@
 .remark-area{
   height: 2rem;
   width: 12.875rem;
-  /* margin-top: 0.3rem; */
   border-radius: 0.25rem;
-  /* border: 0px */
+  resize: none;
 }
 
 .MuiBox-root{
@@ -147,8 +159,8 @@
   /* left: 9%; */
   overflow-y: hidden;  
   overflow-x: hidden;
-  padding-right: 1rem;
-  flex: 4;
+  padding-right: 5rem;
+  /* flex: 4; */
 }
 
 /* .video-name-dynamic::-webkit-scrollbar {
@@ -173,13 +185,8 @@
 
 /*Component: TileController (TC) */
 .tc{
-  /* left: 21%;
-  top: 10%;
-  display: flex;
-  justify-content: center;
-  position: absolute;
-  top: 4rem; */
-  right: 22.4%;
+
+  right: 1.4%;
   top: 10%;
   display: flex;
   justify-content: center;
@@ -198,3 +205,157 @@
   margin-left: 3%!important;
 }
 
+
+/* .am-main-tiles{ */
+  /* position: relative;
+  left: 16%; */
+  /* top: 20%; */
+  /* margin-top: 3px; */
+  /* display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border: 2.5px solid #7F377F; */
+  /* width: 70%; */
+  /* border-end-start-radius: 1.5rem;
+  border-end-end-radius: 1.5rem;
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+} */
+
+.am-main-tiles{
+    /* margin-top: 3px; */
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+    align-items: center;
+    border: 2.5px solid #7F377F;
+    /* width: 70%; */
+    border-end-start-radius: 1.5rem;
+    border-end-end-radius: 1.5rem;
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.am-main-tile-head{
+  display: flex;
+  flex: 6;
+ align-items: center;
+ flex-direction: row;
+ /* margin-right: 40%; */
+}
+
+.am-tiles{
+  margin-top: 1.3rem;
+  width: 78%;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  top: 4rem;
+}
+.aumis-tiles{
+  margin-top: 1.3rem;
+  width: 90.3%;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  top: 4rem;
+}
+.sn-tiles{
+  margin-top: 1.3rem;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  top: 4rem;
+}
+
+.amt-tiles{
+  margin-top: 1.3rem;
+  width: 73%;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  top: 4rem;
+}
+
+.confirm-tiles{
+  margin-top: 1.3rem;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  top: 4rem;
+}
+
+.heading-screens{
+  display: flex;
+  margin-top: 10px;
+  margin-top: -50px;
+
+  justify-content: center;
+  font-weight: bolder;
+  font-family: Heiti SC;
+}
+
+.video-qc-heading {
+  display: flex;
+  justify-content: center;
+  font-weight: bolder;
+  margin-top: 30px;
+  font-family: Heiti SC;
+  margin-bottom: -50px;
+}
+
+
+.au-mis{
+  margin-top: 1rem;
+}
+
+.css-hip9hq-MuiPaper-root-MuiAppBar-root{
+  background-color: #000 !important;
+}
+
+.audio-refresh-btn{
+  display: flex;
+  position: relative;
+  justify-content: flex-end;
+  top: -10px;
+}
+
+/* .audioqc-refresh-btn{
+  display: flex;
+  position: relative;
+  justify-content: flex-end;
+  top: -10px; 
+} */
+
+.css-1yo1jo6-MuiStack-root>:not(style)+:not(style){
+  background-color: solid #7F377F;
+}
+
+.css-1yo1jo6-MuiStack-root>:not(style)+:not(style){
+  margin: 0 !important;
+  margin-left: 78px !important;
+}
+
+.footer{
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: fff;
+  text-align: center;
+}
+
+.MuiBox-root{
+  display: flex;
+  justify-content: center;
+}
+.pagination-class{
+  margin-left: 150px;
+  display: flex;
+  align-items: center;
+}

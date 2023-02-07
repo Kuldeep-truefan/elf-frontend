@@ -3,11 +3,11 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import "../../App.css";
-import { Button, Chip, FormHelperText, Typography } from "@mui/material";
+import { Button, Chip, Typography } from "@mui/material";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 
 import { useEffect, useState } from "react";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import VideoModal from "./VideoModal";
 import { BASE_URL } from "../../constants/constant";
 
@@ -18,9 +18,8 @@ const RowComponent = ({
   handleClickSendMessage,
   emittedData,
   setLink,
-  index,
   link,
-  destbucket 
+  destbucket,
 }) => {
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
@@ -28,11 +27,9 @@ const RowComponent = ({
   const [isDisabled, setIsDisabled] = useState(true);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  // const[required,setRequired]=useState(false)
-  const accessToken = localStorage.getItem('authToken');
+  const accessToken = localStorage.getItem("authToken");
 
   const handelClick = () => {
-
     setOpen(!open);
     console.log(open);
   };
@@ -48,78 +45,76 @@ const RowComponent = ({
 
   const handleChange = (event) => {
     setRemark(event.target.value);
-    // console.log(event.target.value);
   };
 
   let GetQCDone = async () => {
-    // console.log("Checking the access token");
-    handleClickSendMessage({msg:"updated",video_id:item})
-
-   const saveStatus = status
-   const saveOption= option
-   const saveRemark = remark
-   setStatus('')
-   setOptions('')
-   setRemark('')
-    if (!accessToken) {
-      navigate('/');
-    }
-    const remainingData=link.filter((x)=>x!==item)
-    setLink(remainingData)
-    try{
+    handleClickSendMessage({ msg: "updated", video_id: item });
+    
+    const saveStatus = status;
+    const saveOption = option;
+    const saveRemark = remark;
+    setStatus("");
+    setOptions("");
+    setRemark("");
+    const remainingData = link.filter((x) => x !== item);
+    setLink(remainingData);
+    try {
       fetch(`${BASE_URL}/log/tilestatus`, {
-          method: "POST",
-          body: JSON.stringify({
-            sourceBucket: sbuck,
-            destinationBucket: dbuck,
-            videoName: item,
-            videoStatus: saveStatus,
-            videoOption: saveOption,
-            videoRemarks: saveRemark,
-          }),
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-            Authorization: `Bearer ${accessToken}`
-          }
-        })
-        .then(response => response.json()).then((data) =>{ 
-          data.success?setLink(remainingData):console.log("No Data Found"); 
+        method: "POST",
+        body: JSON.stringify({
+          sourceBucket: sbuck,
+          destinationBucket: dbuck,
+          videoName: item,
+          videoStatus: saveStatus,
+          videoOption: saveOption,
+          videoRemarks: saveRemark,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${accessToken}`,
+        },
       })
-      }
-      catch (error) {
-        console.log("Error occured", error)
-      }
+        .then((response) => response.json())
+        .then((data) => {
+          data.success ? setLink(remainingData) : console.log("No Data Found");
+        });
+    } catch (error) {
+      console.log("Error occured", error);
     }
-    useEffect(() => {
-      if(!destbucket) {
-        setIsDisabled(true) 
-      }
-      else if (option && status === 'Rejected' ) setIsDisabled(false) 
-      else if (status && status !== 'Rejected') {
-        setIsDisabled(false)
-      } else {
-        setIsDisabled(true)
-      }
-    }, [status, option, destbucket])
+  };
+
+  useEffect(() => {
+    if (!destbucket) {
+      setIsDisabled(true);
+    } else if (option && status === "Rejected") setIsDisabled(false);
+    else if (status && status !== "Rejected") {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
+  }, [status, option, destbucket]);
 
   return (
     <div className="tiles">
       <div className="main-tile">
         <div className="main-tile-head">
           <Typography
-          className="video-name"
+            className="video-name"
             sx={{
-              // fontSize: "11px",
-              // width: "71.7%",
-              // marginLeft: "2.4rem",
-              // position: "relative",
-              // right: "10%",
               paddingLeft: "1rem",
-            }}
-          >{item}
+            }}>
+            {item}
           </Typography>
-          {JSON.parse(emittedData)?.filter(data=>data?.video_id===item)?.length>0   && (
-            <Chip label={`In progress: ${JSON.parse(emittedData)?.filter(data=>data?.video_id===item)?.[0]?.user}`} sx={{ml:"5px", backgroundColor: 'white'}}/>
+          {JSON.parse(emittedData)?.filter((data) => data?.video_id === item)
+            ?.length > 0 && (
+            <Chip
+              label={`In progress: ${
+                JSON.parse(emittedData)?.filter(
+                  (data) => data?.video_id === item
+                )?.[0]?.user
+              }`}
+              sx={{ ml: "5px", backgroundColor: "white" }}
+            />
           )}
         </div>
 
@@ -145,14 +140,15 @@ const RowComponent = ({
           >
             <MenuItem value={"Approved"}>Approved</MenuItem>
             <MenuItem value={"Rejected"}>Rejected</MenuItem>
-            <MenuItem value=""><em>None</em></MenuItem>
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
           </Select>
         </FormControl>
-        <FormControl sx={{ m: 1, minWidth: 220 }} size="small" >
+        <FormControl sx={{ m: 1, minWidth: 220 }} size="small">
           <InputLabel id="select-options">Reason</InputLabel>
           <Select
             labelId="select-options"
-            // id="select-options"
             value={option}
             label="Options"
             onChange={handleOptions}>
@@ -169,7 +165,6 @@ const RowComponent = ({
             <MenuItem value={"Confirm pronunciation"}>Confirm pronunciation</MenuItem>
             <MenuItem value=""><em>None</em></MenuItem>
           </Select>
-          {/* {required && <FormHelperText>This is required!</FormHelperText>} */}
         </FormControl>
         <TextareaAutosize
           required={true}
@@ -178,14 +173,14 @@ const RowComponent = ({
           minRows={2.2}
           placeholder="Remarks"
           value={remark}
-          onChange={handleChange}/>
+          onChange={handleChange}
+        />
         <Button
           onClick={GetQCDone}
           variant="contained"
           disabled={isDisabled}
           sx={{
             height: "2.5rem",
-            // marginTop: ".46rem",
             backgroundColor: "#D7B8FD",
             color: "white",
             "&:hover": {
@@ -196,12 +191,7 @@ const RowComponent = ({
         >
           Done
         </Button>
-        {/* <Alertbox 
-        open={alertOpen} setOpen={setAlertOpen} item={item} status={status} remark={remark} option= {option} onClick={handleAlert}
-        /> */}
       </div>
-
-      {/* <VideoModal open={open} setOpen={setOpen} /> */}
     </div>
   );
 };

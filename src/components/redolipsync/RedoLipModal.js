@@ -8,7 +8,7 @@ import { ControlBar, PlaybackRateMenuButton, ReplayControl } from "video-react";
 import { useState } from "react";
 import { BASE_URL } from "../../constants/constant";
 import ReactLoading from "react-loading";
-
+// import video from "../../assets/video/Sample_4.mp4"
 const style = {
   position: "absolute",
   top: "50%",
@@ -22,9 +22,10 @@ const style = {
 };
 
 
-export default function VideoModal({ open, setOpen, item, sbuck, sendMessage}) {
+export default function RedoLipModal({item, sbuck, sendMessage}) {
   const [puburl, setPuburl] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);    
+  const [open , setOpen] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -35,61 +36,59 @@ export default function VideoModal({ open, setOpen, item, sbuck, sendMessage}) {
     setPuburl(false)
     setOpen(false)};
    
-  let FetchPlayVideo = async() => {
-       return new Promise(function(resolve, reject) {
-        try{
-          setLoading(true)
-          fetch(`${BASE_URL}/log/makepub`, {
-          method: "POST",
-          body: JSON.stringify({
-            fileName: item,
-            buckName: sbuck 
-          }),
-          headers: {
-            "Content-type": "application/json"
-        }
-      })
-        .then(response => response.json())
-        .then(json => { 
-          resolve(json);
-          });
-      }
-      catch{
-        reject("error")
-      }
-    }).then(
-      result => {
-          setLoading(false);
-          setPuburl(result.publink)
-      }, // shows "done!" after 1 second
-      error => alert(error) // doesn't run
-    );
-    };
+//   let FetchPlayVideo = async() => {
+//        return new Promise(function(resolve, reject) {
+//         try{
+//           setLoading(true)
+//           fetch(`${BASE_URL}/log/makepub`, {
+//           method: "POST",
+//           body: JSON.stringify({
+//             fileName: item,
+//             buckName: sbuck 
+//           }),
+//           headers: {
+//             "Content-type": "application/json"
+//         }
+//       })
+//         .then(response => response.json())
+//         .then(json => { 
+//           resolve(json);
+//           });
+//       }
+//       catch{
+//         reject("error")
+//       }
+//     }).then(
+//       result => {
+//           setLoading(false);
+//           setPuburl(result.publink)
+//       }, // shows "done!" after 1 second
+//       error => alert(error) // doesn't run
+//     );
+//     };
   return (
     <div>
       <PlayCircleRounderIcon
         sx={{ fontSize: "3rem", marginTop: ".35rem", color:"#D7B8FD"}}
-         onClick={() => {handleOpen(); FetchPlayVideo(); sendMessage({video_id: item})}}
+         onClick={() => {handleOpen();}}
       />
-   
       <Modal 
-        open={open}
+        // open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
->
+        >
         <Box sx={style}>
-          {puburl && 
           <Player playsInline>
             <BigPlayButton position="center"/>
-            <source src={`${puburl}#t=.01`} type="video/mp4" />
+            <source src={require("../../assets/video/Sample_4.mp4")} type="video/mp4" />
+            {/* <source src={`${puburl}#t=.01`} type="video/mp4" /> */}
             <ControlBar>
               <PlayToggle />
               <PlaybackRateMenuButton rates={[5, 2, 1, 0.5, 0.1]} />
               <ReplayControl seconds={5}/>
-             
             </ControlBar>
-          </Player>}
+          </Player>
           {loading&&<Box sx={{display:"flex",justifyContent:"center",width:"100%"}}>Loading...<ReactLoading type="balls" color="#black"/></Box>}
         </Box>
       </Modal>
