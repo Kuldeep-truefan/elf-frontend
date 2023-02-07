@@ -82,6 +82,7 @@ function Nav() {
     <div className="navbar-main">      
       <AppBar position="static">
         <Container maxWidth="xl">
+          <div className="navbar-child">
           <Toolbar disableGutters>
             <img src={logo1} sx={{}} />
             <Box>
@@ -130,14 +131,8 @@ function Nav() {
                         ? "/am"
                         : page === "AUDIO QC"
                         ? "/audioqc"
-                        : page === "REDO LIP SYNC"
-                        ? "/redlip"
-                        : page === "SIMPLIFIED NAMES"
-                        ? "/simpname"
                         : page === "AUDIO MISTREATED"
                         ? "/audiomt"
-                        : page === "CONFIRM PRONUNCIATION"
-                        ? "/confpron"
                         : "/nf"
                     );
                   }}
@@ -217,6 +212,7 @@ function Nav() {
               </Menu>
             </Box>
           </Toolbar>
+          </div>
         </Container>
       </AppBar>
     </div>

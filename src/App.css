@@ -349,3 +349,13 @@
   background-color: fff;
   text-align: center;
 }
+
+.MuiBox-root{
+  display: flex;
+  justify-content: center;
+}
+.pagination-class{
+  margin-left: 150px;
+  display: flex;
+  align-items: center;
+}

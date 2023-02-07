@@ -10,8 +10,10 @@ import Pagination from "@mui/material/Pagination";
 
 function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, emittedData}) {
   const [loadbucket, setLoadbucket] = useState("");
+  const [pageCount, setPageCount] = useState('');
   const accessToken = localStorage.getItem('authToken');
-  
+  console.log(pageCount, 'pageCount----------->>>>>>.')
+
   // PROD ENV BUCKETS
   const [loadbucketoption, setLoadbucketoption] = useState([{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}])
   const [movebucketoption, setMovebucketoption] = useState([{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}, {label:"qc-rejects",value:"qc-rejects"}])
@@ -57,7 +59,11 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, 
         }
       })
       .then((response) => response.json())
-      .then((data) => setLink(data.filename))
+      .then((response) => response)
+      .then((data) => {
+        setLink(data.filename)
+        setPageCount(data.pagecount)
+      })
     }
     catch (error) {
       console.log("Error occured", error)
@@ -70,7 +76,7 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, 
 
   return (
     <div className="tc">
-      <div className="tc-inner">
+        <div className="tc-inner">
         <FormControl sx={{ m: 1, minWidth: 133}} size="small">
           <InputLabel id="load-buck">Load From</InputLabel>
           <Select
@@ -96,11 +102,13 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, 
           </Select>
         </FormControl>
         <Button variant="contained" href="#contained-buttons" onClick = {handleClick} sx={{background: '#D7B8FD', '&:hover':{backgroundColor: '#ad6efb'}}}>Refresh</Button>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        
+        {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
+        </div>
+        <div className="pagination-class">
         <Pagination 
         onChange={(e, value) => FetchLink(value)}
-        count={11} variant="outlined" />
+        count={pageCount} 
+        variant="outlined" />
       </div>
     </div>
   );
