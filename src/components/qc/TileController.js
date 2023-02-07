@@ -1,33 +1,28 @@
+import "../../App.css";
 import { useEffect, useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import "../../App.css";
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
-import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import { BASE_URL } from "../../constants/constant";
-import ReactLoading from "react-loading";
+import Pagination from "@mui/material/Pagination";
 
 function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, emittedData}) {
   const [loadbucket, setLoadbucket] = useState("");
-  const navigate = useNavigate();
   const accessToken = localStorage.getItem('authToken');
-  const [loading, setLoading] = useState(false);
   
   // PROD ENV BUCKETS
-  // const [loadbucketoption, setLoadbucketoption] = useState([{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}])
-  // const [movebucketoption, setMovebucketoption] = useState([{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}, {label:"qc-rejects",value:"qc-rejects"}])
-  // const defaultloadbucketoption = [{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}]
-  // const defaultmovebucketoption = [{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}, {label:"qc-rejects",value:"qc-rejects"}]
+  const [loadbucketoption, setLoadbucketoption] = useState([{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}])
+  const [movebucketoption, setMovebucketoption] = useState([{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}, {label:"qc-rejects",value:"qc-rejects"}])
+  const defaultloadbucketoption = [{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}]
+  const defaultmovebucketoption = [{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}, {label:"qc-rejects",value:"qc-rejects"}]
 
   // Dev ENV Bucket
-  const [loadbucketoption, setLoadbucketoption] = useState([{label:"test-qc2",value:"dev-ans-test-qc2"}, {label:"test-final",value:"dev-ans-test-final"}, {label:"test-qc-rejects",value:"dev-ans-test-qc-rejects"}])
-  const [movebucketoption, setMovebucketoption] = useState([{label:"test-qc2",value:"dev-ans-test-qc2"}, {label:"test-final",value:"dev-ans-test-final"}, {label:"test-qc-rejects",value:"dev-ans-test-qc-rejects"}])
-  const defaultloadbucketoption = [{label:"test-qc2",value:"dev-ans-test-qc2"}, {label:"test-final",value:"dev-ans-test-final"}, {label:"test-qc-rejects",value:"dev-ans-test-qc-rejects"}]
-  const defaultmovebucketoption = [{label:"test-qc2",value:"dev-ans-test-qc2"}, {label:"test-final",value:"dev-ans-test-final"}, {label:"test-qc-rejects",value:"dev-ans-test-qc-rejects"}]
+  // const [loadbucketoption, setLoadbucketoption] = useState([{label:"test-qc2",value:"dev-ans-test-qc2"}, {label:"test-final",value:"dev-ans-test-final"}, {label:"qc-rejects",value:"qc-rejects"}])
+  // const [movebucketoption, setMovebucketoption] = useState([{label:"test-qc2",value:"dev-ans-test-qc2"}, {label:"test-final",value:"dev-ans-test-final"}, {label:"qc-rejects",value:"qc-rejects"}])
+  // const defaultloadbucketoption = [{label:"test-qc2",value:"dev-ans-test-qc2"}, {label:"test-final",value:"dev-ans-test-final"}, {label:"qc-rejects",value:"qc-rejects"}]
+  // const defaultmovebucketoption = [{label:"test-qc2",value:"dev-ans-test-qc2"}, {label:"test-final",value:"dev-ans-test-final"}, {label:"qc-rejects",value:"qc-rejects"}]
 
 
   useEffect(() => {
@@ -41,21 +36,20 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, 
     setLoadbucket(event.target.value);
     setSbuck(event.target.value)
   };
+  
   const handleDestBucket = (event) => {
     setDestMove(event.target.value);
     setDbuck(event.target.value)
   };
 
-  let FetchLink = async () => {
-    if (!accessToken){
-      navigate('/')
-    }
+  let FetchLink = async (value) => {
+    console.log('page number',value);
     try{
-        setLoading(true); // Set loading before sending API request
         fetch(`${BASE_URL}/log/getlink`,{
         method: "POST",
         body: JSON.stringify({  
           bucketName: loadbucket,
+          pageNumber: value
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
@@ -64,10 +58,8 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, 
       })
       .then((response) => response.json())
       .then((data) => setLink(data.filename))
-      setLoading(false); // Stop loading
     }
     catch (error) {
-      setLoading(false);
       console.log("Error occured", error)
     }
   }
@@ -75,6 +67,7 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, 
   const handleClick = () => {
     FetchLink();
   }
+
   return (
     <div className="tc">
       <div className="tc-inner">
@@ -103,6 +96,11 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, 
           </Select>
         </FormControl>
         <Button variant="contained" href="#contained-buttons" onClick = {handleClick} sx={{background: '#D7B8FD', '&:hover':{backgroundColor: '#ad6efb'}}}>Refresh</Button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        
+        <Pagination 
+        onChange={(e, value) => FetchLink(value)}
+        count={11} variant="outlined" />
       </div>
     </div>
   );

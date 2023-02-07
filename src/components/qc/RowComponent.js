@@ -3,7 +3,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import "../../App.css";
-import { Button, Chip, FormHelperText, Typography } from "@mui/material";
+import { Button, Chip, Typography } from "@mui/material";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 
 import { useEffect, useState } from "react";
@@ -18,7 +18,6 @@ const RowComponent = ({
   handleClickSendMessage,
   emittedData,
   setLink,
-  index,
   link,
   destbucket,
 }) => {
@@ -28,7 +27,6 @@ const RowComponent = ({
   const [isDisabled, setIsDisabled] = useState(true);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  // const[required,setRequired]=useState(false)
   const accessToken = localStorage.getItem("authToken");
 
   const handelClick = () => {
@@ -47,22 +45,17 @@ const RowComponent = ({
 
   const handleChange = (event) => {
     setRemark(event.target.value);
-    // console.log(event.target.value);
   };
 
   let GetQCDone = async () => {
-    // console.log("Checking the access token");
     handleClickSendMessage({ msg: "updated", video_id: item });
-
+    
     const saveStatus = status;
     const saveOption = option;
     const saveRemark = remark;
     setStatus("");
     setOptions("");
     setRemark("");
-    if (!accessToken) {
-      navigate("/");
-    }
     const remainingData = link.filter((x) => x !== item);
     setLink(remainingData);
     try {
@@ -89,7 +82,7 @@ const RowComponent = ({
       console.log("Error occured", error);
     }
   };
-  
+
   useEffect(() => {
     if (!destbucket) {
       setIsDisabled(true);
@@ -108,14 +101,8 @@ const RowComponent = ({
           <Typography
             className="video-name"
             sx={{
-              // fontSize: "11px",
-              // width: "71.7%",
-              // marginLeft: "2.4rem",
-              // position: "relative",
-              // right: "10%",
               paddingLeft: "1rem",
-            }}
-          >
+            }}>
             {item}
           </Typography>
           {JSON.parse(emittedData)?.filter((data) => data?.video_id === item)
@@ -162,37 +149,22 @@ const RowComponent = ({
           <InputLabel id="select-options">Reason</InputLabel>
           <Select
             labelId="select-options"
-            // id="select-options"
             value={option}
             label="Options"
-            onChange={handleOptions}
-          >
+            onChange={handleOptions}>
             <MenuItem value={"Redo Lipsync"}>Redo Lipsync</MenuItem>
             <MenuItem value={"Audio Mistreated"}>Audio Mistreated</MenuItem>
-            <MenuItem value={"Audio Mispronounced"}>
-              Audio Mispronounced
-            </MenuItem>
+            <MenuItem value={"Audio Mispronounced"}>Audio Mispronounced</MenuItem>
             <MenuItem value={"AV Redo"}>AV Redo</MenuItem>
             <MenuItem value={"AV Sync Mismatch"}>AV Sync Mismatch</MenuItem>
             <MenuItem value={"Fix hi"}>Fix hi</MenuItem>
             <MenuItem value={"Trim Reject"}>Trim Reject</MenuItem>
-            <MenuItem value={"Add gap between A & B"}>
-              Add gap between A & B
-            </MenuItem>
-            <MenuItem value={"Reduce gap between A & B"}>
-              Reduce gap between A & B
-            </MenuItem>
-            <MenuItem value={"AV Redo (mistreated)"}>
-              AV Redo (mistreated)
-            </MenuItem>
-            <MenuItem value={"Confirm pronunciation"}>
-              Confirm pronunciation
-            </MenuItem>
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
+            <MenuItem value={"Add gap between A & B"}>Add gap between A & B</MenuItem>
+            <MenuItem value={"Reduce gap between A & B"}>Reduce gap between A & B</MenuItem>
+            <MenuItem value={"AV Redo (mistreated)"}>AV Redo (mistreated)</MenuItem>
+            <MenuItem value={"Confirm pronunciation"}>Confirm pronunciation</MenuItem>
+            <MenuItem value=""><em>None</em></MenuItem>
           </Select>
-          {/* {required && <FormHelperText>This is required!</FormHelperText>} */}
         </FormControl>
         <TextareaAutosize
           required={true}
@@ -209,7 +181,6 @@ const RowComponent = ({
           disabled={isDisabled}
           sx={{
             height: "2.5rem",
-            // marginTop: ".46rem",
             backgroundColor: "#D7B8FD",
             color: "white",
             "&:hover": {
@@ -220,12 +191,7 @@ const RowComponent = ({
         >
           Done
         </Button>
-        {/* <Alertbox 
-        open={alertOpen} setOpen={setAlertOpen} item={item} status={status} remark={remark} option= {option} onClick={handleAlert}
-        /> */}
       </div>
-
-      {/* <VideoModal open={open} setOpen={setOpen} /> */}
     </div>
   );
 };

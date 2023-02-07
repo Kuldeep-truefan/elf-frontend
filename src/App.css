@@ -59,6 +59,9 @@
   padding-right: 0.5rem;
 }
 
+.navbar-main{
+  width: auto;
+}
 .main-logo {
   position: absolute;
   right: 45%;
@@ -182,13 +185,8 @@
 
 /*Component: TileController (TC) */
 .tc{
-  /* left: 21%;
-  top: 10%;
-  display: flex;
-  justify-content: center;
-  position: absolute;
-  top: 4rem; */
-  right: 22.4%;
+
+  right: 1.4%;
   top: 10%;
   display: flex;
   justify-content: center;
@@ -342,3 +340,12 @@
   margin-left: 78px !important;
 }
 
+.footer{
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: fff;
+  text-align: center;
+}

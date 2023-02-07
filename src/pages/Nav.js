@@ -15,18 +15,19 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import logo1 from "../assets/img/logo1.png";
 import { useNavigate } from "react-router-dom";
-import { useState , useEffect} from "react";
-
+import { useState, useEffect } from "react";
+import Fade from '@mui/material/Fade';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 const pages = [
   "Dashboard",
   "QUALITY CHECK",
   "AUDIO MISPRONOUNCED",
   "AUDIO QC",
-  "SIMPLIFIED NAMES",
-  "REDO LIP SYNC",
+  // "SIMPLIFIED NAMES",
   "AUDIO MISTREATED",
-  "CONFIRM PRONUNCIATION",
+  // "REDO LIP SYNC",
+  // "CONFIRM PRONUNCIATION",
 ];
 
 const settings = ["Profile", "Dashboard", "Logout"];
@@ -34,7 +35,30 @@ const settings = ["Profile", "Dashboard", "Logout"];
 function Nav() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const showname = localStorage.getItem("username")
+  const showname = localStorage.getItem("username");
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const navigate = useNavigate();
+
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const pageRedirect = (path) =>{
+    if (path === "redlip"){
+      navigate("/redlip")
+    }else if (path === "simpname"){
+      navigate("/simpname")
+    }else if (path === "audiomt"){
+      navigate("/audiomt")
+    }else if (path === "confpron"){
+      navigate("/confpron")
+    }
+  }
+
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -49,30 +73,18 @@ function Nav() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  const navigate = useNavigate();
-  
+
   const clearLogout = () => {
-      localStorage.clear();
-    }
-  const handleClick = () => document.location.replace('/');
+    localStorage.clear();
+  };
+  const navigateToHome = () => document.location.replace("/");
   return (
+    <div className="navbar-main">      
       <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
-            <img src={logo1} sx={{  }}/>
-
-            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleOpenNavMenu}
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
+            <img src={logo1} sx={{}} />
+            <Box>
               <Menu
                 id="menu-appbar"
                 anchorEl={anchorElNav}
@@ -103,26 +115,7 @@ function Nav() {
                 ))}
               </Menu>
             </Box>
-            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-            <Typography
-              variant="h5"
-              noWrap
-              component="a"
-              href=""
-              sx={{
-                mr: 2,
-                display: { xs: "flex", md: "none" },
-                flexGrow: 1,
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              LOGO
-            </Typography>
-              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
                 <Button
                   key={page}
@@ -131,21 +124,21 @@ function Nav() {
                     navigate(
                       page === "Dashboard"
                         ? "/home"
-                      :page === "QUALITY CHECK"
+                        : page === "QUALITY CHECK"
                         ? "/qc"
-                      : page === "AUDIO MISPRONOUNCED"
-                      ? "/am"
-                      : page === "AUDIO QC"
-                      ? "/audioqc"
-                      : page === "REDO LIP SYNC"
-                      ? "/redlip"
-                      : page === "SIMPLIFIED NAMES"
-                      ? "/simpname"
-                      : page === "AUDIO MISTREATED"
-                      ? "/audiomt"
-                      : page === "CONFIRM PRONUNCIATION"
-                      ? "/confpron"
-                      : "/nf"
+                        : page === "AUDIO MISPRONOUNCED"
+                        ? "/am"
+                        : page === "AUDIO QC"
+                        ? "/audioqc"
+                        : page === "REDO LIP SYNC"
+                        ? "/redlip"
+                        : page === "SIMPLIFIED NAMES"
+                        ? "/simpname"
+                        : page === "AUDIO MISTREATED"
+                        ? "/audiomt"
+                        : page === "CONFIRM PRONUNCIATION"
+                        ? "/confpron"
+                        : "/nf"
                     );
                   }}
                   sx={{ my: 2, color: "white", display: "block" }}
@@ -153,51 +146,80 @@ function Nav() {
                   {page}
                 </Button>
               ))}
-              </Box>
-
-              <Box sx={{ flexGrow: 0 }}>
-                <Tooltip title={showname}>
-                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt={showname} src="/static/images/avatar/2.jpg" />
-                  </IconButton>
-                </Tooltip>
-                <Menu
-                  sx={{ mt: "45px" }}
-                  id="menu-appbar"
-                  anchorEl={anchorElUser}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  open={Boolean(anchorElUser)}
-                  onClose={handleCloseUserMenu}
-                >
-                  {settings.map((setting) => (
-                    <MenuItem key={setting} 
-                    onClick={() =>{
-                    handleCloseUserMenu();
-                    if (setting === "Logout"){
-                      clearLogout()
-                      handleClick()
-                      } else if (setting === "Dashboard"){
-                        navigate('/home')
-                      } else if (setting === "Profile"){
-                        navigate('/')
+              <Button
+                // id="fade-button"
+                sx={{
+                  color: '#fff'
+                }}
+                aria-controls={open ? "fade-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+                endIcon={<KeyboardArrowDownIcon />}
+                onClick={handleClick}
+              >
+                Others
+              </Button>
+              <Menu
+                id="fade-menu"
+                MenuListProps={{
+                  "aria-labelledby": "fade-button",
+                }}
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                TransitionComponent={Fade}
+              >
+                <MenuItem onClick={ () => {handleClose(); pageRedirect('simpname');}}>SIMPLIFIED NAMES</MenuItem>
+                <MenuItem onClick={ () => {handleClose(); pageRedirect('redlip');}}>REDO LIP SYNC</MenuItem>
+                <MenuItem onClick={ () => {handleClose(); pageRedirect('confpron');}}>CONFIRM PRONUNCIATION</MenuItem>
+              </Menu>
+            </Box>
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title={showname}>
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt={showname} src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) => (
+                  <MenuItem
+                    key={setting}
+                    onClick={() => {
+                      handleCloseUserMenu();
+                      if (setting === "Logout") {
+                        clearLogout();
+                        navigateToHome();
+                      } else if (setting === "Dashboard") {
+                        navigate("/home");
+                      } else if (setting === "Profile") {
+                        navigate("/");
                       }
-                    }}>
-                      <Typography textAlign="center">{setting}</Typography>
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </Box>
+                    }}
+                  >
+                    <Typography textAlign="center">{setting}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
           </Toolbar>
         </Container>
       </AppBar>
+    </div>
   );
 }
 export default Nav;
