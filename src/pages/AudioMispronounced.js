@@ -56,9 +56,6 @@ const AudioMispronounced = ({ item, emittedData , sendFile}) => {
   // };
 
   let FetchAudioMisTiles = async () => {
-    if (!accessToken) {
-      navigate("/");
-    }
     try {
       // setLoading(true); // Set loading before sending API request
       fetch(`${BASE_URL}/audio/audiomis`, {

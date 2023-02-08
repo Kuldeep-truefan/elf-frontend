@@ -6,6 +6,8 @@ import "react-transliterate/dist/index.css";
 import "../../App.css";
 import { BASE_URL } from "../../constants/constant";
 
+// https://beta.reactjs.org/reference/react-dom/components/textarea for text area customisations
+
 const SimpTile = ({
     value
 }) => {
@@ -23,7 +25,7 @@ const SimpTile = ({
           fetch(`${BASE_URL}/audio/update-simplified-fields`, {
             method: "POST",
             body: JSON.stringify({
-              englishName: englishName,
+              englishName: englishName.trim(),
               hindiName: hindiName,
               videoId: id,
               button_type,
@@ -56,28 +58,27 @@ const SimpTile = ({
       <p className="video-name-dynamic">Vas Field Value</p>
     </div>
     <div className="main-tiles">
-      <TextField
-        sx={{
-          width: { sm: 200, md: 300 },
-          "& .MuiInputBase-root": {
-            width: 250,
-          },
-          size: "small",
-        }}
+      <textarea
+      className="simp-hindi-textarea"
+        rows={3} cols={30}
         id="outlined-basic"
-        label="English Name"
+        // label="English Name"
+        placeholder="english"
         variant="outlined"
         onChange={handleEngName}
       />
       <ReactTransliterate
-        renderComponent={(props) => <textarea {...props} />}
-        value={hindiName}
+      className="simp-hindi-textarea"
+        renderComponent={(props) =>
+        <textarea {...props} rows={3} cols={30} placeholder="hindi"/>}
+        value={hindiName.trim()}
         onChangeText={(text) => {
           setHindiName(text);
         }}
         lang="hi"/>
       <Button
         variant="contained"
+        disableElevation
         sx={{
           height: "2.5rem",
           backgroundColor: "#D7B8FD",
@@ -85,7 +86,9 @@ const SimpTile = ({
           "&:hover": {
             backgroundColor: "#ad6efb",
             color: "#fff",
+            shadow: '0 0 30px rgba(40,40,40,.4)'
           },
+          borderRadius: '14px'
         }}
         onClick={() =>
           UpdateSimpNames(
@@ -103,7 +106,10 @@ const SimpTile = ({
           "&:hover": {
             backgroundColor: "#ad6efb",
             color: "#fff",
+            shadow: '0 0 30px rgba(40,40,40,.4)'
           },
+          borderRadius: '14px',
+
         }}
         onClick={() => {
           UpdateSimpNames(value.split("_")[3].split(".")[0], "Done");

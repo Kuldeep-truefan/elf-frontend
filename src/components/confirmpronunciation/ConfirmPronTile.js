@@ -9,19 +9,12 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
 const ConfirmPronTile = (
-  item,
-  sbuck,
-  dbuck,
-  handleClickSendMessage,
-  emittedData,
-  setLink,
-  index,
-  link,
   destbucket
 ) => {
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
   const [remark, setRemark] = useState("");
+  const [audioConfirmPro, setAudioConfirmPro] = useState([]);
   const [isDisabled, setIsDisabled] = useState(true);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -47,45 +40,26 @@ const ConfirmPronTile = (
     // console.log(event.target.value);
   };
 
-  let GetQCDone = async () => {
-    // console.log("Checking the access token");
-    handleClickSendMessage({ msg: "updated", video_id: item });
-
-    const saveStatus = status;
-    const saveOption = option;
-    const saveRemark = remark;
-    setStatus("");
-    setOptions("");
-    setRemark("");
-    if (!accessToken) {
-      navigate("/");
-    }
-    const remainingData = link.filter((x) => x !== item);
-    setLink(remainingData);
+  let FetchConfirmPronunFiles = async () => {
     try {
-      fetch(`${BASE_URL}/log/tilestatus`, {
-        method: "POST",
-        body: JSON.stringify({
-          sourceBucket: sbuck,
-          destinationBucket: dbuck,
-          videoName: item,
-          videoStatus: saveStatus,
-          videoOption: saveOption,
-          videoRemarks: saveRemark,
-        }),
+      // setLoading(true); // Set loading before sending API request
+      fetch(`${BASE_URL}/audio/get-confirm-files`, {
+        method: "GET",
         headers: {
           "Content-type": "application/json; charset=UTF-8",
           Authorization: `Bearer ${accessToken}`,
         },
       })
         .then((response) => response.json())
-        .then((data) => {
-          data.success ? setLink(remainingData) : console.log("No Data Found");
-        });
+        .then((data) => setAudioConfirmPro(data.filename));
+      // .then((data) => console.log(data));
+      // setLoading(false); // Stop loading
     } catch (error) {
+      // setLoading(false);
       console.log("Error occured", error);
     }
   };
+
   useEffect(() => {
     if (!destbucket) {
       setIsDisabled(true);
@@ -99,86 +73,90 @@ const ConfirmPronTile = (
 
   return (
     <div className="confirm-tiles">
-    <h1 className='heading-screens'>Confirm Pronunciation</h1>
-      <div className="main-tile">
-        <div className="main-tile-head">
-          <Typography
-            className="video-name"
-            sx={{
-              // fontSize: "11px",
-              // width: "71.7%",
-              // marginLeft: "2.4rem",
-              // position: "relative",
-              // right: "10%",
-              paddingLeft: "1rem",
-            }}
-          >
-            {" "}
-            Sample_4.mp4
-          </Typography>
-          <Chip
-            label={`In progress: admin`}
-            sx={{ ml: "5px", backgroundColor: "white" }}
-          />
+      <h1 className="heading-screens">Confirm Pronunciation</h1>
+      <div className="audio-refresh-btn">
+        <Button
+          variant="contained"
+          disableElevation
+          onClick={FetchConfirmPronunFiles}
+        >
+          Confirm Pronunciation Files
+        </Button>
+      </div>
+      {audioConfirmPro?.map((value, index) => (
+        <div key={index} className="au-mt">
+          <div className="main-tile">
+            <div className="main-tile-head">
+              <Typography
+                className="video-name"
+                sx={{
+                  paddingLeft: "1rem",
+                }}
+              >
+                {value}
+              </Typography>
+              <Chip
+                label={`In progress: admin`}
+                sx={{ ml: "5px", backgroundColor: "white" }}
+              />
+            </div>
+            <p className="video-name-dynamic">No comment Found</p>
+          </div>
+          <div className="main-tiles">
+            <Box
+              component="form"
+              sx={{
+                "& > :not(style)": { m: 1, width: "25ch" },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                sx={{
+                  width: { sm: 200, md: 300 },
+                  "& .MuiInputBase-root": {
+                    width: 250,
+                  },
+                }}
+                id="outlined-basic"
+                label="English Name"
+                variant="outlined"
+              />
+            </Box>
+            <Button
+              variant="contained"
+              sx={{
+                height: "2.5rem",
+                backgroundColor: "#D7B8FD",
+                color: "white",
+                "&:hover": {
+                  backgroundColor: "#ad6efb",
+                  color: "#fff",
+                },
+              }}
+            >
+              Refunded
+            </Button>
+            <Button
+              // onClick={GetQCDone}
+              variant="contained"
+              // disabled={isDisabled}
+              sx={{
+                height: "2.5rem",
+                // marginTop: ".46rem",
+                backgroundColor: "#D7B8FD",
+                color: "white",
+                "&:hover": {
+                  backgroundColor: "#ad6efb",
+                  color: "#fff",
+                },
+              }}
+            >
+              Confirmed
+            </Button>
+          </div>
         </div>
-        <p className="video-name-dynamic">No comment Found</p>
-      </div>
-      <div className="main-tiles">
-        <Box
-          component="form"
-          sx={{
-            "& > :not(style)": { m: 1, width: "25ch" },
-          }}
-          noValidate
-          autoComplete="off"
-        >
-          <TextField
-            sx={{
-              width: { sm: 200, md: 300 },
-              "& .MuiInputBase-root": {
-                width: 250,
-              },
-            }}
-            id="outlined-basic"
-            label="English Name"
-            variant="outlined"
-          />
-        </Box>
-        <Button
-          // onClick={GetQCDone}
-          variant="contained"
-          // disabled={isDisabled}
-          sx={{
-            height: "2.5rem",
-            // marginTop: ".46rem",
-            backgroundColor: "#D7B8FD",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#ad6efb",
-              color: "#fff",
-            },
-          }}
-        >
-          Refunded
-        </Button>
-        <Button
-          // onClick={GetQCDone}
-          variant="contained"
-          // disabled={isDisabled}
-          sx={{
-            height: "2.5rem",
-            // marginTop: ".46rem",
-            backgroundColor: "#D7B8FD",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#ad6efb",
-              color: "#fff",
-            },
-          }}
-        >
-          Confirmed
-        </Button>
-      </div>
+      ))}
     </div>
   );
 };

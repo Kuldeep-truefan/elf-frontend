@@ -15,23 +15,15 @@ const AudioMistreatedTile = () => {
     const audioUrl = URL.createObjectURL(e.target.files[0]);
     setAudio(audioUrl);
   };
-  
-  console.log(">>>>>", aaudio);
+
 
   return (
     <div>
+        
       <Stack style={{position:"relative"}} direction="row" alignItems="center" spacing={2}>
-      {/* <input type="file" onChange={previewFile} /> */}
-
       <div style= {{width:"300px"}}>
-      {/* <p style={{position:"absolute", top:"2px", left:"45%", fontSize:"12px"}}>Attach Audio</p> */}
-        {/* Attach Audio */}
       {!aaudio? <input type="file" onChange={previewFile} />:<audio src={aaudio} controls />}
       </div>
-  
-      {/* <Button variant="contained" component="label">
-      Attach Audio
-    </Button> */}
         {!showModal.raw?
         <Button variant="contained" component="label" onClick={()=> setShowModal({...showModal,raw:!showModal.raw})}>
           Raw Audio
@@ -49,18 +41,6 @@ const AudioMistreatedTile = () => {
           controls
           />
         } {showModal.treated&&<p style={{position:"absolute", top:"2px", left:"70%", fontSize:"12px"}}>Treated Audio</p>}
-        {/* <ReactAudioPlayer
-            src={locaudio}
-            controls
-            volume
-            />
-        <p style={{position:"absolute", top:"2px", left:"45%", fontSize:"12px"}}>Raw Audio</p> */}
-        {/* <ReactAudioPlayer
-            src = {locaudio}
-            controls
-            volume
-            />
-        <p style={{position:"absolute", top:"2px", left:"77%", fontSize:"12px"}}>Treated Audio</p> */}
       </Stack>
     </div>
   );
