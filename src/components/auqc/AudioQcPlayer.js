@@ -27,7 +27,7 @@ const AudioModal = ({
        body: JSON.stringify({
         //  fileName: fileFirstName&&`${fileFirstName}.wav`,
          fileName: `${audioQcFileName}.wav`,
-         buckName: 'dev-ans-test-final',
+         buckName: 'celeb-audio-data',
          subpath:`${qcBucketName}-raw`
       }),
        headers: {

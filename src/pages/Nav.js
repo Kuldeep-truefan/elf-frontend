@@ -41,6 +41,7 @@ function Nav() {
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
+    console.log('OnClick------->>>>');
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {

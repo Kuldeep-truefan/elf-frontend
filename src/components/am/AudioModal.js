@@ -1,18 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
-import IconButton from "@mui/material/IconButton";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import ReactAudioPlayer from "react-audio-player";
-// import locaudio from "../../assets/audio/jf-raw_aabheri.wav";
 import { BASE_URL } from "../../constants/constant";
 const accessToken = localStorage.getItem("authToken");
 
 const AudioModal = ({ value}) => {
   const [sendFile, setSendFile] = useState(null);
 
-  // console.log(audioUrl);
   const fileFirstName = value.split("_")[0];
   const fileBucket = value.split("_")[1];
   
@@ -35,34 +30,7 @@ const AudioModal = ({ value}) => {
   });
 
   const [audioUrl, setAudioUrl] = useState(false);
-  const [aaudio, setAudio] = useState();
-  const previewFile = (e) => {
-    const audioUrl = URL.createObjectURL(e.target.files[0]);
-    setAudio(audioUrl);
-  };
-  const [showAlert, setShowAlert] = useState(false);
 
-  // const alertUncracked = () => {
-  //   alert("Are you sure!!");
-  // };
-
-
-  // const showConfirmBox = () => {
-  //   if (window.confirm("Do you want to proceed?")) {
-  //     alert();
-  //   } 
-  //   alert("Do you want to proceed")
-  // };    
-
-  // const alertUncracked = () => {
-  //   let text = "Press a button!\nEither OK or Cancel.";
-  //   if (confirm(text)) {
-  //     text = "You pressed OK!";
-  //   } else {
-  //     text = "You canceled!";
-  //   }
-  //   document.getElementById("demo").innerHTML = text;
-  // };
   let FetchPlayAudio = async (bucketName, audioFileName, subBucketName=null) => {
     return new Promise(function (resolve, reject) {
       try {
@@ -93,6 +61,7 @@ const AudioModal = ({ value}) => {
       (error) => alert(error) // doesn't run
     );
   };
+
   let AudioUncracked = async (id) => {
     try {
       fetch(`${BASE_URL}/audio/update-miscracked-field`, {
