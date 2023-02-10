@@ -92,7 +92,7 @@ const AudioMistreated = ({
                 sx={{
                   paddingLeft: "1rem",
                 }}
-              >
+              >   
                 {value}
               </Typography>
               {emittedData?.video_id === item && (

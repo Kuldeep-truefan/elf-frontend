@@ -28,7 +28,6 @@ export default function VideoModal({ open, setOpen, item, sbuck, sendMessage}) {
 
   const handleOpen = () => {
     setOpen(true);
-    console.log("true");
   };
   const handleClose = () => {
     console.log("false")

@@ -110,6 +110,7 @@ const RowComponent = ({
             <Chip
               label={`In progress: ${
                 JSON.parse(emittedData)?.filter(
+                  
                   (data) => data?.video_id === item
                 )?.[0]?.user
               }`}

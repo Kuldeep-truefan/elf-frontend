@@ -53,9 +53,7 @@ function Login() {
         body: JSON.stringify({ username: username, password: password})
       }).then(res=>res.json()).then((data) => {
           setState({ open: true });
-
           localStorage.setItem('username', data.username)
-          console.log("Username in App js", data.username);
           localStorage.setItem('authToken', JSON.stringify(data.access))
           navigate('/qc');
       })
