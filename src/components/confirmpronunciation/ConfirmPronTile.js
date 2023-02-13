@@ -1,5 +1,4 @@
 import React from "react";
-
 import "../../App.css";
 import { Button, Chip, FormHelperText, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -9,24 +8,13 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Pagination from "@mui/material/Pagination";
 
-const ConfirmPronTile = (
-  destbucket
-) => {
+const ConfirmPronTile = (destbucket) => {
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
-  const [remark, setRemark] = useState("");
   const [audioConfirmPro, setAudioConfirmPro] = useState([]);
   const [isDisabled, setIsDisabled] = useState(true);
-  const [pageCount, setPageCount] = useState('');
-  const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
-  // const[required,setRequired]=useState(false)
+  const [pageCount, setPageCount] = useState("");
   const accessToken = localStorage.getItem("authToken");
-
-  const handelClick = () => {
-    setOpen(!open);
-    console.log(open);
-  };
 
   const handleStatus = (event) => {
     setStatus(event.target.value);
@@ -37,19 +25,13 @@ const ConfirmPronTile = (
     console.log(event.target.value);
   };
 
-  const handleChange = (event) => {
-    setRemark(event.target.value);
-    // console.log(event.target.value);
-  };
-
   let FetchConfirmPronunFiles = async (e, value) => {
-    console.log('working----FetchConfirmPronunFiles');
+    console.log("working----FetchConfirmPronunFiles");
     try {
-      // setLoading(true); // Set loading before sending API request
       fetch(`${BASE_URL}/audio/get-confirm-files`, {
         method: "POST",
         body: JSON.stringify({
-          pageNumber: value
+          pageNumber: value,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
@@ -57,56 +39,45 @@ const ConfirmPronTile = (
         },
       })
         .then((response) => response.json())
-        .then((data) => {setAudioConfirmPro(data.filename)
-                          setPageCount(data.pagecount)
-        })
+        .then((data) => {
+          setAudioConfirmPro(data.filename);
+          setPageCount(data.pagecount);
+        });
     } catch (error) {
-      // setLoading(false);
       console.log("Error occured", error);
     }
   };
 
-  let UpdateConfirmName = async (buttonPressed, engName,  videoId ) => {
+  let UpdateConfirmName = async (buttonPressed, engName, videoId) => {
     try {
       fetch(`${BASE_URL}/audio/updt-redo-lip-newnamecode`, {
         method: "PUT",
         body: JSON.stringify({
           englishName: engName,
           buttonPressed: buttonPressed,
-          videoId: videoId
+          videoId: videoId,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
           Authorization: `Bearer ${accessToken}`,
         },
-      })
-        .then((response) => response.json());
+      }).then((response) => response.json());
     } catch (error) {
       console.log("Error occured", error);
     }
   };
 
-  useEffect(() => {
-    if (!destbucket) {
-      setIsDisabled(true);
-    } else if (option && status === "Rejected") setIsDisabled(false);
-    else if (status && status !== "Rejected") {
-      setIsDisabled(false);
-    } else {
-      setIsDisabled(true);
-    }
-  }, [status, option, destbucket]);
-
   return (
     <div className="confirm-tiles">
       <h1 className="heading-screens">Confirm Pronunciation</h1>
       <div className="audio-refresh-btn">
-      <div className="pagination-class">
-        <Pagination 
-        onChange={(e, value) => FetchConfirmPronunFiles(e, value)}
-        count={pageCount} 
-        variant="outlined" />
-      </div>        
+        <div className="pagination-class">
+          <Pagination
+            onChange={(e, value) => FetchConfirmPronunFiles(e, value)}
+            count={pageCount}
+            variant="outlined"
+          />
+        </div>
         <Button
           variant="contained"
           disableElevation
@@ -156,7 +127,12 @@ const ConfirmPronTile = (
             </Box>
             <Button
               variant="contained"
-              onClick={() => {UpdateConfirmName('Refunded', value.split("_")[3].split(".")[0])}}
+              onClick={() => {
+                UpdateConfirmName(
+                  "Refunded",
+                  value.split("_")[3].split(".")[0]
+                );
+              }}
               sx={{
                 height: "2.5rem",
                 backgroundColor: "#D7B8FD",
@@ -170,7 +146,12 @@ const ConfirmPronTile = (
               Refunded
             </Button>
             <Button
-              onClick={() => {UpdateConfirmName('Confirm Name', value.split("_")[3].split(".")[0])}}
+              onClick={() => {
+                UpdateConfirmName(
+                  "Confirm Name",
+                  value.split("_")[3].split(".")[0]
+                );
+              }}
               variant="contained"
               // disabled={isDisabled}
               sx={{

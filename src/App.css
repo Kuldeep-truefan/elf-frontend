@@ -358,3 +358,19 @@
 .au-mt{
   margin-bottom: 10px;
 }
+
+/* Video Upload Module JM */
+
+.upload-file-div{
+  margin-top: 10%;
+}
+
+.loading-bar-div{
+  margin-top: 10%;
+  display: flex;
+  justify-content: center;
+}
+
+.upload-button{
+  margin-top:5% !important;
+}

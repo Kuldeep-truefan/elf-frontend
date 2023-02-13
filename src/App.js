@@ -15,6 +15,7 @@ import SimplifiedNames from './pages/SimplifiedNames';
 import AudioMistreated from './pages/AudioMistreated';
 import ConfirmPronunciation from './pages/ConfirmPronunciation';
 import Dashboard from './pages/Dashboard';
+import VideoUpload from '../src/pages/VideoUpload';
 
 const App = () => {
   const location = useLocation();
@@ -31,6 +32,7 @@ const App = () => {
         <Route path="/simpname" element={<SimplifiedNames/>}/>
         <Route path="/audiomt" element={<AudioMistreated/>}/>
         <Route path="/confpron" element={<ConfirmPronunciation/>}/>    
+        <Route path="/videoupload" element={<VideoUpload/>}/>    
 
         <Route path="*" element={<PageNotFound/>}/>  
         <Route path="/nf" element={<PageNotFound/>}/>
