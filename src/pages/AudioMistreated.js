@@ -7,18 +7,15 @@ import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../constants/constant";
 import Pagination from "@mui/material/Pagination";
 
-const AudioMistreated = ({
-  item,
-  emittedData,
-  destbucket,
-}) => {
+const AudioMistreated = ({ item, emittedData, destbucket }) => {
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
   const [remark, setRemark] = useState("");
+  const [audTreData, setaudTreData] = useState("");
   const [audioMistreatedFile, setAudioMistreatedFile] = useState([]);
   const [isDisabled, setIsDisabled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [pageCount, setPageCount] = useState('');
+  const [pageCount, setPageCount] = useState("");
 
   const navigate = useNavigate();
   // const[required,setRequired]=useState(false)
@@ -44,13 +41,13 @@ const AudioMistreated = ({
   };
 
   let FetchAudioMisTreated = async (e, value) => {
-    console.log(value, 'Value for FetchAudioMisTreated--------->>> ');
+    console.log(value, "Value for FetchAudioMisTreated--------->>> ");
     try {
       // setLoading(true); // Set loading before sending API request
       fetch(`${BASE_URL}/audio/get-amt-files`, {
         method: "POST",
         body: JSON.stringify({
-          pageNumber: value
+          pageNumber: value,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
@@ -59,9 +56,10 @@ const AudioMistreated = ({
       })
         .then((response) => response.json())
         .then((response) => response)
-        .then((data) => {setAudioMistreatedFile(data.filename)
-                          setPageCount(data.pagecount)
-        })
+        .then((data) => {
+          setaudTreData(data.filename);
+          setPageCount(data.pagecount);
+        });
       // setLoading(false); // Stop loading
     } catch (error) {
       // setLoading(false);
@@ -83,12 +81,13 @@ const AudioMistreated = ({
     <div className="amt-tiles">
       <h1 className="heading-screens">Audio Mistreated</h1>
       <div className="audio-refresh-btn">
-      <div className="pagination-class">
-      <Pagination 
-        onChange={(e, value) => FetchAudioMisTreated(e, value)}
-        count={pageCount} 
-        variant="outlined"/>
-      </div>
+        <div className="pagination-class">
+          <Pagination
+            onChange={(e, value) => FetchAudioMisTreated(e, value)}
+            count={pageCount}
+            variant="outlined"
+          />
+        </div>
         <Button
           variant="contained"
           disableElevation
@@ -98,7 +97,7 @@ const AudioMistreated = ({
           GET AUDIO Mistreated
         </Button>
       </div>
-      {audioMistreatedFile?.map((value, index) => (
+      {audTreData.length > 0 && audTreData?.map(([tileName, comments], index) => (
         <div key={index} className="au-mt">
           <div className="main-tile">
             <div className="main-tile-head">
@@ -107,8 +106,8 @@ const AudioMistreated = ({
                 sx={{
                   paddingLeft: "1rem",
                 }}
-              >   
-                {value}
+              >
+                {tileName}
               </Typography>
               {emittedData?.video_id === item && (
                 <Chip
@@ -117,10 +116,10 @@ const AudioMistreated = ({
                 />
               )}
             </div>
-            <p className="video-name-dynamic">No Comment Found</p>
+            <p className="video-name-dynamic">{comments}</p>
           </div>
           <div className="am-main-tiles">
-            <AudioMistreatedTile value={value}/>
+            <AudioMistreatedTile value={comments} />
           </div>
         </div>
       ))}
@@ -129,4 +128,3 @@ const AudioMistreated = ({
 };
 
 export default AudioMistreated;
-

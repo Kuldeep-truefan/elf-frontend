@@ -18,7 +18,7 @@ const RedoLipBox = (
   const [option, setOptions] = useState("");
   const [remark, setRemark] = useState("");
   const [pageCount, setPageCount] = useState('');
-  const [redoTileName, setRedoTileName] = useState([]);
+  const [redoTileName, setRedoTileName] = useState('');
   const [nameCode, setNameCode] = useState("");
   const [newNameCode, setNewNameCode] = useState("");
 
@@ -127,7 +127,7 @@ const RedoLipBox = (
           Get Redo Lip Sync
         </Button>
       </div>
-      {redoTileName?.map((value, index) => (
+      {redoTileName.length > 0 && redoTileName?.map(([tileName, comments], index) => (
         <div key={index} className="au-mt">
           <div className="main-tile">
             <div className="main-tile-head">
@@ -137,14 +137,14 @@ const RedoLipBox = (
                   paddingLeft: "1rem",
                 }}
               >
-                {value}
+                {tileName}
               </Typography>
               <Chip
                 label={`In progress: admin`}
                 sx={{ ml: "5px", backgroundColor: "white" }}
               />
             </div>
-            <p className="video-name-dynamic">No Comment Found</p>
+            <p className="video-name-dynamic">{comments}</p>
           </div>
           <div className="main-tiles">
             <RedoLipModal
@@ -152,7 +152,7 @@ const RedoLipBox = (
               sendMessage={handleClickSendMessage}
               open={open}
               setOpen={setOpen}
-              item={value}
+              item={tileName}
               sbuck={sbuck}
             />
             <Box
@@ -177,7 +177,7 @@ const RedoLipBox = (
             />
             </Box>
             <Button
-              onClick={() =>{UpdateRedoLipSync(value.split("_")[3].split(".")[0])}}
+              onClick={() =>{UpdateRedoLipSync(tileName.split("_")[3].split(".")[0])}}
               variant="contained"
               sx={{
                 height: "2.5rem",

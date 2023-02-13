@@ -9,7 +9,8 @@ import { BASE_URL } from "../../constants/constant";
 // https://beta.reactjs.org/reference/react-dom/components/textarea for text area customisations
 
 const SimpTile = ({
-    value
+    value,
+    vas
 }) => {
     const [englishName, setEnglishName] = useState("");
     const [hindiName, setHindiName] = useState('');
@@ -55,7 +56,7 @@ const SimpTile = ({
           label={`In progress: admin`}
           sx={{ ml: "5px", backgroundColor: "white" }}/>
       </div>
-      <p className="video-name-dynamic">Vas Field Value</p>
+      <p className="video-name-dynamic">{vas}</p>
     </div>
     <div className="main-tiles">
       <textarea

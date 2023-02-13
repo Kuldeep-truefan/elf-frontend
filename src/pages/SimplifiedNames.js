@@ -11,6 +11,7 @@ import Pagination from "@mui/material/Pagination";
 const SimplifiedNames = () => {
   const [englishName, setEnglishName] = useState("");
   const [hinName, setHinName] = useState("");
+  const [simpNamesData, setSimpNameData] = useState('');
   const [simpFileName, setSimpFileName] = useState([]);
   const [pageCount, setPageCount] = useState('');
   const navigate = useNavigate();
@@ -64,7 +65,7 @@ const SimplifiedNames = () => {
         .then((response) => response.json())
         .then((response) => response)
         .then((data) => {
-          setSimpFileName(data.filename)
+          setSimpNameData(data.filename)
           setPageCount(data.pagecount)
         })
     } catch (error) {
@@ -90,8 +91,8 @@ const SimplifiedNames = () => {
           GET Simplified Names
         </Button>
       </div>
-      {simpFileName?.map((value, index) => (
-        <SimpTile key={index} value={value}/>
+      {simpNamesData.length > 0 && simpNamesData?.map(([tileName, vas], index) => (
+        <SimpTile key={index} value={tileName} vas={vas}/>
       ))}
     </div>
   );

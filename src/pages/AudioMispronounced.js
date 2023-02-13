@@ -8,13 +8,13 @@ import Pagination from "@mui/material/Pagination";
 
 const AudioMispronounced = ({ item, emittedData , sendFile}) => {
   const [audioFile, setAudioFile] = useState([]);
-
   // const[required,setRequired]=useState(false)
   const [pageCount, setPageCount] = useState('');
+  const [misProData, setMisProData] = useState('');
+  // console.log(misProData, 'audioFile--????--->>>>>');
   const accessToken = localStorage.getItem("authToken");
 
   let FetchAudioMisTiles = async (e, value) => {
-    console.log(value, 'Working---->>>>');
     try {
       fetch(`${BASE_URL}/audio/audiomis`, {
         method: "POST",
@@ -28,9 +28,10 @@ const AudioMispronounced = ({ item, emittedData , sendFile}) => {
       })
         .then((response) => response.json())
         .then((response) => response)
-        .then((data) => {setAudioFile(data.filename)
-                        setPageCount(data.pagecount)
-        })
+        .then((data) => {
+          setMisProData(data.filename)
+          setPageCount(data.pagecount)
+        })        
       // setLoading(false); // Stop loading
     } catch (error) {
       console.log("Error occured", error);
@@ -55,8 +56,8 @@ const AudioMispronounced = ({ item, emittedData , sendFile}) => {
           GET AUDIO Mispronounced
         </Button>
       </div>
-      
-      {audioFile?.map((value, index) => (
+
+      {misProData.length > 0 && misProData?.map(([tileName, comments], index) => (
         <div key={index} className="au-mis">
           <div className="main-tile">
           <ColorCheckboxes/>
@@ -68,7 +69,7 @@ const AudioMispronounced = ({ item, emittedData , sendFile}) => {
                   paddingLeft: "1rem",
                 }}
               >
-                {value}
+                {tileName}
               </Typography>
               {emittedData?.video_id === item && (
                 <Chip
@@ -77,10 +78,10 @@ const AudioMispronounced = ({ item, emittedData , sendFile}) => {
                 />
               )}
             </div>
-            <p className="video-name-dynamic">No Comment Found</p>
+            <p className="video-name-dynamic">{comments}</p>
           </div>
           <div className="am-main-tiles">
-            <AudioModal value={value} sendFile={sendFile}/>
+            <AudioModal value={tileName} sendFile={sendFile}/>
           </div>
         </div>
       ))}

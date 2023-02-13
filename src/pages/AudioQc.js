@@ -25,6 +25,7 @@ const AudioQc = ({
   const [isDisabled, setIsDisabled] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState();
   const [pageCount, setPageCount] = useState("");
+  const [audioQcData, setAudioQcData] = useState('');
 
   // const[required,setRequired]=useState(false)
   const accessToken = localStorage.getItem("authToken");
@@ -107,7 +108,7 @@ const AudioQc = ({
         .then((response) => response.json())
         .then((response) => response)
         .then((data) => {
-          setAudioQcFiles(data.filename);
+          setAudioQcData(data.filename);
           setPageCount(data.pagecount);
         });
       // setLoading(false); // Stop loading
@@ -135,22 +136,17 @@ const AudioQc = ({
           GET AUDIO QC
         </Button>
       </div>
-      {audioQcFiles?.map((value, index) => (
+      {audioQcData.length > 0 &&audioQcData?.map(([tileName, comments], index) => (
         <div key={index} className="au-mis">
           <div className="main-tile">
             <div className="main-tile-head">
               <Typography
                 className="video-name"
                 sx={{
-                  // fontSize: "11px",
-                  // width: "71.7%",
-                  // marginLeft: "2.4rem",
-                  // position: "relative",
-                  // right: "10%",
                   paddingLeft: "1rem",
                 }}
               >
-                {value}
+                {tileName}
               </Typography>
               {emittedData?.video_id === item && (
                 <Chip
@@ -159,10 +155,10 @@ const AudioQc = ({
                 />
               )}
             </div>
-            <p className="video-name-dynamic">No Comment Found</p>
+            <p className="video-name-dynamic">{comments}</p>
           </div>
           <div className="am-main-tiles">
-            <AudioQcPlayer value={value} />
+            <AudioQcPlayer value={tileName} />
             <AudioRecorders setRecordedAudio={setRecordedAudio} />
             {/* <SettingsVoiceRoundedIcon/> */}
             <TextareaAutosize
@@ -181,15 +177,14 @@ const AudioQc = ({
                 onClick={() => {
                   UpdateQcComtStatus(
                     "Approved",
-                    value.split("_")[3].split(".")[0],
+                    tileName.split("_")[3].split(".")[0],
                     "",
-                    value
+                    tileName
                   );
                 }}
                 sx={{
                   height: "2.5rem",
                   marginRight: "1rem",
-                  // marginTop: ".46rem",
                   backgroundColor: "#D7B8FD",
                   color: "white",
                   "&:hover": {
@@ -206,11 +201,11 @@ const AudioQc = ({
                 onClick={() => {
                   UpdateQcComtStatus(
                     "Rejected",
-                    value.split("_")[3].split(".")[0],
+                    tileName.split("_")[3].split(".")[0],
                     remark,
                     ""
                   );
-                  UploadAudioRecored(value, value.split("_")[3].split(".")[0]);
+                  UploadAudioRecored(tileName, tileName.split("_")[3].split(".")[0]);
                 }}
                 sx={{
                   height: "2.5rem",
