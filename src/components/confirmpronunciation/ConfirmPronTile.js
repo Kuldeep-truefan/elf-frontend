@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../constants/constant";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import Pagination from "@mui/material/Pagination";
 
 const ConfirmPronTile = (
   destbucket
@@ -16,6 +17,7 @@ const ConfirmPronTile = (
   const [remark, setRemark] = useState("");
   const [audioConfirmPro, setAudioConfirmPro] = useState([]);
   const [isDisabled, setIsDisabled] = useState(true);
+  const [pageCount, setPageCount] = useState('');
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   // const[required,setRequired]=useState(false)
@@ -40,22 +42,46 @@ const ConfirmPronTile = (
     // console.log(event.target.value);
   };
 
-  let FetchConfirmPronunFiles = async () => {
+  let FetchConfirmPronunFiles = async (e, value) => {
+    console.log('working----FetchConfirmPronunFiles');
     try {
       // setLoading(true); // Set loading before sending API request
       fetch(`${BASE_URL}/audio/get-confirm-files`, {
-        method: "GET",
+        method: "POST",
+        body: JSON.stringify({
+          pageNumber: value
+        }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
           Authorization: `Bearer ${accessToken}`,
         },
       })
         .then((response) => response.json())
-        .then((data) => setAudioConfirmPro(data.filename));
-      // .then((data) => console.log(data));
-      // setLoading(false); // Stop loading
+        .then((data) => {setAudioConfirmPro(data.filename)
+                          setPageCount(data.pagecount)
+        })
     } catch (error) {
       // setLoading(false);
+      console.log("Error occured", error);
+    }
+  };
+
+  let UpdateConfirmName = async (buttonPressed, engName,  videoId ) => {
+    try {
+      fetch(`${BASE_URL}/audio/updt-redo-lip-newnamecode`, {
+        method: "PUT",
+        body: JSON.stringify({
+          englishName: engName,
+          buttonPressed: buttonPressed,
+          videoId: videoId
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+        .then((response) => response.json());
+    } catch (error) {
       console.log("Error occured", error);
     }
   };
@@ -75,6 +101,12 @@ const ConfirmPronTile = (
     <div className="confirm-tiles">
       <h1 className="heading-screens">Confirm Pronunciation</h1>
       <div className="audio-refresh-btn">
+      <div className="pagination-class">
+        <Pagination 
+        onChange={(e, value) => FetchConfirmPronunFiles(e, value)}
+        count={pageCount} 
+        variant="outlined" />
+      </div>        
         <Button
           variant="contained"
           disableElevation
@@ -100,7 +132,6 @@ const ConfirmPronTile = (
                 sx={{ ml: "5px", backgroundColor: "white" }}
               />
             </div>
-            <p className="video-name-dynamic">No comment Found</p>
           </div>
           <div className="main-tiles">
             <Box
@@ -125,6 +156,7 @@ const ConfirmPronTile = (
             </Box>
             <Button
               variant="contained"
+              onClick={() => {UpdateConfirmName('Refunded', value.split("_")[3].split(".")[0])}}
               sx={{
                 height: "2.5rem",
                 backgroundColor: "#D7B8FD",
@@ -138,7 +170,7 @@ const ConfirmPronTile = (
               Refunded
             </Button>
             <Button
-              // onClick={GetQCDone}
+              onClick={() => {UpdateConfirmName('Confirm Name', value.split("_")[3].split(".")[0])}}
               variant="contained"
               // disabled={isDisabled}
               sx={{

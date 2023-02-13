@@ -7,6 +7,7 @@ import { BASE_URL } from "../../constants/constant";
 import RedoLipModal from "./RedoLipModal";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import Pagination from "@mui/material/Pagination";
 
 const RedoLipBox = (
   sbuck,
@@ -16,6 +17,7 @@ const RedoLipBox = (
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
   const [remark, setRemark] = useState("");
+  const [pageCount, setPageCount] = useState('');
   const [redoTileName, setRedoTileName] = useState([]);
   const [nameCode, setNameCode] = useState("");
   const [newNameCode, setNewNameCode] = useState("");
@@ -67,11 +69,15 @@ const RedoLipBox = (
     }
   };
 
-  let FetchAudioRedoLipSync = async () => {
+  let FetchAudioRedoLipSync = async (e, value) => {
+    console.log(value, 'value of FetchAudioRedoLipSync---->>');
     try {
       // setLoading(true); // Set loading before sending API request
       fetch(`${BASE_URL}/audio/get-redo-lip-files`, {
-        method: "GET",
+        method: "POST",
+        body: JSON.stringify({
+          pageNumber: value
+        }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
           Authorization: `Bearer ${accessToken}`,
@@ -81,6 +87,8 @@ const RedoLipBox = (
         .then((data) => {
           setRedoTileName(data.filename);
           setNameCode(data.lastnamecode);
+          setPageCount(data.pagecount)
+
         });
       // setLoading(false); // Stop loading
     } catch (error) {
@@ -89,7 +97,6 @@ const RedoLipBox = (
     }
   };
 
-  console.log("------------->>>>>>>> ", redoTileName);
 
 
   // useEffect(() => {
@@ -106,6 +113,12 @@ const RedoLipBox = (
     <div className="tiles">
       <h1 className="heading-screens">Redo Lip Sync</h1>
       <div className="audio-refresh-btn">
+      <div className="pagination-class">
+        <Pagination 
+        onChange={(e, value) => FetchAudioRedoLipSync(e, value)}
+        count={pageCount} 
+        variant="outlined" />
+      </div>        
         <Button
           variant="contained"
           disableElevation
