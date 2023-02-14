@@ -5,21 +5,23 @@ import ReactAudioPlayer from "react-audio-player";
 import { BASE_URL } from "../../constants/constant";
 const accessToken = localStorage.getItem("authToken");
 
-const AudioModal = ({ value}) => {
+const AudioModal = ({ value }) => {
   const [sendFile, setSendFile] = useState(null);
-
   const fileFirstName = value.split("_")[0];
   const fileBucket = value.split("_")[1];
+
   
   const handleFile = (event) => {
-    if (`${event.target.files[0]?.name}.wav` !== `${fileFirstName}.wav`){
-      alert("Filename not correct")
-    }else if(`${event.target.files[0]?.name}.wav` === `${fileFirstName}.wav`){
-      const audioUrl = URL.createObjectURL(event.target.files[0]);
+    var matchWith = `${event.target.files[0]?.name}`
+    var matchWithFile = `${fileFirstName}.wav`
+    if(matchWith === matchWithFile){
+      const audioUrl = URL.createObjectURL(event.target.files[0]);      
       setSendFile({
         url: audioUrl,
         file: event.target.files[0],
       });
+    }else if (`${event.target.files[0]?.name}` !== `${fileFirstName}.wav`){
+      alert("Filename not correct")
     }
   };
 
@@ -92,7 +94,8 @@ const AudioModal = ({ value}) => {
       formdata.append("fileName", `${filename}.wav`);
       formdata.append("folderName", `${subBuckName}-raw`);
       formdata.append("videoId", vid);
-
+      formdata.append("screenName", 'am');
+      
       let requestOptions = {
         method: "POST",
         headers: myHeaders,
@@ -222,7 +225,7 @@ const AudioModal = ({ value}) => {
             UploadAudioFileMispronounced(
               value.split("_")[0],
               value.split("_")[1],
-              value.split("_")[4].split(".")[0]
+              value.split("_")[3].split(".")[0]
             );
           }}
           variant="contained"
