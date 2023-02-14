@@ -68,7 +68,7 @@ const AudioMistreatedTile = (value) => {
       formdata.append("fileName", `${value.value.split("_")[0]}.wav`)
       formdata.append("folderName", `${value.value.split("_")[1]}-raw`)
       formdata.append("videoId", value.value.split("_")[3].split(".")[0])
-      formdata.append("screenName", 'am')
+      formdata.append("screenName", 'amt')
       
 
       let requestOptions = {

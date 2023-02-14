@@ -8,6 +8,7 @@ import { BASE_URL } from "../constants/constant";
 import AudioQcPlayer from "../components/auqc/AudioQcPlayer";
 import AudioRecorders from "../components/auqc/AudioRecorders";
 import Pagination from "@mui/material/Pagination";
+import ColorCheckboxes from "../components/CheckBoxPick.js/ColorCheckboxes";
 
 const AudioQc = ({
   item,
@@ -121,13 +122,6 @@ const AudioQc = ({
     <div className="am-tiles">
       <h1 className="heading-screens">Audio QC</h1>
       <div className="audio-refresh-btn">
-        <div className="pagination-class">
-          <Pagination
-            onChange={(e, value) => FetchAudioQcTiles(e ,value)}
-            count={pageCount}
-            variant="outlined"
-          />
-        </div>
         <Button
           onClick={FetchAudioQcTiles}
           variant="contained"
@@ -135,10 +129,18 @@ const AudioQc = ({
         >
           GET AUDIO QC
         </Button>
+        <div className="pagination-class">
+          <Pagination
+            onChange={(e, value) => FetchAudioQcTiles(e ,value)}
+            count={pageCount}
+            variant="outlined"
+          />
+        </div>
       </div>
       {audioQcData.length > 0 &&audioQcData?.map(([tileName, comments], index) => (
         <div key={index} className="au-mis">
           <div className="main-tile">
+          <ColorCheckboxes/>
             <div className="main-tile-head">
               <Typography
                 className="video-name"

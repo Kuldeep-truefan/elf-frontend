@@ -8,7 +8,7 @@ import * as React from "react";
 import Stack from "@mui/material/Stack";
 
 function Qc() {
-  const [link, setLink] = useState([]);
+  const [link, setLink] = useState("");
   const [sbuck, setSbuck] = useState([]);
   const [dbuck, setDbuck] = useState([]);
   const [destbucket, setDestMove] = useState("");
@@ -73,15 +73,16 @@ function Qc() {
         destbucket={destbucket}
         setDestMove={setDestMove}
       />
-      {link?.map((item, index) => {
+      {link.length>0 && link?.map(([fileName, comments], index) => {
         return (
           <RowComponent
             key={index}
+            comments={comments}
             setLink={setLink}
             handleClickSendMessage={handleClickSendMessage}
             destbucket={destbucket}
             emittedData={emittedData}
-            item={item}
+            item={fileName}
             sbuck={sbuck}
             dbuck={dbuck}
             index={index}

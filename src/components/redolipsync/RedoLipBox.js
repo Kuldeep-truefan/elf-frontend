@@ -1,45 +1,31 @@
 import "../../App.css";
-import { Button, Chip, FormHelperText, Typography } from "@mui/material";
-
+import { Button, Chip, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../constants/constant";
 import RedoLipModal from "./RedoLipModal";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Pagination from "@mui/material/Pagination";
+import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
 
 const RedoLipBox = (
   sbuck,
   handleClickSendMessage,
   destbucket
 ) => {
-  const [status, setStatus] = useState("");
-  const [option, setOptions] = useState("");
-  const [remark, setRemark] = useState("");
   const [pageCount, setPageCount] = useState('');
   const [redoTileName, setRedoTileName] = useState('');
   const [nameCode, setNameCode] = useState("");
   const [newNameCode, setNewNameCode] = useState("");
 
-  const [isDisabled, setIsDisabled] = useState(true);
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
+
   // const[required,setRequired]=useState(false)
   const accessToken = localStorage.getItem("authToken");
 
   const handelClick = () => {
     setOpen(open);
     console.log(open);
-  };
-
-  const handleStatus = (event) => {
-    setStatus(event.target.value);
-  };
-
-  const handleOptions = (event) => {
-    setOptions(event.target.value);
-    console.log(event.target.value);
   };
 
   const handleChange = (event) => {
@@ -88,7 +74,6 @@ const RedoLipBox = (
           setRedoTileName(data.filename);
           setNameCode(data.lastnamecode);
           setPageCount(data.pagecount)
-
         });
       // setLoading(false); // Stop loading
     } catch (error) {
@@ -114,11 +99,6 @@ const RedoLipBox = (
       <h1 className="heading-screens">Redo Lip Sync</h1>
       <div className="audio-refresh-btn">
       <div className="pagination-class">
-        <Pagination 
-        onChange={(e, value) => FetchAudioRedoLipSync(e, value)}
-        count={pageCount} 
-        variant="outlined" />
-      </div>        
         <Button
           variant="contained"
           disableElevation
@@ -126,10 +106,16 @@ const RedoLipBox = (
         >
           Get Redo Lip Sync
         </Button>
+        <Pagination 
+        onChange={(e, value) => FetchAudioRedoLipSync(e, value)}
+        count={pageCount} 
+        variant="outlined" />
+      </div>        
       </div>
       {redoTileName.length > 0 && redoTileName?.map(([tileName, comments], index) => (
         <div key={index} className="au-mt">
           <div className="main-tile">
+          <ColorCheckboxes/>
             <div className="main-tile-head">
               <Typography
                 className="video-name"

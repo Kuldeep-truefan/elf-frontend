@@ -5,6 +5,7 @@ import { ReactTransliterate } from "react-transliterate";
 import "react-transliterate/dist/index.css";
 import "../../App.css";
 import { BASE_URL } from "../../constants/constant";
+import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
 
 // https://beta.reactjs.org/reference/react-dom/components/textarea for text area customisations
 
@@ -46,6 +47,7 @@ const SimpTile = ({
   return (
     <div className="au-mis">
     <div className="main-tile">
+    <ColorCheckboxes/>
       <div className="main-tile-head">
         <Typography
           className="video-name"

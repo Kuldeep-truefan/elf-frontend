@@ -121,7 +121,7 @@ const AudioModal = ({ value}) => {
         <div style={{ width: "300px" }}>
           {!sendFile?.url ? (
             <input id="audio" type="file" onChange={handleFile} />
-          ) : (
+          ):(
             <audio src={sendFile.url} controls />
           )}
         </div>
@@ -168,10 +168,8 @@ const AudioModal = ({ value}) => {
               setShowModal({ ...showModal, remark: !showModal.remark })
             }}
             variant="contained"
-            // disabled={isDisabled}
             sx={{
               height: "2.5rem",
-              // marginTop: ".46rem",
               backgroundColor: "#D7B8FD",
               color: "white",
               "&:hover": {
@@ -200,7 +198,6 @@ const AudioModal = ({ value}) => {
         <div className="au-dn-uncracked-btns">
         <Button
           onClick={() => {
-            // alertUncracked();
             if (window.confirm("Do you want to proceed?")) {
               AudioUncracked(value.split("_")[3].split(".")[0]);
             } 
@@ -208,7 +205,6 @@ const AudioModal = ({ value}) => {
           variant="contained"
           sx={{
             height: "2.5rem",
-            // marginTop: ".46rem",
             backgroundColor: "#D7B8FD",
             color: "white",
             "&:hover": {

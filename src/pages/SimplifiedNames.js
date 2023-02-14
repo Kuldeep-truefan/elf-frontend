@@ -78,11 +78,6 @@ const SimplifiedNames = () => {
       <h1 className="heading-screens">Simplified Names</h1>
       <div className="audio-refresh-btn">
       <div className="pagination-class">
-        <Pagination 
-        onChange={(e, value) => FetchSimplifiedNames(e, value)}
-        count={pageCount} 
-        variant="outlined" />
-      </div>
         <Button
           onClick={FetchSimplifiedNames}
           variant="contained"
@@ -90,6 +85,11 @@ const SimplifiedNames = () => {
         >
           GET Simplified Names
         </Button>
+        <Pagination 
+        onChange={(e, value) => FetchSimplifiedNames(e, value)}
+        count={pageCount} 
+        variant="outlined" />
+      </div>
       </div>
       {simpNamesData.length > 0 && simpNamesData?.map(([tileName, vas], index) => (
         <SimpTile key={index} value={tileName} vas={vas}/>

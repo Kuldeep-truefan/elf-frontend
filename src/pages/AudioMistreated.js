@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../constants/constant";
 import Pagination from "@mui/material/Pagination";
+import ColorCheckboxes from "../components/CheckBoxPick.js/ColorCheckboxes";
 
 const AudioMistreated = ({ item, emittedData, destbucket }) => {
   const [status, setStatus] = useState("");
@@ -82,12 +83,6 @@ const AudioMistreated = ({ item, emittedData, destbucket }) => {
       <h1 className="heading-screens">Audio Mistreated</h1>
       <div className="audio-refresh-btn">
         <div className="pagination-class">
-          <Pagination
-            onChange={(e, value) => FetchAudioMisTreated(e, value)}
-            count={pageCount}
-            variant="outlined"
-          />
-        </div>
         <Button
           variant="contained"
           disableElevation
@@ -96,10 +91,17 @@ const AudioMistreated = ({ item, emittedData, destbucket }) => {
         >
           GET AUDIO Mistreated
         </Button>
+          <Pagination
+            onChange={(e, value) => FetchAudioMisTreated(e, value)}
+            count={pageCount}
+            variant="outlined"
+          />
+        </div>
       </div>
       {audTreData.length > 0 && audTreData?.map(([tileName, comments], index) => (
         <div key={index} className="au-mt">
           <div className="main-tile">
+            <ColorCheckboxes/>
             <div className="main-tile-head">
               <Typography
                 className="video-name"

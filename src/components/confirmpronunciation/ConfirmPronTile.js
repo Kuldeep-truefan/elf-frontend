@@ -7,6 +7,7 @@ import { BASE_URL } from "../../constants/constant";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Pagination from "@mui/material/Pagination";
+import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
 
 const ConfirmPronTile = (destbucket) => {
   const [status, setStatus] = useState("");
@@ -72,12 +73,6 @@ const ConfirmPronTile = (destbucket) => {
       <h1 className="heading-screens">Confirm Pronunciation</h1>
       <div className="audio-refresh-btn">
         <div className="pagination-class">
-          <Pagination
-            onChange={(e, value) => FetchConfirmPronunFiles(e, value)}
-            count={pageCount}
-            variant="outlined"
-          />
-        </div>
         <Button
           variant="contained"
           disableElevation
@@ -85,10 +80,17 @@ const ConfirmPronTile = (destbucket) => {
         >
           Confirm Pronunciation Files
         </Button>
+          <Pagination
+            onChange={(e, value) => FetchConfirmPronunFiles(e, value)}
+            count={pageCount}
+            variant="outlined"
+          />
+        </div>
       </div>
       {audioConfirmPro?.map((value, index) => (
         <div key={index} className="au-mt">
           <div className="main-tile">
+          <ColorCheckboxes/>
             <div className="main-tile-head">
               <Typography
                 className="video-name"

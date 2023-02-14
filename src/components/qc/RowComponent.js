@@ -14,6 +14,7 @@ import { BASE_URL } from "../../constants/constant";
 const RowComponent = ({
   item,
   sbuck,
+  comments,
   dbuck,
   handleClickSendMessage,
   emittedData,
@@ -119,7 +120,7 @@ const RowComponent = ({
           )}
         </div>
 
-        <p className="video-name-dynamic">No Comment Found</p>
+        <p className="video-name-dynamic">{comments}</p>
       </div>
       <div className="main-tiles">
         <VideoModal
