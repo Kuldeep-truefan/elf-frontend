@@ -9,46 +9,10 @@ import SimpTile from "../components/sn/SimpTile";
 import Pagination from "@mui/material/Pagination";
 
 const SimplifiedNames = () => {
-  const [englishName, setEnglishName] = useState("");
-  const [hinName, setHinName] = useState("");
   const [simpNamesData, setSimpNameData] = useState('');
   const [simpFileName, setSimpFileName] = useState([]);
   const [pageCount, setPageCount] = useState('');
-  const navigate = useNavigate();
   const accessToken = localStorage.getItem("authToken");
-
-  const handleEngName = (event) => {
-    setEnglishName(event.target.value);
-    console.log(event.target.value);
-  };
-
-  const handleHinName = (event) => {
-    setHinName(event.target.value);
-    console.log(event.target.value);
-  };
-
-  // let UpdateSimpNames = async (id, button_type) => {
-  //   try {
-  //     fetch(`${BASE_URL}/audio/update-simplified-fields`, {
-  //       method: "POST",
-  //       body: JSON.stringify({
-  //         englishName: englishName,
-  //         hindiName: hindiName,
-  //         videoId: id,
-  //         button_type,
-  //       }),
-  //       headers: {
-  //         "Content-type": "application/json; charset=UTF-8",
-  //         Authorization: `Bearer ${accessToken}`,
-  //       },
-  //     })
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //       });
-  //   } catch (error) {
-  //     console.log("Error occured", error);
-  //   }
-  // };
 
   let FetchSimplifiedNames = async (e, value) => {
     try {

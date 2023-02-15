@@ -16,10 +16,23 @@ import AudioMistreated from './pages/AudioMistreated';
 import ConfirmPronunciation from './pages/ConfirmPronunciation';
 import Dashboard from './pages/Dashboard';
 import VideoUpload from '../src/pages/VideoUpload';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query'
 
 const App = () => {
   const location = useLocation();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false, // default: true
+      },
+    },
+  })
+  
   return (
+    <QueryClientProvider client={queryClient}>
     <div>{location.pathname!=="/"&& <Nav/>}
       <Routes>
         <Route path="/" element={<Login />}/>
@@ -39,6 +52,7 @@ const App = () => {
         </Route>
       </Routes>
     </div>
+    </QueryClientProvider>
   )
 }
 

@@ -12,8 +12,8 @@ const AudioModal = ({ value }) => {
 
   
   const handleFile = (event) => {
-    var matchWith = `${event.target.files[0]?.name}`
-    var matchWithFile = `${fileFirstName}.wav`
+    let matchWith = `${event.target.files[0]?.name}`
+    let matchWithFile = `${fileFirstName}.wav`
     if(matchWith === matchWithFile){
       const audioUrl = URL.createObjectURL(event.target.files[0]);      
       setSendFile({
@@ -21,7 +21,7 @@ const AudioModal = ({ value }) => {
         file: event.target.files[0],
       });
     }else if (`${event.target.files[0]?.name}` !== `${fileFirstName}.wav`){
-      alert("Filename not correct")
+      alert("Filename not matched choose the correct file")
     }
   };
 
@@ -122,8 +122,8 @@ const AudioModal = ({ value }) => {
       >
         {/* <input type="file" onChange={previewFile} /> */}
         <div style={{ width: "300px" }}>
-          {!sendFile?.url ? (
-            <input id="audio" type="file" onChange={handleFile} />
+          {!sendFile?.url? (
+            <input id="audio" type="file" onChange={handleFile}/>
           ):(
             <audio src={sendFile.url} controls />
           )}
