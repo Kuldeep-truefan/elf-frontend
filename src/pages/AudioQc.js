@@ -14,76 +14,9 @@ const AudioQc = ({
   item,
   emittedData
 }) => {
-  // const [remark, setRemark] = useState("");
-  // const [audioQcFiles, setAudioQcFiles] = useState([]);
-  // const [isDisabled, setIsDisabled] = useState(false);
-  // const [recordedAudio, setRecordedAudio] = useState();
-  // const [audioQcData, setAudioQcData] = useState('');
-
-  // // const[required,setRequired]=useState(false)
   const accessToken = localStorage.getItem("authToken");
   const [pageNumber, setPageNumber] = useState(1);
-  // let UploadAudioRecored = async (fullFileName, vidAuRec) => {
-  //   try {
-  //     let myHeaders = new Headers();
-  //     myHeaders.append(
-  //       "Cookie",
-  //       "csrftoken=L2ETtVsdGnxYzQ4llNrKESv7Evm5nGa5N7SWvkTt488G43CzM7AnoWHJoxr8GNSC"
-  //     );
-
-  //     let formdata = new FormData();
-  //     formdata.append("fileName", fullFileName); 
-  //     formdata.append("file", recordedAudio);
-  //     formdata.append("videoId", vidAuRec);
-
-  //     let requestOptions = {
-  //       method: "POST",
-  //       headers: myHeaders,
-  //       body: formdata,
-  //     };
-  //     const response = await fetch(
-  //       `${BASE_URL}/audio/upload-rec-auqc-file`,
-  //       requestOptions
-  //     );
-  //     const convertToText = await response.text();
-  //     return convertToText;
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // let UpdateQcComtStatus = async (
-  //   audioQcStatus,
-  //   audioId,
-  //   remark,
-  //   blobToDelete
-  // ) => {
-  //   try {
-  //     fetch(`${BASE_URL}/audio/qccommentstatus`, {
-  //       method: "POST",
-  //       body: JSON.stringify({
-  //         audioQc: audioQcStatus,
-  //         audioQcId: audioId,
-  //         audioQcRemarks: remark,
-  //         deleteBlob: blobToDelete ? blobToDelete : "",
-  //       }),
-  //       headers: {
-  //         "Content-type": "application/json; charset=UTF-8",
-  //         Authorization: `Bearer ${accessToken}`,
-  //       },
-  //     });
-  //     // .then((response) => response.json())
-  //     // .then((data) => setLink(data.filename))
-  //     // setLoading(false); // Stop loading
-  //   } catch (error) {
-  //     console.log("Error occured", error);
-  //   }
-  // };
-
-  // const handleChange = (event) => {
-  //   setRemark(event.target.value);
-  //   console.log(event.target.value);
-  // };
+  
 
   let FetchAudioQcTiles = async (value) => {
      const data = await fetch(`${BASE_URL}/audio/audioqc`, {
@@ -137,7 +70,7 @@ const AudioQc = ({
       </div>
       {audioQcData?.length > 0 &&audioQcData?.map(([tileName, comments], index) => (
 
-        <AudioQcRow item={item} emittedData={emittedData} tileName={tileName} comments={comments} index={index} />
+        <AudioQcRow item={item} emittedData={emittedData} tileName={`${tileName}.wav`} comments={comments} index={index} />
       )
       )}
     </div>

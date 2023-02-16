@@ -5,7 +5,6 @@ import useWebSocket, { ReadyState } from "react-use-websocket";
 import { WEB_BASE_URL } from "../constants/constant";
 import RowComponent from "../components/qc/RowComponent";
 import * as React from "react";
-import Stack from "@mui/material/Stack";
 
 function Qc() {
   const [link, setLink] = useState("");
@@ -18,7 +17,7 @@ function Qc() {
   //Public API that will echo messages sent to it back to the client
   const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/socket.io/`);
 
-  const [messageHistory, setMessageHistory] = useState([]);
+  // const [messageHistory, setMessageHistory] = useState([]);
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
     onMessage: (message) => {
@@ -26,18 +25,17 @@ function Qc() {
       if (data?.msg === "updated") {
       }
       setemittedData(JSON.parse(data?.data));
-      // console.log("qc",J);
       console.log("message", message);
-    },
+    }
   });
 
-  useEffect(() => {
-    if (lastMessage !== null) {
-      setMessageHistory((prev) => prev.concat(lastMessage));
-    }
-  }, [lastMessage, setMessageHistory]);
+  // useEffect(() => {
+  //   if (lastMessage !== null) {
+  //     setMessageHistory((prev) => prev.concat(lastMessage));
+  //   }
+  // }, [lastMessage, setMessageHistory]);
 
-  console.log(messageHistory);
+  // console.log(messageHistory, 'this is message history');
 
   const handleClickSendMessage = useCallback(
     (payload) =>
@@ -49,8 +47,6 @@ function Qc() {
       ),
     [username]
   );
-
-  console.log(localStorage.getItem("username"));
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: "Connecting",

@@ -2,18 +2,19 @@ import React from "react";
 import "../App.css";
 import { Button, Chip, Typography } from "@mui/material";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../constants/constant";
 import "react-transliterate/dist/index.css";
 import SimpTile from "../components/sn/SimpTile";
 import Pagination from "@mui/material/Pagination";
+import useWebSocket, { ReadyState } from "react-use-websocket";
+import { WEB_BASE_URL } from "../constants/constant";
 
 const SimplifiedNames = () => {
   const [simpNamesData, setSimpNameData] = useState('');
   const [simpFileName, setSimpFileName] = useState([]);
   const [pageCount, setPageCount] = useState('');
   const accessToken = localStorage.getItem("authToken");
-
+  
   let FetchSimplifiedNames = async (e, value) => {
     try {
       fetch(`${BASE_URL}/audio/simpnametiles`, {
@@ -56,7 +57,7 @@ const SimplifiedNames = () => {
       </div>
       </div>
       {simpNamesData.length > 0 && simpNamesData?.map(([tileName, vas], index) => (
-        <SimpTile key={index} value={tileName} vas={vas}/>
+        <SimpTile key={index} tileName={tileName} vas={vas}/>
       ))}
     </div>
   );

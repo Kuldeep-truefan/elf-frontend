@@ -49,7 +49,7 @@ const RowComponent = ({
   };
 
   let GetQCDone = async () => {
-    handleClickSendMessage({ msg: "updated", video_id: item });
+    // handleClickSendMessage({ msg: "updated", video_id: item });
     
     const saveStatus = status;
     const saveOption = option;
@@ -111,7 +111,6 @@ const RowComponent = ({
             <Chip
               label={`In progress: ${
                 JSON.parse(emittedData)?.filter(
-                  
                   (data) => data?.video_id === item
                 )?.[0]?.user
               }`}

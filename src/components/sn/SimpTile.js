@@ -1,22 +1,55 @@
 import { Button, Chip, Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import React, { useState } from "react";
+import React from "react";
 import { ReactTransliterate } from "react-transliterate";
 import "react-transliterate/dist/index.css";
 import "../../App.css";
-import { BASE_URL } from "../../constants/constant";
+import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
+import useWebSocket, { ReadyState } from "react-use-websocket";
+import { useCallback, useState } from "react";
 
 const filter = createFilterOptions();
 // https://beta.reactjs.org/reference/react-dom/components/textarea for text area customisations
 
-const SimpTile = ({ value, vas }) => {
+const SimpTile = ({ value, vas, tileName}) => {
+  console.log(tileName, 'tileName in simptile');
   const [englishName, setEnglishName] = useState("");
   const [hindiName, setHindiName] = useState("");
   const accessToken = localStorage.getItem("authToken");
   const [engValue, setEngValue] = React.useState(null);
+  const [emittedData, setemittedData] = useState();
+  const [username, setUsername] = useState(localStorage.getItem("username"));
+
+  const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/audiomis.io/`);
+  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
+    onMessage: (message) => {
+      const data = JSON.parse(message?.data);
+      setemittedData(JSON.parse(data?.data));
+      console.log(message, "message------->>>>>");
+    },
+  });
   
+  const handleClickAndSendMessage = useCallback(
+    (payload) =>
+      sendMessage(
+        JSON.stringify({
+          user: username,
+          ...payload,
+        })
+      ),
+    [username]
+  );
+
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: "Connecting",
+    [ReadyState.OPEN]: "Open",
+    [ReadyState.CLOSING]: "Closing",
+    [ReadyState.CLOSED]: "Closed",
+    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  }[readyState];
+
   const handleEngName = (event) => {
     setEnglishName(event.target.value);
     console.log(event.target.value);
@@ -43,18 +76,26 @@ const SimpTile = ({ value, vas }) => {
       console.log("Error occured", error);
     }
   };
+
   return (
     <div className="au-mis">
       <div className="main-tile">
-        <ColorCheckboxes />
+        <ColorCheckboxes tileName={tileName} handleClickAndSendMessage={handleClickAndSendMessage}/>
         <div className="main-tile-head">
           <Typography className="video-name" sx={{ paddingLeft: "1rem" }}>
-            {value}
+            {tileName}
           </Typography>
-          <Chip
-            label={`In progress: admin`}
-            sx={{ ml: "5px", backgroundColor: "white" }}
-          />
+          {!!emittedData &&
+          JSON.parse(emittedData)?.filter(
+            (data) => data?.video_id === tileName
+            )?.length > 0 && (
+              <Chip
+              label={`In progress: ${
+                JSON.parse(emittedData)?.filter(
+                  (data) => data?.video_id === tileName)?.[0]?.user}`}
+                  sx={{ ml: "5px", backgroundColor: "white" }}
+                  ></Chip>
+                )}
         </div>
         <p className="video-name-dynamic">{vas}</p>
       </div>
@@ -154,7 +195,7 @@ const SimpTile = ({ value, vas }) => {
             borderRadius: "14px",
           }}
           onClick={() =>
-            UpdateSimpNames(value.split("_")[3].split(".")[0], "Confirm Name")
+            UpdateSimpNames(tileName.split("_")[3], "Confirm Name")
           }
         >
           Confirm Name
@@ -173,7 +214,7 @@ const SimpTile = ({ value, vas }) => {
             borderRadius: "14px",
           }}
           onClick={() => {
-            UpdateSimpNames(value.split("_")[3].split(".")[0], "Done");
+            UpdateSimpNames(tileName.split("_")[3], "Done");
           }}
         >
           Done
