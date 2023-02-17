@@ -1,8 +1,7 @@
 import React from 'react'
-import ReactDOM from "react-dom/client";
 import "./index.css";
 import "./App.css";
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import PrivateRoute from "./components/PrivateRoute";
 import PageNotFound from "./components/PageNotFound";
 import Login from "./pages/Login"

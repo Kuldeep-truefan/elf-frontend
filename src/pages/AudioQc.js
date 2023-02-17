@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "../App.css";
-import { Button } from "@mui/material";
 import { useState } from "react";
 import { BASE_URL } from "../constants/constant";
 import Pagination from "@mui/material/Pagination";
@@ -70,7 +69,7 @@ const AudioQc = ({
       </div>
       {audioQcData?.length > 0 &&audioQcData?.map(([tileName, comments], index) => (
 
-        <AudioQcRow item={item} emittedData={emittedData} tileName={`${tileName}.wav`} comments={comments} index={index} />
+        <AudioQcRow item={item} emittedData={emittedData} tileName={tileName} comments={comments} index={index} />
       )
       )}
     </div>

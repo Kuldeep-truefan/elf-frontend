@@ -57,7 +57,7 @@ const RowComponent = ({
     setStatus("");
     setOptions("");
     setRemark("");
-    const remainingData = link.filter((x) => x !== item);
+    const remainingData = link?.fileName.filter((x) => x !== item);
     setLink(remainingData);
     try {
       fetch(`${BASE_URL}/log/tilestatus`, {

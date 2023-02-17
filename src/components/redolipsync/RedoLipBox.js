@@ -1,24 +1,52 @@
 import "../../App.css";
 import { Button, Chip, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { BASE_URL } from "../../constants/constant";
+import { useState } from "react";
+import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import RedoLipModal from "./RedoLipModal";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Pagination from "@mui/material/Pagination";
 import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
+import useWebSocket, { ReadyState } from "react-use-websocket";
 
-const RedoLipBox = (
-  sbuck,
-  handleClickSendMessage,
-  destbucket
-) => {
-  const [pageCount, setPageCount] = useState('');
-  const [redoTileName, setRedoTileName] = useState('');
+import { useCallback } from "react";
+
+const RedoLipBox = (sbuck, handleClickSendMessage, destbucket) => {
+  const [pageCount, setPageCount] = useState("");
+  const [redoTileName, setRedoTileName] = useState("");
   const [nameCode, setNameCode] = useState("");
   const [newNameCode, setNewNameCode] = useState("");
-
   const [open, setOpen] = useState(false);
+  const [emittedData, setemittedData] = useState({});
+  const [username, setUsername] = useState(localStorage.getItem("username"));
+
+  const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/audiomis.io/`);
+  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
+    onMessage: (message) => {
+      const data = JSON.parse(message?.data);
+      setemittedData(JSON.parse(data?.data));
+      console.log(message, "message------->>>>>");
+    },
+  });
+
+  const handleClickAndSendMessage = useCallback(
+    (payload) =>
+      sendMessage(
+        JSON.stringify({
+          user: username,
+          ...payload,
+        })
+      ),
+    [username]
+  );
+
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: "Connecting",
+    [ReadyState.OPEN]: "Open",
+    [ReadyState.CLOSING]: "Closing",
+    [ReadyState.CLOSED]: "Closed",
+    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  }[readyState];
 
   // const[required,setRequired]=useState(false)
   const accessToken = localStorage.getItem("authToken");
@@ -32,15 +60,14 @@ const RedoLipBox = (
     setNewNameCode(event.target.value);
   };
 
-
   let UpdateRedoLipSync = async (videoId) => {
-    console.log(videoId, 'VideoId');
+    console.log(videoId, "VideoId");
     try {
       fetch(`${BASE_URL}/audio/updt-redo-lip-newnamecode`, {
         method: "PUT",
         body: JSON.stringify({
           newNameCode: newNameCode,
-          videoId: videoId
+          videoId: videoId,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
@@ -48,21 +75,20 @@ const RedoLipBox = (
         },
       })
         .then((response) => response.json())
-        .then((data) => {
-        });
+        .then((data) => {});
     } catch (error) {
       console.log("Error occured", error);
     }
   };
 
   let FetchAudioRedoLipSync = async (e, value) => {
-    console.log(value, 'value of FetchAudioRedoLipSync---->>');
+    console.log(value, "value of FetchAudioRedoLipSync---->>");
     try {
       // setLoading(true); // Set loading before sending API request
       fetch(`${BASE_URL}/audio/get-redo-lip-files`, {
         method: "POST",
         body: JSON.stringify({
-          pageNumber: value
+          pageNumber: value,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
@@ -73,7 +99,7 @@ const RedoLipBox = (
         .then((data) => {
           setRedoTileName(data.filename);
           setNameCode(data.lastnamecode);
-          setPageCount(data.pagecount)
+          setPageCount(data.pagecount);
         });
       // setLoading(false); // Stop loading
     } catch (error) {
@@ -81,8 +107,6 @@ const RedoLipBox = (
       console.log("Error occured", error);
     }
   };
-
-
 
   // useEffect(() => {
   //   if (!destbucket) {
@@ -98,90 +122,103 @@ const RedoLipBox = (
     <div className="tiles">
       <h1 className="heading-screens">Redo Lip Sync</h1>
       <div className="audio-refresh-btn">
-      <div className="pagination-class">
-        <Button
-          variant="contained"
-          disableElevation
-          onClick={FetchAudioRedoLipSync}
-        >
-          Get Redo Lip Sync
-        </Button>
-        <Pagination 
-        onChange={(e, value) => FetchAudioRedoLipSync(e, value)}
-        count={pageCount} 
-        variant="outlined" />
-      </div>        
+        <div className="pagination-class">
+          <Button
+            variant="contained"
+            disableElevation
+            onClick={FetchAudioRedoLipSync}
+          >
+            Get Redo Lip Sync
+          </Button>
+          <Pagination
+            onChange={(e, value) => FetchAudioRedoLipSync(e, value)}
+            count={pageCount}
+            variant="outlined"
+          />
+        </div>
       </div>
-      {redoTileName.length > 0 && redoTileName?.map(([tileName, comments], index) => (
-        <div key={index} className="au-mt">
-          <div className="main-tile">
-          <ColorCheckboxes/>
-            <div className="main-tile-head">
-              <Typography
-                className="video-name"
+      {redoTileName.length > 0 &&
+        redoTileName?.map(([tileName, comments], index) => (
+          <div key={index} className="au-mt">
+            <div className="main-tile">
+              <ColorCheckboxes
+                tileName={tileName}
+                handleClickAndSendMessage={handleClickAndSendMessage}
+              />
+              <div className="main-tile-head">
+                <Typography
+                  className="video-name"
+                  sx={{
+                    paddingLeft: "1rem",
+                  }}
+                >
+                  {tileName}
+                </Typography>
+                {JSON.parse(emittedData)?.filter(
+                  (data) => data?.video_id === tileName
+                )?.length > 0 && (
+                  <Chip
+                    label={`In progress: ${
+                      JSON.parse(emittedData)?.filter(
+                        (data) => data?.video_id === tileName)?.[0]?.user}`}
+                    sx={{ ml: "5px", backgroundColor: "white" }}
+                  ></Chip>
+                )}
+              </div>
+              <p className="video-name-dynamic">{comments}</p>
+            </div>
+            <div className="main-tiles">
+              <RedoLipModal
+                onClick={handelClick}
+                sendMessage={handleClickSendMessage}
+                open={open}
+                setOpen={setOpen}
+                item={tileName}
+                sbuck={sbuck}
+              />
+              <Box
+                component="form"
                 sx={{
-                  paddingLeft: "1rem",
+                  "& > :not(style)": { m: 1, width: "25ch" },
+                }}
+                noValidate
+                autoComplete="off"
+              >
+                <TextField
+                  value={nameCode}
+                  id="outlined-basic"
+                  disabled="True"
+                  variant="outlined"
+                />
+                <TextField
+                  id="outlined-basic"
+                  label="Type Namecode"
+                  variant="outlined"
+                  onChange={handleChange}
+                />
+              </Box>
+              <Button
+                onClick={() => {
+                  UpdateRedoLipSync(tileName.split("_")[3].split(".")[0]);
+                }}
+                variant="contained"
+                sx={{
+                  height: "2.5rem",
+                  backgroundColor: "#D7B8FD",
+                  color: "white",
+                  "&:hover": {
+                    backgroundColor: "#ad6efb",
+                    color: "#fff",
+                  },
                 }}
               >
-                {tileName}
-              </Typography>
-              <Chip
-                label={`In progress: admin`}
-                sx={{ ml: "5px", backgroundColor: "white" }}
-              />
+                Done
+              </Button>
             </div>
-            <p className="video-name-dynamic">{comments}</p>
           </div>
-          <div className="main-tiles">
-            <RedoLipModal
-              onClick={handelClick}
-              sendMessage={handleClickSendMessage}
-              open={open}
-              setOpen={setOpen}
-              item={tileName}
-              sbuck={sbuck}
-            />
-            <Box
-              component="form"
-              sx={{
-                "& > :not(style)": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-            >
-            <TextField
-              value={nameCode}
-              id="outlined-basic"
-              disabled="True"
-              variant="outlined"
-            />
-            <TextField
-              id="outlined-basic"
-              label="Type Namecode"
-              variant="outlined"
-              onChange={handleChange}
-            />
-            </Box>
-            <Button
-              onClick={() =>{UpdateRedoLipSync(tileName.split("_")[3].split(".")[0])}}
-              variant="contained"
-              sx={{
-                height: "2.5rem",
-                backgroundColor: "#D7B8FD",
-                color: "white",
-                "&:hover": {
-                  backgroundColor: "#ad6efb",
-                  color: "#fff",
-                },
-              }}
-            >
-              Done
-            </Button>
-          </div>
-        </div>
-      ))}
+        ))}
     </div>
-);
+  );
 };
 
 export default RedoLipBox;
