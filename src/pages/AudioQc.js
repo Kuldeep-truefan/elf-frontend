@@ -17,6 +17,7 @@ const AudioQc = ({
 }) => {
   const accessToken = localStorage.getItem("authToken");
   const [pageNumber, setPageNumber] = useState(1);
+  const [pageCount, setPageCount] = useState(1);
   // const queryClient = useQueryClient()
 
   let FetchAudioQcTiles = async (value) => {
@@ -34,8 +35,13 @@ const AudioQc = ({
         return data
   };
   
-  const {isLoading, data, isFetching} = useQuery(['FetchAudioQcTiles', pageNumber],() => FetchAudioQcTiles(pageNumber),)
-  const {filename: audioQcData, pagecount: pageCount} = data || {}
+  const {isLoading, data, isFetching} = useQuery(['FetchAudioQcTiles', pageNumber],() => FetchAudioQcTiles(pageNumber),
+  {
+    onSuccess: (res) => {
+      setPageCount(res.pagecount)
+    }
+  })
+  const {filename: audioQcData } = data || {}
   console.log({isFetching}, 'audioQcData.length------->>>>>>>');
 //   if (isLoading) {
 //     return <div style={{

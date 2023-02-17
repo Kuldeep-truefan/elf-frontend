@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import AudioMistreatedTile from "../components/aumistreated/AudioMistreatedTile";
 import "../App.css";
 import { Button, Chip, Typography } from "@mui/material";
@@ -8,19 +8,20 @@ import Pagination from "@mui/material/Pagination";
 import ColorCheckboxes from "../components/CheckBoxPick.js/ColorCheckboxes";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { useCallback } from "react";
+import { useQuery } from "react-query";
 
 const AudioMistreated = ({ item,  destbucket }) => {
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
   const [remark, setRemark] = useState("");
-  const [audTreData, setaudTreData] = useState("");
   const [audioMistreatedFile, setAudioMistreatedFile] = useState([]);
   const [isDisabled, setIsDisabled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [pageCount, setPageCount] = useState("");
-  const [emittedData, setemittedData] = useState({});
+  const [emittedData, setemittedData] = useState('');
   const accessToken = localStorage.getItem("authToken");
   const [username, setUsername] = useState(localStorage.getItem("username"));
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageCount, setPageCount] = useState(1);
 
   const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/audiomis.io/`);
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
@@ -69,11 +70,8 @@ const AudioMistreated = ({ item,  destbucket }) => {
     console.log(event.target.value);
   };
 
-  let FetchAudioMisTreated = async (e, value) => {
-    console.log(value, "Value for FetchAudioMisTreated--------->>> ");
-    try {
-      // setLoading(true); // Set loading before sending API request
-      fetch(`${BASE_URL}/audio/get-amt-files`, {
+  let FetchAudioMisTreated = async (value) => {
+      const data = await fetch(`${BASE_URL}/audio/get-amt-files`, {
         method: "POST",
         body: JSON.stringify({
           pageNumber: value,
@@ -85,16 +83,21 @@ const AudioMistreated = ({ item,  destbucket }) => {
       })
         .then((response) => response.json())
         .then((response) => response)
-        .then((data) => {
-          setaudTreData(data.filename);
-          setPageCount(data.pagecount);
-        });
+
+        return data;
       // setLoading(false); // Stop loading
-    } catch (error) {
-      // setLoading(false);
-      console.log("Error occured", error);
-    }
   };
+
+  const { isLoading, data } = useQuery(
+    ["FetchAudioMisTreated", pageNumber],
+    () => FetchAudioMisTreated(pageNumber), {
+      onSuccess: (res) => {
+        setPageCount(res.pagecount)
+      }
+    }
+  );
+
+  const { filename: audTreData } = data || {};
 
   // useEffect(() => {
   //   if (!destbucket) {
@@ -120,13 +123,16 @@ const AudioMistreated = ({ item,  destbucket }) => {
           GET AUDIO Mistreated
         </Button>
           <Pagination
-            onChange={(e, value) => FetchAudioMisTreated(e, value)}
+            onChange={(e, value) => {
+              setPageNumber(value);
+            }}
             count={pageCount}
+            page={pageNumber}
             variant="outlined"
           />
         </div>
       </div>
-      {audTreData.length > 0 && audTreData?.map(([tileName, comments], index) => (
+      {audTreData?.length > 0 && audTreData?.map(([tileName, comments], index) => (
         <div key={index} className="au-mt">
           <div className="main-tile">
             <ColorCheckboxes
@@ -141,7 +147,7 @@ const AudioMistreated = ({ item,  destbucket }) => {
               >
                 {tileName}
               </Typography>
-              {!! emittedData &&
+              {!!emittedData &&
               JSON.parse(emittedData)?.filter(
                   (data) => data?.video_id === tileName
                 )?.length > 0 && (

@@ -74,7 +74,7 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
       })
         .then((response) => response.json())
         .then((data) => {
-          setEnglishName('')
+          setEngValue('')
           setHindiName('')
           queryClient.invalidateQueries(["FetchSimplifiedNames", pageNumber]);
         });

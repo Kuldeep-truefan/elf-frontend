@@ -10,6 +10,7 @@ import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 
 import { useCallback } from "react";
+import RedoLipRowTile from "./RedoLipRowTile";
 
 const RedoLipBox = (sbuck, handleClickSendMessage, destbucket) => {
   const [pageCount, setPageCount] = useState("");
@@ -17,7 +18,7 @@ const RedoLipBox = (sbuck, handleClickSendMessage, destbucket) => {
   const [nameCode, setNameCode] = useState("");
   const [newNameCode, setNewNameCode] = useState("");
   const [open, setOpen] = useState(false);
-  const [emittedData, setemittedData] = useState({});
+  const [emittedData, setemittedData] = useState("");
   const [username, setUsername] = useState(localStorage.getItem("username"));
 
   const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/audiomis.io/`);
@@ -28,17 +29,6 @@ const RedoLipBox = (sbuck, handleClickSendMessage, destbucket) => {
       console.log(message, "message------->>>>>");
     },
   });
-
-  const handleClickAndSendMessage = useCallback(
-    (payload) =>
-      sendMessage(
-        JSON.stringify({
-          user: username,
-          ...payload,
-        })
-      ),
-    [username]
-  );
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: "Connecting",
@@ -137,85 +127,9 @@ const RedoLipBox = (sbuck, handleClickSendMessage, destbucket) => {
           />
         </div>
       </div>
-      {redoTileName.length > 0 &&
+      {redoTileName?.length > 0 &&
         redoTileName?.map(([tileName, comments], index) => (
-          <div key={index} className="au-mt">
-            <div className="main-tile">
-              <ColorCheckboxes
-                tileName={tileName}
-                handleClickAndSendMessage={handleClickAndSendMessage}
-              />
-              <div className="main-tile-head">
-                <Typography
-                  className="video-name"
-                  sx={{
-                    paddingLeft: "1rem",
-                  }}
-                >
-                  {tileName}
-                </Typography>
-                {JSON.parse(emittedData)?.filter(
-                  (data) => data?.video_id === tileName
-                )?.length > 0 && (
-                  <Chip
-                    label={`In progress: ${
-                      JSON.parse(emittedData)?.filter(
-                        (data) => data?.video_id === tileName)?.[0]?.user}`}
-                    sx={{ ml: "5px", backgroundColor: "white" }}
-                  ></Chip>
-                )}
-              </div>
-              <p className="video-name-dynamic">{comments}</p>
-            </div>
-            <div className="main-tiles">
-              <RedoLipModal
-                onClick={handelClick}
-                sendMessage={handleClickSendMessage}
-                open={open}
-                setOpen={setOpen}
-                item={tileName}
-                sbuck={sbuck}
-              />
-              <Box
-                component="form"
-                sx={{
-                  "& > :not(style)": { m: 1, width: "25ch" },
-                }}
-                noValidate
-                autoComplete="off"
-              >
-                <TextField
-                  value={nameCode}
-                  id="outlined-basic"
-                  disabled="True"
-                  variant="outlined"
-                />
-                <TextField
-                  id="outlined-basic"
-                  label="Type Namecode"
-                  variant="outlined"
-                  onChange={handleChange}
-                />
-              </Box>
-              <Button
-                onClick={() => {
-                  UpdateRedoLipSync(tileName.split("_")[3].split(".")[0]);
-                }}
-                variant="contained"
-                sx={{
-                  height: "2.5rem",
-                  backgroundColor: "#D7B8FD",
-                  color: "white",
-                  "&:hover": {
-                    backgroundColor: "#ad6efb",
-                    color: "#fff",
-                  },
-                }}
-              >
-                Done
-              </Button>
-            </div>
-          </div>
+          <RedoLipRowTile tileName={tileName} comments={comments} nameCode={nameCode[index]}/>
         ))}
     </div>
   );

@@ -44,7 +44,9 @@ const SimplifiedNames = () => {
       <div className="audio-refresh-btn">
         <div className="pagination-class">
           <Button
-            onClick={FetchSimplifiedNames}
+            onClick={() => {
+              window.location.reload(false)
+            }}
             variant="contained"
             disableElevation
           >

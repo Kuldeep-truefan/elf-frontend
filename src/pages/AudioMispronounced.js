@@ -11,8 +11,9 @@ import { useQuery } from "react-query";
 
 const AudioMispronounced = ({ item, sendFile }) => {
   const accessToken = localStorage.getItem("authToken");
-  const [emittedData, setemittedData] = useState({});
+  const [emittedData, setemittedData] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
+  const [pageCount, setPageCount] = useState(1);
   const [username, setUsername] = useState(localStorage.getItem("username"));
 
   const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/audiomis.io/`);
@@ -62,16 +63,22 @@ const AudioMispronounced = ({ item, sendFile }) => {
 
   const { isLoading, data, isFetching } = useQuery(
     ["FetchAudioMisTiles", pageNumber],
-    () => FetchAudioMisTiles(pageNumber)
+    () => FetchAudioMisTiles(pageNumber), {
+      onSuccess: (res) => {
+        setPageCount(res.pagecount);
+      }
+    }
   );
-  const { filename: misProData, pagecount: pageCount } = data || {};
+  const { filename: misProData } = data || {};
   console.log({misProData})
   return (
     <div className="aumis-tiles">
       <h1 className="heading-screens">Audio Mispronounced</h1>
       <div className="audio-refresh-btn">
         <Button
-          onClick={FetchAudioMisTiles}
+          onClick={() => {
+            window.location.reload(false);
+          }}
           variant="contained"
           disableElevation
         >
