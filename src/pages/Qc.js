@@ -12,7 +12,7 @@ function Qc() {
   const [dbuck, setDbuck] = useState([]);
   const [destbucket, setDestMove] = useState("");
   const [username, setUsername] = useState(localStorage.getItem("username"));
-  const [emittedData, setemittedData] = useState({});
+  const [emittedData, setemittedData] = useState();
 
   //Public API that will echo messages sent to it back to the client
   const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/socket.io/`);

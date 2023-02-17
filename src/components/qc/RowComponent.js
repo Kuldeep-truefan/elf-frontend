@@ -50,7 +50,7 @@ const RowComponent = ({
 
   let GetQCDone = async () => {
     // handleClickSendMessage({ msg: "updated", video_id: item });
-    
+
     const saveStatus = status;
     const saveOption = option;
     const saveRemark = remark;
@@ -94,7 +94,7 @@ const RowComponent = ({
       setIsDisabled(true);
     }
   }, [status, option, destbucket]);
-
+  
   return (
     <div className="tiles">
       <div className="main-tile">
@@ -103,20 +103,22 @@ const RowComponent = ({
             className="video-name"
             sx={{
               paddingLeft: "1rem",
-            }}>
+            }}
+          >
             {item}
           </Typography>
-          {JSON.parse(emittedData)?.filter((data) => data?.video_id === item)
-            ?.length > 0 && (
-            <Chip
-              label={`In progress: ${
-                JSON.parse(emittedData)?.filter(
-                  (data) => data?.video_id === item
-                )?.[0]?.user
-              }`}
-              sx={{ ml: "5px", backgroundColor: "white" }}
-            />
-          )}
+          {emittedData?.length > 0 &&
+            emittedData?.filter((data) => data?.video_id === item)?.length >
+              0 && (
+              <Chip
+                label={`In progress: ${
+                  JSON.parse(emittedData)?.filter(
+                    (data) => data?.video_id === item
+                  )?.[0]?.user
+                }`}
+                sx={{ ml: "5px", backgroundColor: "white" }}
+              />
+            )}
         </div>
 
         <p className="video-name-dynamic">{comments}</p>
@@ -152,19 +154,32 @@ const RowComponent = ({
             labelId="select-options"
             value={option}
             label="Options"
-            onChange={handleOptions}>
+            onChange={handleOptions}
+          >
             <MenuItem value={"Redo Lipsync"}>Redo Lipsync</MenuItem>
             <MenuItem value={"Audio Mistreated"}>Audio Mistreated</MenuItem>
-            <MenuItem value={"Audio Mispronounced"}>Audio Mispronounced</MenuItem>
+            <MenuItem value={"Audio Mispronounced"}>
+              Audio Mispronounced
+            </MenuItem>
             <MenuItem value={"AV Redo"}>AV Redo</MenuItem>
             <MenuItem value={"AV Sync Mismatch"}>AV Sync Mismatch</MenuItem>
             <MenuItem value={"Fix hi"}>Fix hi</MenuItem>
             <MenuItem value={"Trim Reject"}>Trim Reject</MenuItem>
-            <MenuItem value={"Add gap between A & B"}>Add gap between A & B</MenuItem>
-            <MenuItem value={"Reduce gap between A & B"}>Reduce gap between A & B</MenuItem>
-            <MenuItem value={"AV Redo (mistreated)"}>AV Redo (mistreated)</MenuItem>
-            <MenuItem value={"Confirm pronunciation"}>Confirm pronunciation</MenuItem>
-            <MenuItem value=""><em>None</em></MenuItem>
+            <MenuItem value={"Add gap between A & B"}>
+              Add gap between A & B
+            </MenuItem>
+            <MenuItem value={"Reduce gap between A & B"}>
+              Reduce gap between A & B
+            </MenuItem>
+            <MenuItem value={"AV Redo (mistreated)"}>
+              AV Redo (mistreated)
+            </MenuItem>
+            <MenuItem value={"Confirm pronunciation"}>
+              Confirm pronunciation
+            </MenuItem>
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
           </Select>
         </FormControl>
         <TextareaAutosize

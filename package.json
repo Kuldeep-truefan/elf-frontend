@@ -17,6 +17,7 @@
     "react-dom": "^18.2.0",
     "react-drag-drop-files": "^2.3.8",
     "react-loading": "^2.0.3",
+    "react-query": "^3.39.3",
     "react-router-dom": "^6.4.4",
     "react-scripts": "5.0.1",
     "react-transliterate": "^1.1.9",
