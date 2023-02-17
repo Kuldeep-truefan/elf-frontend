@@ -3,12 +3,14 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import ReactAudioPlayer from "react-audio-player";
 import { BASE_URL } from "../../constants/constant";
+import { useQueryClient } from "react-query";
 const accessToken = localStorage.getItem("authToken");
 
-const AudioModal = ({ value }) => {
+const AudioModal = ({ value, pageNumber }) => {
   const [sendFile, setSendFile] = useState(null);
   const fileFirstName = value.split("_")[0];
   const fileBucket = value.split("_")[1];
+  const queryClient = useQueryClient()
 
   
   const handleFile = (event) => {
@@ -105,6 +107,10 @@ const AudioModal = ({ value }) => {
         `${BASE_URL}/audio/audio_mispronounced`,
         requestOptions
       );
+      // if (response.status === 'success') {
+        queryClient.invalidateQueries(["FetchAudioMisTiles", pageNumber]);
+        setSendFile(null)
+      // }
       const convertToText = await response.text();
       return convertToText;
     } catch (error) {

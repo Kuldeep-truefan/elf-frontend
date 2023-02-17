@@ -21,6 +21,8 @@ const RowComponent = ({
   setLink,
   link,
   destbucket,
+  fetchLinkMutate,
+  pageNumber
 }) => {
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
@@ -49,16 +51,12 @@ const RowComponent = ({
   };
 
   let GetQCDone = async () => {
-    // handleClickSendMessage({ msg: "updated", video_id: item });
-
     const saveStatus = status;
     const saveOption = option;
     const saveRemark = remark;
     setStatus("");
     setOptions("");
     setRemark("");
-    const remainingData = link?.fileName.filter((x) => x !== item);
-    setLink(remainingData);
     try {
       fetch(`${BASE_URL}/log/tilestatus`, {
         method: "POST",
@@ -77,7 +75,8 @@ const RowComponent = ({
       })
         .then((response) => response.json())
         .then((data) => {
-          data.success ? setLink(remainingData) : console.log("No Data Found");
+          fetchLinkMutate(pageNumber);
+          // data.success ? setLink(remainingData) : console.log("No Data Found");
         });
     } catch (error) {
       console.log("Error occured", error);
@@ -94,7 +93,7 @@ const RowComponent = ({
       setIsDisabled(true);
     }
   }, [status, option, destbucket]);
-  
+
   return (
     <div className="tiles">
       <div className="main-tile">
@@ -107,8 +106,8 @@ const RowComponent = ({
           >
             {item}
           </Typography>
-          {emittedData?.length > 0 &&
-            emittedData?.filter((data) => data?.video_id === item)?.length >
+          {!!emittedData &&
+            JSON.parse(emittedData)?.filter((data) => data?.video_id === item)?.length >
               0 && (
               <Chip
                 label={`In progress: ${

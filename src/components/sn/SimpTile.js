@@ -9,14 +9,16 @@ import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { useCallback, useState } from "react";
+import { useQueryClient } from "react-query";
 
 const filter = createFilterOptions();
 // https://beta.reactjs.org/reference/react-dom/components/textarea for text area customisations
 
-const SimpTile = ({ value, vas, tileName}) => {
+const SimpTile = ({ value, vas, tileName, pageNumber}) => {
   console.log(tileName, 'tileName in simptile');
   const [englishName, setEnglishName] = useState("");
   const [hindiName, setHindiName] = useState("");
+  const queryClient = useQueryClient();
   const accessToken = localStorage.getItem("authToken");
   const [engValue, setEngValue] = React.useState(null);
   const [emittedData, setemittedData] = useState();
@@ -71,7 +73,11 @@ const SimpTile = ({ value, vas, tileName}) => {
         },
       })
         .then((response) => response.json())
-        .then((data) => {});
+        .then((data) => {
+          setEnglishName('')
+          setHindiName('')
+          queryClient.invalidateQueries(["FetchSimplifiedNames", pageNumber]);
+        });
     } catch (error) {
       console.log("Error occured", error);
     }

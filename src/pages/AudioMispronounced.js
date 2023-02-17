@@ -7,12 +7,12 @@ import ColorCheckboxes from "../components/CheckBoxPick.js/ColorCheckboxes";
 import Pagination from "@mui/material/Pagination";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { WEB_BASE_URL } from "../constants/constant";
+import { useQuery } from "react-query";
 
 const AudioMispronounced = ({ item, sendFile }) => {
-  const [pageCount, setPageCount] = useState("");
-  const [misProData, setMisProData] = useState("");
   const accessToken = localStorage.getItem("authToken");
   const [emittedData, setemittedData] = useState({});
+  const [pageNumber, setPageNumber] = useState(1);
   const [username, setUsername] = useState(localStorage.getItem("username"));
 
   const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/audiomis.io/`);
@@ -23,7 +23,7 @@ const AudioMispronounced = ({ item, sendFile }) => {
       console.log(message, "message------->>>>>");
     },
   });
-  
+
   const handleClickAndSendMessage = useCallback(
     (payload) =>
       sendMessage(
@@ -43,30 +43,29 @@ const AudioMispronounced = ({ item, sendFile }) => {
     [ReadyState.UNINSTANTIATED]: "Uninstantiated",
   }[readyState];
 
-  let FetchAudioMisTiles = async (e, value) => {
-    try {
-      fetch(`${BASE_URL}/audio/audiomis`, {
-        method: "POST",
-        body: JSON.stringify({
-          pageNumber: value,
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((response) => response)
-        .then((data) => {
-          setMisProData(data.filename);
-          setPageCount(data.pagecount);
-        });
-      // setLoading(false); // Stop loading
-    } catch (error) {
-      console.log("Error occured", error);
-    }
+  let FetchAudioMisTiles = async (pageNumber) => {
+    const data = await fetch(`${BASE_URL}/audio/audiomis`, {
+      method: "POST",
+      body: JSON.stringify({
+        pageNumber,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => response);
+    return data;
+    // setLoading(false); // Stop loading
   };
 
+  const { isLoading, data, isFetching } = useQuery(
+    ["FetchAudioMisTiles", pageNumber],
+    () => FetchAudioMisTiles(pageNumber)
+  );
+  const { filename: misProData, pagecount: pageCount } = data || {};
+  console.log({misProData})
   return (
     <div className="aumis-tiles">
       <h1 className="heading-screens">Audio Mispronounced</h1>
@@ -80,14 +79,17 @@ const AudioMispronounced = ({ item, sendFile }) => {
         </Button>
         <div className="pagination-class">
           <Pagination
-            onChange={(e, value) => FetchAudioMisTiles(e, value)}
+            onChange={(e, value) => {
+              setPageNumber(value);
+            }}
             count={pageCount}
+            page={pageNumber}
             variant="outlined"
           />
         </div>
       </div>
 
-      {misProData.length > 0 &&
+      {misProData?.length > 0 &&
         misProData?.map(([tileName, comments], index) => (
           <div key={index} className="au-mis">
             <div className="main-tile">
@@ -105,13 +107,15 @@ const AudioMispronounced = ({ item, sendFile }) => {
                 >
                   {tileName}
                 </Typography>
-                {JSON.parse(emittedData)?.filter(
+                {!!emittedData && JSON.parse(emittedData)?.filter(
                   (data) => data?.video_id === tileName
                 )?.length > 0 && (
                   <Chip
                     label={`In progress: ${
                       JSON.parse(emittedData)?.filter(
-                        (data) => data?.video_id === tileName)?.[0]?.user}`}
+                        (data) => data?.video_id === tileName
+                      )?.[0]?.user
+                    }`}
                     sx={{ ml: "5px", backgroundColor: "white" }}
                   ></Chip>
                 )}
@@ -119,7 +123,7 @@ const AudioMispronounced = ({ item, sendFile }) => {
               <p className="video-name-dynamic">{comments}</p>
             </div>
             <div className="am-main-tiles">
-              <AudioModal value={tileName} sendFile={sendFile} />
+              <AudioModal value={tileName} sendFile={sendFile} pageNumber={pageNumber} />
             </div>
           </div>
         ))}

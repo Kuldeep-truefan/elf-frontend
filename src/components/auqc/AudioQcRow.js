@@ -8,11 +8,12 @@ import ColorCheckboxes from "../../components/CheckBoxPick.js/ColorCheckboxes";
 import { Chip, Typography } from "@mui/material";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
+import { useQueryClient } from "react-query";
 
-
-const AudioQcRow = ({ index, comments, tileName, item }) => {
-  console.log(tileName, 'tileName--------->>>>>>???????this is in audioqcrow');
+const AudioQcRow = ({ index, comments, tileName, item, pageNumber }) => {
+  console.log(tileName, "tileName--------->>>>>>???????this is in audioqcrow");
   const [remark, setRemark] = useState("");
+  const queryClient = useQueryClient();
   const [isDisabled, setIsDisabled] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState();
   const [emittedData, setemittedData] = useState();
@@ -80,10 +81,11 @@ const AudioQcRow = ({ index, comments, tileName, item }) => {
     audioQcStatus,
     audioId,
     remark,
-    blobToDelete
+    blobToDelete,
+    tileName
   ) => {
     try {
-      fetch(`${BASE_URL}/audio/qccommentstatus`, {
+      await fetch(`${BASE_URL}/audio/qccommentstatus`, {
         method: "POST",
         body: JSON.stringify({
           audioQc: audioQcStatus,
@@ -96,6 +98,10 @@ const AudioQcRow = ({ index, comments, tileName, item }) => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
+      if (audioQcStatus === "Rejected") {
+        await UploadAudioRecored(tileName, audioId);
+      }
+      queryClient.invalidateQueries(["FetchAudioQcTiles", pageNumber]);
       // .then((response) => response.json())
       // .then((data) => setLink(data.filename))
       // setLoading(false); // Stop loading
@@ -108,8 +114,8 @@ const AudioQcRow = ({ index, comments, tileName, item }) => {
     setRemark(event.target.value);
     console.log(event.target.value);
   };
-  
-  console.log(emittedData, 'emittedData----:::::>>>>');
+
+  console.log(emittedData, "emittedData----:::::>>>>");
 
   return (
     <div key={index} className="au-mis">
@@ -128,17 +134,18 @@ const AudioQcRow = ({ index, comments, tileName, item }) => {
             {tileName}
           </Typography>
           {!!emittedData &&
-          JSON.parse(emittedData)?.filter(
-            (data) => data?.video_id === tileName
+            JSON.parse(emittedData)?.filter(
+              (data) => data?.video_id === tileName
             )?.length > 0 && (
               <Chip
-              label={`In progress: ${
-                JSON.parse(emittedData)?.filter(
-                  (data) => data?.video_id === tileName)?.[0]?.user}`}
-                  sx={{ ml: "5px", backgroundColor: "white" }}
-                  ></Chip>
-                )}
-                
+                label={`In progress: ${
+                  JSON.parse(emittedData)?.filter(
+                    (data) => data?.video_id === tileName
+                  )?.[0]?.user
+                }`}
+                sx={{ ml: "5px", backgroundColor: "white" }}
+              ></Chip>
+            )}
         </div>
         <p className="video-name-dynamic">{comments}</p>
       </div>
@@ -187,12 +194,13 @@ const AudioQcRow = ({ index, comments, tileName, item }) => {
                 "Rejected",
                 tileName.split("_")[3].split(".")[0],
                 remark,
-                ""
+                "",
+                tileName
               );
-              UploadAudioRecored(
-                tileName,
-                tileName.split("_")[3].split(".")[0]
-              );
+              // UploadAudioRecored(
+              //   tileName,
+              //   tileName.split("_")[3].split(".")[0]
+              // );
             }}
             sx={{
               height: "2.5rem",

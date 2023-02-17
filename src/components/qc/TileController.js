@@ -7,12 +7,34 @@ import Select from "@mui/material/Select";
 import { Button } from "@mui/material";
 import { BASE_URL } from "../../constants/constant";
 import Pagination from "@mui/material/Pagination";
+import {useMutation} from 'react-query'
 
-function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, emittedData}) {
-  const [loadbucket, setLoadbucket] = useState("");
-  const [pageCount, setPageCount] = useState('');
+function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, emittedData, setPageCount, setLoadbucket, fetchLinkMutate,loadbucket}) {
+  // let FetchLink = async () => {
+  //      const data =  await fetch(`${BASE_URL}/log/getlink`,{
+  //       method: "POST",
+  //       body: JSON.stringify({  
+  //         bucketName: loadbucket,
+  //         pageNumber
+  //       }),
+  //       headers: {
+  //         "Content-type": "application/json; charset=UTF-8",
+  //         Authorization: `Bearer ${accessToken}`
+  //       }
+  //     })
+  //     .then((response) => response.json())
+  //     .then((response) => response)
+  //     return data;
+  // }
+  // const [loadbucket, setLoadbucket] = useState("");
   const accessToken = localStorage.getItem('authToken');
-
+  // const {mutate: fetchLinkMutate} = useMutation(FetchLink, {
+  //   onSuccess: (res) => {
+  //     console.log({res});
+  //     setLink(res.filename)
+  //     setPageCount(res.pagecount)
+  //   }
+  // })
   // // PROD ENV BUCKETS
   // const [loadbucketoption, setLoadbucketoption] = useState([{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}])
   // const [movebucketoption, setMovebucketoption] = useState([{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}, {label:"qc-rejects",value:"qc-rejects"}])
@@ -43,35 +65,6 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, 
     setDbuck(event.target.value)
   };
 
-  let FetchLink = async (e, value) => {
-    console.log('page number',value);
-    try{
-        fetch(`${BASE_URL}/log/getlink`,{
-        method: "POST",
-        body: JSON.stringify({  
-          bucketName: loadbucket,
-          pageNumber: value
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${accessToken}`
-        }
-      })
-      .then((response) => response.json())
-      .then((response) => response)
-      .then((data) => {
-        setLink(data.filename)
-        setPageCount(data.pagecount)
-      })
-    }
-    catch (error) {
-      console.log("Error occured", error)
-    }
-  }
-  
-  const handleClick = () => {
-    FetchLink();
-  }
 
   return (
     <div className="tc">
@@ -100,15 +93,15 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, 
             {movebucketoption?.map(bucket => <MenuItem value={bucket.value}>{bucket.label}</MenuItem>)} 
           </Select>
         </FormControl>
-        <Button variant="contained" href="#contained-buttons" onClick = {handleClick} sx={{background: '#D7B8FD', '&:hover':{backgroundColor: '#ad6efb'}}}>Refresh</Button>
+        <Button variant="contained" href="#contained-buttons" onClick = {() => fetchLinkMutate(1)} sx={{background: '#D7B8FD', '&:hover':{backgroundColor: '#ad6efb'}}}>Refresh</Button>
         {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
         </div>
-        <div className="pagination-class">
+        {/* <div className="pagination-class">
         <Pagination 
-        onChange={(e, value) => FetchLink(e, value)}
+        onChange={(e, value) => fetchLinkMutate(e, value)}
         count={pageCount} 
         variant="outlined" />
-      </div>
+      </div> */}
     </div>
   );
 }
