@@ -13,9 +13,10 @@ import { useQuery } from "react-query";
 const SimplifiedNames = () => {
   const [simpFileName, setSimpFileName] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
+  const [pageCount, setPageCount] = useState(1);
   const accessToken = localStorage.getItem("authToken");
 
-  let FetchSimplifiedNames = async (e, value) => {
+  let FetchSimplifiedNames = async (value) => {
     const data = fetch(`${BASE_URL}/audio/simpnametiles`, {
       method: "POST",
       body: JSON.stringify({
@@ -33,10 +34,15 @@ const SimplifiedNames = () => {
 
   const { isLoading, data } = useQuery(
     ["FetchSimplifiedNames", pageNumber],
-    () => FetchSimplifiedNames(pageNumber)
+    () => FetchSimplifiedNames(pageNumber),
+    {
+      onSuccess: (res) => {
+        setPageCount(res.pagecount);
+      },
+    }
   );
 
-  const { filename: simpNamesData, pagecount: pageCount } = data || {};
+  const { filename: simpNamesData } = data || {};
 
   return (
     <div className="sn-tiles">
@@ -45,7 +51,7 @@ const SimplifiedNames = () => {
         <div className="pagination-class">
           <Button
             onClick={() => {
-              window.location.reload(false)
+              window.location.reload(false);
             }}
             variant="contained"
             disableElevation
@@ -64,7 +70,12 @@ const SimplifiedNames = () => {
       </div>
       {simpNamesData?.length > 0 &&
         simpNamesData?.map(([tileName, vas], index) => (
-          <SimpTile key={index} tileName={tileName} vas={vas} pageNumber={pageNumber} />
+          <SimpTile
+            key={index}
+            tileName={tileName}
+            vas={vas}
+            pageNumber={pageNumber}
+          />
         ))}
     </div>
   );
