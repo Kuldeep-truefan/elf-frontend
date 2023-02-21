@@ -67,7 +67,7 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, 
 
 
   return (
-    <div className="tc">
+    // <div className="tc">
         <div className="tc-inner">
         <FormControl sx={{ m: 1, minWidth: 133}} size="small">
           <InputLabel id="load-buck">Load From</InputLabel>
@@ -96,13 +96,7 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, 
         <Button variant="contained" href="#contained-buttons" onClick = {() => fetchLinkMutate(1)} sx={{background: '#D7B8FD', '&:hover':{backgroundColor: '#ad6efb'}}}>Refresh</Button>
         {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */}
         </div>
-        {/* <div className="pagination-class">
-        <Pagination 
-        onChange={(e, value) => fetchLinkMutate(e, value)}
-        count={pageCount} 
-        variant="outlined" />
-      </div> */}
-    </div>
+
   );
 }
 

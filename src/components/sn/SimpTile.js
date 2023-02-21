@@ -63,7 +63,7 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
         method: "POST",
         body: JSON.stringify({
           englishName: englishName.trim(),
-          hindiName: hindiName,
+          hindiName: hindiName.trim(),
           videoId: id,
           button_type,
         }),
@@ -116,7 +116,7 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
           variant="outlined"
           onChange={handleEngName}
         /> */}
-        <Autocomplete
+        {/* <Autocomplete
           value={engValue}
           onChange={(event, newValue) => {
             if (typeof newValue === "string") {
@@ -173,14 +173,14 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
           renderInput={(params) => (
             <TextField {...params} label="english" onChange={handleEngName}/>
           )}
-        />
-
+        /> */}
+        <input onChange={handleEngName} className="simp-english-input" type={'text'} placeholder="english"/>
         <ReactTransliterate
           className="simp-hindi-textarea"
           renderComponent={(props) => (
-            <textarea {...props} rows={3} cols={30} placeholder="hindi" />
+            <input {...props} rows={3} cols={30} placeholder="hindi" />
           )}
-          value={hindiName.trim()}
+          value={hindiName}
           onChangeText={(text) => {
             setHindiName(text);
           }}

@@ -292,7 +292,7 @@
   font-weight: bolder;
   margin-top: 30px;
   font-family: Heiti SC;
-  margin-bottom: -50px;
+  /* margin-bottom: -50px; */
 }
 
 
@@ -342,17 +342,25 @@
   justify-content: center;
 }
 .pagination-class{
-  margin-right: 181px;
+  margin-left: 181px;
   display: flex;
   align-items: center;
 }
+.simp-english-input {
+  min-width: 250px;
+  padding: 10px;
+  border-radius: 14px;
+  text-align: center;
+}
 
 .simp-hindi-textarea{
-  display: flex;
-  justify-content: center;
-  resize:none;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* resize:none; */
+  padding: 10px;
   text-align: center;
   border-radius: 14px;
+  min-width: 250px;
 }
 
 .au-mt{

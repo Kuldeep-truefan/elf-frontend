@@ -16,7 +16,7 @@ function Qc() {
   const [destbucket, setDestMove] = useState("");
   const [username, setUsername] = useState(localStorage.getItem("username"));
   const [emittedData, setemittedData] = useState();
-  const [pageCount, setPageCount] = useState("");
+  const [pageCount, setPageCount] = useState(1);
   const [pageNumber, setPageNumber] = useState(1);
   const [loadbucket, setLoadbucket] = useState("");
 
@@ -127,6 +127,11 @@ function Qc() {
       )}
     <div className="Qc">
       <h1 className="video-qc-heading">Video QC</h1>
+<div style={{
+  display: 'flex',
+  justifyContent: 'center',
+flexDirection: 'row'
+}}>
 
       <TileController
         setLink={setLink}
@@ -143,6 +148,7 @@ function Qc() {
       <div className="pagination-class">
         <Pagination
           onChange={(e, value) => {
+            e.preventDefault();
             setPageNumber(value);
             fetchLinkMutate(value);
           }}
@@ -151,6 +157,8 @@ function Qc() {
           variant="outlined"
         />
       </div>
+        
+</div>
       {link?.length > 0 &&
         link?.map(([fileName, comments], index) => {
           return (
