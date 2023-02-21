@@ -8,7 +8,6 @@ export default function ColorCheckboxes({
   handleClickAndSendMessage,
 }) {
   const [selectedValue, setSelectedValue] = useState("a");
-  console.log(tileName, 'tilename----->>>>> in CCB---');
   const handleChange = (event) => {
     // if (event.target.value === selectedValue ) {
     //     setSelectedValue("");
@@ -29,10 +28,14 @@ export default function ColorCheckboxes({
   return (
     <div>
       <Checkbox 
-        // value="anshul"
-        onClick={() => {
+        onClick={(e) => {
           handleChange();
-          handleClickAndSendMessage({ video_id: tileName });
+          if (e.target.checked!= true){
+            handleClickAndSendMessage({ video_id: tileName, true: true});
+          }
+          else{
+          handleClickAndSendMessage({ video_id: tileName});
+          }
         }}
       />
     </div>

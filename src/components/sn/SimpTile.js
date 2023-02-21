@@ -15,7 +15,6 @@ const filter = createFilterOptions();
 // https://beta.reactjs.org/reference/react-dom/components/textarea for text area customisations
 
 const SimpTile = ({ value, vas, tileName, pageNumber}) => {
-  console.log(tileName, 'tileName in simptile');
   const [englishName, setEnglishName] = useState("");
   const [hindiName, setHindiName] = useState("");
   const queryClient = useQueryClient();
@@ -29,20 +28,33 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
     onMessage: (message) => {
       const data = JSON.parse(message?.data);
       setemittedData(JSON.parse(data?.data));
-      console.log(message, "message------->>>>>");
     },
   });
   
-  const handleClickAndSendMessage = useCallback(
-    (payload) =>
+  const handleClickAndSendMessage = useCallback((payload)=>{
+    console.log(payload, "payload")
+    if (payload.true){
+      sendMessage(
+        JSON.stringify({
+          user: username,
+          true:true,
+          ...payload,
+        })
+      )
+    }
+    else{
       sendMessage(
         JSON.stringify({
           user: username,
           ...payload,
         })
-      ),
-    [username]
-  );
+      )
+
+    }
+    console.log("h`eel")
+   
+  
+  },[username])
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: "Connecting",
@@ -86,7 +98,7 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
   return (
     <div className="au-mis">
       <div className="main-tile">
-        <ColorCheckboxes tileName={tileName} handleClickAndSendMessage={handleClickAndSendMessage}/>
+        <ColorCheckboxes tileName={tileName} true={true} handleClickAndSendMessage={handleClickAndSendMessage}/>
         <div className="main-tile-head">
           <Typography className="video-name" sx={{ paddingLeft: "1rem" }}>
             {tileName}
