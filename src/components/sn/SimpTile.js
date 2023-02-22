@@ -51,12 +51,9 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
       )
 
     }
-<<<<<<< HEAD
     console.log("h`eel")
    
   
-=======
->>>>>>> 656d1c5 (fixed websocket)
   },[username])
 
   const connectionStatus = {
