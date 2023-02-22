@@ -84,7 +84,8 @@ const VideoUpload = () => {
   let loading_button;
   if(upl_status===true){
     //loading_button = <Button disabled onClick = {UploadVideoToBucket} variant="contained" disableElevation>Uploading</Button>;
-    loading_button = <div  className="loading-bar-div"><Box sx={{ width: '100%' }}><LinearProgress /></Box></div>;
+    loading_button = <div style={{marginTop: '10%'}}><LinearProgress /></div>;
+    // loading_button = <LinearProgress />;
   }
   else{
     loading_button = <Box textAlign='center'><Button className="upload-button" onClick = {UploadVideoToBucket} variant="contained" disableElevation>Upload</Button></Box>;
