@@ -118,74 +118,6 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
         <p className="video-name-dynamic">{vas}</p>
       </div>
       <div className="main-tiles">
-        {/* <textarea
-          className="simp-hindi-textarea"
-          rows={3}
-          cols={30}
-          id="outlined-basic"
-          // label="English Name"
-          placeholder="english"
-          variant="outlined"
-          onChange={handleEngName}
-        /> */}
-        {/* <Autocomplete
-          value={engValue}
-          onChange={(event, newValue) => {
-            if (typeof newValue === "string") {
-              setEngValue({
-                title: newValue,
-              });
-            } else if (newValue && newValue.inputValue) {
-              // Create a new value from the user input
-              setEngValue({
-                title: newValue.inputValue,
-              });
-            } else {
-              setEngValue(newValue);
-            }
-          }}
-          filterOptions={(options, params) => {
-            const filtered = filter(options, params);
-
-            const { inputValue } = params;
-            // Suggest the creation of a new value
-            const isExisting = options.some(
-              (option) => inputValue === option.title
-            );
-            if (inputValue !== "" && !isExisting) {
-              filtered.push({
-                inputValue,
-                title: `Add "${inputValue}"`,
-              });
-            }
-
-            return filtered;
-          }}
-          selectOnFocus
-          clearOnBlur
-          handleHomeEndKeys
-          id="free-solo-with-text-demo"
-          className="simp-hindi-textarea"
-          options={top100Films}
-          getOptionLabel={(option) => {
-            // Value selected with enter, right from the input
-            if (typeof option === "string") {
-              return option;
-            }
-            // Add "xxx" option created dynamically
-            if (option.inputValue) {
-              return option.inputValue;
-            }
-            // Regular option
-            return option.title;
-          }}
-          renderOption={(props, option) => <li {...props}>{option.title}</li>}
-          sx={{ width: 200 }}
-          freeSolo
-          renderInput={(params) => (
-            <TextField {...params} label="english" onChange={handleEngName}/>
-          )}
-        /> */}
         <input onChange={handleEngName} className="simp-english-input" type={'text'} placeholder="english"/>
         <ReactTransliterate
           className="simp-hindi-textarea"
@@ -241,24 +173,5 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
     </div>
   );
 };
-const top100Films = [
-  { title: 'neha-vaghela'},
-  { title: 'neelam-kumar'},
-  { title: 'najjuu-najaaf' },
-  { title: 'nidhi-mahimkar'},
-  { title: 'nikhil-gore'},
-  { title: 'nirnay-barsainya'},
-  { title: 'nawab'},
-  { title: 'nimay-sharma'},
-  { title: 'nishu-bhatia'},
-  { title: 'navi'},
-  { title: 'navya-karnawat'},
-  { title: 'nirali-acharya'},
-  { title: 'niharika-modi'},
-  { title: 'nitansh'},
-  { title: 'nitu-moni'},
-  { title: 'niyati-lodha'},
-  { title: 'nirav-yogi'}
-];
 
 export default SimpTile;

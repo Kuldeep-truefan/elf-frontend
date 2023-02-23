@@ -19,7 +19,7 @@ export default function ColorCheckboxes({
 
   const controlProps = (item) => ({
     checked: selectedValue === item,
-    onChange: handleChange,
+    // onChange: handleChange,
     value: item,
     name: "size-radio-button-demo",
     inputProps: { "aria-label": item },
@@ -29,7 +29,7 @@ export default function ColorCheckboxes({
     <div>
       <Checkbox 
         onClick={(e) => {
-          handleChange();
+          // handleChange();
           if (e.target.checked!= true){
             handleClickAndSendMessage({ video_id: tileName, true: true});
           }
