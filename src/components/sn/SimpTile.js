@@ -86,8 +86,6 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
       })
         .then((response) => response.json())
         .then((data) => {
-          setEngValue('')
-          setHindiName('')
           queryClient.invalidateQueries(["FetchSimplifiedNames", pageNumber]);
         });
     } catch (error) {
@@ -118,7 +116,7 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
         <p className="video-name-dynamic">{vas}</p>
       </div>
       <div className="main-tiles">
-        <input onChange={handleEngName} className="simp-english-input" type={'text'} placeholder="english"/>
+        <input onChange={handleEngName} value={englishName} className="simp-english-input" type={'text'} placeholder="english"/>
         <ReactTransliterate
           className="simp-hindi-textarea"
           renderComponent={(props) => (

@@ -71,7 +71,7 @@ const SimplifiedNames = () => {
       {simpNamesData?.length > 0 &&
         simpNamesData?.map(([tileName, vas], index) => (
           <SimpTile
-            key={index}
+            key={`${tileName}-${index}`}
             tileName={tileName}
             vas={vas}
             pageNumber={pageNumber}
