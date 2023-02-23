@@ -382,3 +382,13 @@
 .upload-button{
   margin-top:5% !important;
 }
+
+.offline-compo{
+  display: flex;
+  justify-content: center;
+  font-family: "heiti sc";
+  color: mediumvioletred;
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 40px;
+}

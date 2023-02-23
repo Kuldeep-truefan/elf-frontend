@@ -19,6 +19,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query'
+import OfflineInternet from './constants/OfflineInternet';
 
 const App = () => {
   const location = useLocation();
@@ -33,6 +34,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
     <div>{location.pathname!=="/"&& <Nav/>}
+    <OfflineInternet/>
       <Routes>
         <Route path="/" element={<Login />}/>
         <Route path="/" element={<PrivateRoute/>}>
