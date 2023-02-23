@@ -47,7 +47,7 @@ const VideoUpload = () => {
           formdata.append(""+uploadfiledata[i]["name"], uploadfiledata[i]);
         }
         formdata.append("allFiles", JSON.stringify(names));
-        formdata.append("folderName", "dev-ans-test-qc2");
+        formdata.append("folderName", "qc2");
         console.log(JSON.stringify(names));
       }
       let requestOptions = {

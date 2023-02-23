@@ -31,7 +31,7 @@ const AudioMistreatedTile = (value) => {
           method: "POST",
           body: JSON.stringify({
             fileName: fileNameAmt,
-            buckName: "dev-ans-test-final",
+            buckName: "celeb-audio-data",
             subpath: bucketNameAmt,
           }),
           headers: {

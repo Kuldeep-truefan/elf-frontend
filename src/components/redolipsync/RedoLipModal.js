@@ -43,7 +43,7 @@ export default function RedoLipModal({item, sendMessage}) {
           method: "POST",
           body: JSON.stringify({
             fileName: item,
-            buckName: 'dev-ans-test-qc-rejects' 
+            buckName: 'qc-rejects' 
           }),
           headers: {
             "Content-type": "application/json"
