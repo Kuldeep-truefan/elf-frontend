@@ -96,7 +96,7 @@ const AudioMispronounced = ({ item, sendFile }) => {
       </div>
       {misProData?.length > 0 &&
         misProData?.map(([tileName, comments], index) => (
-          <div key={index} className="au-mis">
+          <div key={`${tileName}-${index}`} className="au-mis">
             <div className="main-tile">
               <ColorCheckboxes
                 tileName={tileName}
