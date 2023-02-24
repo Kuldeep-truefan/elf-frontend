@@ -70,7 +70,6 @@ const AudioMispronounced = ({ item, sendFile }) => {
     }
   );
   const { filename: misProData } = data || {};
-  console.log({misProData})
   return (
     <div className="aumis-tiles">
       <h1 className="heading-screens">Audio Mispronounced</h1>
@@ -95,7 +94,6 @@ const AudioMispronounced = ({ item, sendFile }) => {
           />
         </div>
       </div>
-
       {misProData?.length > 0 &&
         misProData?.map(([tileName, comments], index) => (
           <div key={index} className="au-mis">

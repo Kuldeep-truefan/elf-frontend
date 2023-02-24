@@ -11,7 +11,6 @@ import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import { useQueryClient } from "react-query";
 
 const AudioQcRow = ({ index, comments, tileName, item, pageNumber }) => {
-  console.log(tileName, "tileName--------->>>>>>???????this is in audioqcrow");
   const [remark, setRemark] = useState("");
   const queryClient = useQueryClient();
   const [isDisabled, setIsDisabled] = useState(false);
@@ -170,6 +169,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber }) => {
                 "Approved",
                 tileName.split("_")[3].split(".")[0],
                 "",
+                tileName,
                 tileName
               );
             }}
