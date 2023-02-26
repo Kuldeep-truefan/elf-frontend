@@ -170,11 +170,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber }) => {
                 tileName.split("_")[3].split(".")[0],
                 "",
                 tileName,
-<<<<<<< HEAD
                 tileName
-=======
-                ""
->>>>>>> 2fea082 (fixed audio player in am screen)
               );
             }}
             sx={{
