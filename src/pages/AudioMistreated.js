@@ -113,15 +113,16 @@ const AudioMistreated = ({ item,  destbucket }) => {
     <div className="amt-tiles">
       <h1 className="heading-screens">Audio Mistreated</h1>
       <div className="audio-refresh-btn">
-        <div className="pagination-class">
         <Button
+          onClick={() => {
+            window.location.reload(false);
+          }}
           variant="contained"
           disableElevation
-          disabled={isDisabled}
-          onClick={FetchAudioMisTreated}
         >
           GET AUDIO Mistreated
         </Button>
+        <div className="pagination-class">
           <Pagination
             onChange={(e, value) => {
               setPageNumber(value);
@@ -133,7 +134,7 @@ const AudioMistreated = ({ item,  destbucket }) => {
         </div>
       </div>
       {audTreData?.length > 0 && audTreData?.map(([tileName, comments], index) => (
-        <div key={index} className="au-mt">
+        <div key={`${tileName}-${index}`} className="au-mt">
           <div className="main-tile">
             <ColorCheckboxes
               tileName={tileName}
@@ -162,7 +163,7 @@ const AudioMistreated = ({ item,  destbucket }) => {
             <p className="video-name-dynamic">{comments}</p>
           </div>
           <div className="am-main-tiles">
-            <AudioMistreatedTile value={comments} />
+            <AudioMistreatedTile value={tileName} />
           </div>
         </div>
       ))}

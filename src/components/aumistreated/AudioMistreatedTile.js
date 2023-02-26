@@ -5,7 +5,7 @@ import ReactAudioPlayer from "react-audio-player";
 import { BASE_URL } from "../../constants/constant";
 
 const AudioMistreatedTile = (value) => {
-  // console.log(value, 'value----->>>>>');
+  console.log(value, 'value----->>>>>');
   const [showModal, setShowModal] = useState({ raw: false, treated: false });
   
   const [audioUrlMisTreat, setAudioUrlMisTreat] = useState();
