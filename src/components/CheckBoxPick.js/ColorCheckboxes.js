@@ -7,6 +7,7 @@ export default function ColorCheckboxes({
   tileName,
   handleClickAndSendMessage,
 }) {
+  console.log(tileName, "TileName in colorcheckbox");  
   const [selectedValue, setSelectedValue] = useState("a");
   const handleChange = (event) => {
     // if (event.target.value === selectedValue ) {
@@ -30,7 +31,7 @@ export default function ColorCheckboxes({
       <Checkbox 
         onClick={(e) => {
           // handleChange();
-          if (e.target.checked!= true){
+          if (e.target.checked != true){
             handleClickAndSendMessage({ video_id: tileName, true: true});
           }
           else{

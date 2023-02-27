@@ -137,7 +137,7 @@ const RedoLipBox = (sbuck, handleClickSendMessage, destbucket) => {
       {redoTileName?.length > 0 &&
         redoTileName?.map(([tileName, comments], index) => (
           <RedoLipRowTile
-            key={`${tileName}-${index}`}
+            // key={`${tileName}-${index}`}
             tileName={tileName}
             comments={comments}
             nameCode={nameCode[index]}

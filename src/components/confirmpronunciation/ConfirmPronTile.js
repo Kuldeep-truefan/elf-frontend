@@ -136,29 +136,29 @@ const ConfirmPronTile = () => {
         </div>
       </div>
       {audioConfirmPro?.map((value, index) => (
-        <div key={index} className="au-mt">
+        <div key={`${value}-${index}`} className="au-mt">
           <div className="main-tile">
             <ColorCheckboxes
-              tileName={audioConfirmPro}
+              tileName={value}
               handleClickAndSendMessage={handleClickAndSendMessage}
-            />
+              />
             <div className="main-tile-head">
               <Typography
                 className="video-name"
                 sx={{
                   paddingLeft: "1rem",
                 }}
-              >
+                >
                 {value}
               </Typography>
               {emittedData &&
                 JSON.parse(emittedData)?.filter(
-                  (data) => data?.video_id === audioConfirmPro
+                  (data) => data?.video_id === value
                 )?.length > 0 && (
                   <Chip
                     label={`In progress: ${
                       JSON.parse(emittedData)?.filter(
-                        (data) => data?.video_id === audioConfirmPro
+                        (data) => data?.video_id === value
                       )?.[0]?.user
                     }`}
                     sx={{ ml: "5px", backgroundColor: "white" }}
