@@ -1,21 +1,48 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import "../../App.css";
+import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
+
 import { Button, Chip, FormHelperText, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../constants/constant";
+import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Pagination from "@mui/material/Pagination";
 import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
 
-const ConfirmPronTile = (destbucket) => {
+const username = localStorage.getItem("username");
+const socketUrl = `${WEB_BASE_URL}/audiomis.io/`;
+
+const ConfirmPronTile = ({tileName}) => {
+  console.log(tileName, '------>>>>>>tileName');
+  const [emittedData, setemittedData] = useState("");
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
   const [audioConfirmPro, setAudioConfirmPro] = useState([]);
-  const [isDisabled, setIsDisabled] = useState(true);
   const [pageCount, setPageCount] = useState("");
   const accessToken = localStorage.getItem("authToken");
+
+  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
+    onMessage: (message) => {
+      const data = JSON.parse(message?.data);
+      setemittedData(JSON.parse(data?.data));
+      console.log(message, "message------->>>>>");
+    },
+  });
+  // const handleChange = (event) => {
+  //   setNewNameCode(event.target.value);
+  // };
+  const handleClickAndSendMessage = useCallback(
+    (payload) =>
+      sendMessage(
+        JSON.stringify({
+          user: username,
+          ...payload,
+        })
+      ),
+    [username]
+  );
 
   const handleStatus = (event) => {
     setStatus(event.target.value);
@@ -27,7 +54,6 @@ const ConfirmPronTile = (destbucket) => {
   };
 
   let FetchConfirmPronunFiles = async (e, value) => {
-    console.log("working----FetchConfirmPronunFiles");
     try {
       fetch(`${BASE_URL}/audio/get-confirm-files`, {
         method: "POST",
@@ -90,20 +116,29 @@ const ConfirmPronTile = (destbucket) => {
       {audioConfirmPro?.map((value, index) => (
         <div key={index} className="au-mt">
           <div className="main-tile">
-          <ColorCheckboxes/>
+          <ColorCheckboxes
+          tileName={tileName}
+          handleClickAndSendMessage={handleClickAndSendMessage}
+          />
             <div className="main-tile-head">
               <Typography
                 className="video-name"
                 sx={{
                   paddingLeft: "1rem",
-                }}
-              >
+                }}>
                 {value}
               </Typography>
-              <Chip
-                label={`In progress: admin`}
-                sx={{ ml: "5px", backgroundColor: "white" }}
-              />
+              {emittedData &&
+                JSON.parse(emittedData)?.filter(
+                  (data) => data?.video_id === tileName
+                )?.length > 0 && (
+                  <Chip
+                    label={`In progress: ${
+                      JSON.parse(emittedData)?.filter(
+                        (data) => data?.video_id === tileName)?.[0]?.user
+                    }`}
+                    sx={{ ml: "5px", backgroundColor: "white" }}></Chip>
+            )}
             </div>
           </div>
           <div className="main-tiles">
