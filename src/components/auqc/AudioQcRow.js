@@ -193,10 +193,10 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber }) => {
                 tileName,
                 tileName
               );
-              UploadAudioRecored(
-                tileName,
-                tileName.split("_")[3].split(".")[0]
-              );
+              // UploadAudioRecored(
+              //   tileName,
+              //   tileName.split("_")[3].split(".")[0]
+              // );
             }}
             sx={{
               height: "2.5rem",

@@ -33,9 +33,10 @@ const AudioModal = ({ value, pageNumber }) => {
     remark: false,
   });
 
-  const [audioUrl, setAudioUrl] = useState(false);
+  const [lastAudioUrl, setLastAudioUrl] = useState(false);
+  const [remarksAudioUrl, setRemarksAudioUrl] = useState(false);
 
-  let FetchPlayAudio = async (bucketName, audioFileName, subBucketName=null) => {
+  let FetchPlayAudio = async (bucketName, audioFileName, subBucketName=null, audioUrlType) => {
     return new Promise(function (resolve, reject) {
       try {
         //  setLoading(true)
@@ -60,7 +61,10 @@ const AudioModal = ({ value, pageNumber }) => {
     }).then(
       (result) => {
         //  setLoading(false);
-        setAudioUrl(result.publink);
+        if(audioUrlType === 'last')
+         setLastAudioUrl(result.publink);
+        else 
+         setRemarksAudioUrl(result.publink);
       }, // shows "done!" after 1 second
       (error) => alert(error) // doesn't run
     );
@@ -137,7 +141,7 @@ const AudioModal = ({ value, pageNumber }) => {
         {!showModal.last ? (
           <Button
             onClick={() => {
-              FetchPlayAudio("celeb-audio-data", fileFirstName && `${fileFirstName}.wav`, fileBucket && `${fileBucket}-raw`);
+              FetchPlayAudio("celeb-audio-data", fileFirstName && `${fileFirstName}.wav`, fileBucket && `${fileBucket}-raw`, 'last');
               setShowModal({ ...showModal, last: !showModal.last });
             }}
             variant="contained"
@@ -156,7 +160,7 @@ const AudioModal = ({ value, pageNumber }) => {
             Last Audio
           </Button>
         ) : (
-          <ReactAudioPlayer src={audioUrl} controls />
+          <ReactAudioPlayer src={lastAudioUrl} controls />
         )}
         {showModal.attach && (
           <p
@@ -190,7 +194,7 @@ const AudioModal = ({ value, pageNumber }) => {
             Remarks Audio
           </Button>
         ) : (
-          <ReactAudioPlayer src={audioUrl} controls />
+          <ReactAudioPlayer src={remarksAudioUrl} controls />
         )}
         {showModal.attach && (
           <p

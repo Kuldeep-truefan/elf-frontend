@@ -25,8 +25,9 @@ const AudioMistreatedTile = (value) => {
     });
   };
 
-  const [audioMisPubLink, setAudioMisPubLink] = useState();
-  let FetchRawAudioMistreated = async (fileNameAmt, bucketNameAmt) => {
+  const [rawAudioUrl, setRawAudioUrl] = useState();
+  const [treatedAudioUrl, setTreatedAudioUrl] = useState();
+  let FetchRawAudioMistreated = async (fileNameAmt, bucketNameAmt, audioUrlType) => {
     return new Promise(function (resolve, reject) {
       try {
         fetch(`${BASE_URL}/log/makepub`, {
@@ -49,7 +50,9 @@ const AudioMistreatedTile = (value) => {
       }
     }).then(
       (result) => {
-        setAudioMisPubLink(result.publink);
+        if (audioUrlType === 'raw')
+          setRawAudioUrl(result.publink);
+        else setTreatedAudioUrl(result.publink)
       },
       (error) => alert(error)
     );
@@ -109,29 +112,30 @@ const AudioMistreatedTile = (value) => {
 
         {!showModal.raw ? (
           <Button
-          sx={{
-            height: "2.5rem",
-            backgroundColor: "#D7B8FD",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#ad6efb",
-              color: "#fff",
-            },
-          }}          
+            sx={{
+              height: "2.5rem",
+              backgroundColor: "#D7B8FD",
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#ad6efb",
+                color: "#fff",
+              },
+            }}
             variant="contained"
             component="label"
             onClick={() => {
               setShowModal({ ...showModal, raw: !showModal.raw });
               FetchRawAudioMistreated(
                 `${value.value.split("_")[0]}.wav`,
-                `${value.value.split("_")[1]}-raw`
+                `${value.value.split("_")[1]}-raw`,
+                'raw'
               );
             }}
           >
             Raw Audio
           </Button>
         ) : (
-          <ReactAudioPlayer src={audioMisPubLink} controls />
+          <ReactAudioPlayer src={rawAudioUrl} controls />
         )}
         {showModal.raw && (
           <p
@@ -147,15 +151,15 @@ const AudioMistreatedTile = (value) => {
         )}
         {!showModal.treated ? (
           <Button
-          sx={{
-            height: "2.5rem",
-            backgroundColor: "#D7B8FD",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#ad6efb",
-              color: "#fff",
-            },
-          }}          
+            sx={{
+              height: "2.5rem",
+              backgroundColor: "#D7B8FD",
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#ad6efb",
+                color: "#fff",
+              },
+            }}
             variant="contained"
             component="label"
             onClick={() => {
@@ -169,7 +173,7 @@ const AudioMistreatedTile = (value) => {
             Treated Audio
           </Button>
         ) : (
-          <ReactAudioPlayer src={audioMisPubLink} controls />
+          <ReactAudioPlayer src={treatedAudioUrl} controls />
         )}
         {showModal.treated && (
           <p
