@@ -4,6 +4,7 @@ import MaterialTable from "@material-table/core";
 import { BASE_URL } from "../../constants/constant";
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
 
 const MatTableComp = () => {
@@ -26,6 +27,14 @@ const MatTableComp = () => {
     "AV Redo (mistreated)":"AV Redo (mistreated)", "Confirm pronunciation":"Confirm pronunciation", "REFUNDED":"REFUNDED", "Uploaded to Final QC":"Uploaded to Final QC"}},
     { title: 'QC Comment', field: 'qc_comment' },
     { title: 'Output Link', field: 'output_link' },
+    {
+      title: 'Button',
+      render: rowData => (
+        <Button sx={{background: '#D7B8FD', '&:hover':{backgroundColor: '#ad6efb'}}} onClick={() => {
+          console.log(`Button clicked for ${rowData.video_id}`);
+        }} variant="contained">Contained</Button>
+      ),
+    },
     // {
     //   title: 'Birth Place',
     //   field: 'birthCity',
