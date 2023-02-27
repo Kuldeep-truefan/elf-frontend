@@ -50,13 +50,8 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
     }
   );
 
-<<<<<<< Updated upstream
-  const { filename: redoTileName} = data || {};
-
-=======
   const { filename: redoTileName, lastnamecode: nameCode } = data || {};
   console.log(nameCode, 'nameCode------->>');
->>>>>>> Stashed changes
   const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/audiomis.io/`);
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
     onMessage: (message) => {
@@ -140,11 +135,7 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
       {redoTileName?.length > 0 &&
         redoTileName?.map(([tileName, comments, namecode], index) => (
           <RedoLipRowTile
-<<<<<<< Updated upstream
-            key = {`${tileName}-${index}`}
-=======
             key={`${tileName}-${index}`}
->>>>>>> Stashed changes
             tileName={tileName}
             comments={comments}
             nameCode={namecode}
