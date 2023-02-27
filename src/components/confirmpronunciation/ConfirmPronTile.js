@@ -10,16 +10,18 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Pagination from "@mui/material/Pagination";
 import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
+import { useQuery, useQueryClient } from "react-query";
 
 const username = localStorage.getItem("username");
 const socketUrl = `${WEB_BASE_URL}/audiomis.io/`;
 
 const ConfirmPronTile = () => {
   const [emittedData, setemittedData] = useState("");
+  const queryClient = useQueryClient();
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
-  const [audioConfirmPro, setAudioConfirmPro] = useState([]);
-  const [pageCount, setPageCount] = useState("");
+  const [pageCount, setPageCount] = useState(1);
+  const [pageNumber, setPageNumber] = useState(1);
   const accessToken = localStorage.getItem("authToken");
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
@@ -30,27 +32,28 @@ const ConfirmPronTile = () => {
     },
   });
 
-  const handleClickAndSendMessage = useCallback((payload)=>{
-    console.log(payload, "payload")
-    if (payload.true){
-      sendMessage(
-        JSON.stringify({
-          user: username,
-          true:true,
-          ...payload,
-        })
-      )
-    }
-    else{
-      sendMessage(
-        JSON.stringify({
-          user: username,
-          ...payload,
-        })
-      )
-
-    }
-  },[username])
+  const handleClickAndSendMessage = useCallback(
+    (payload) => {
+      console.log(payload, "payload");
+      if (payload.true) {
+        sendMessage(
+          JSON.stringify({
+            user: username,
+            true: true,
+            ...payload,
+          })
+        );
+      } else {
+        sendMessage(
+          JSON.stringify({
+            user: username,
+            ...payload,
+          })
+        );
+      }
+    },
+    [username]
+  );
 
   const handleStatus = (event) => {
     setStatus(event.target.value);
@@ -61,26 +64,22 @@ const ConfirmPronTile = () => {
     console.log(event.target.value);
   };
 
-  let FetchConfirmPronunFiles = async (e, value) => {
-    try {
-      fetch(`${BASE_URL}/audio/get-confirm-files`, {
-        method: "POST",
-        body: JSON.stringify({
-          pageNumber: value,
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setAudioConfirmPro(data.filename);
-          setPageCount(data.pagecount);
-        });
-    } catch (error) {
-      console.log("Error occured", error);
-    }
+  let FetchConfirmPronunFiles = async (value) => {
+    const data = fetch(`${BASE_URL}/audio/get-confirm-files`, {
+      method: "POST",
+      body: JSON.stringify({
+        pageNumber: value,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((response) => response.json());
+    // .then((data) => {
+    //   setAudioConfirmPro(data.filename);
+    //   setPageCount(data.pagecount);
+    // });
+    return data;
   };
 
   let UpdateConfirmName = async (buttonPressed, engName, videoId) => {
@@ -96,27 +95,42 @@ const ConfirmPronTile = () => {
           "Content-type": "application/json; charset=UTF-8",
           Authorization: `Bearer ${accessToken}`,
         },
-      }).then((response) => response.json());
+      }).then(() => {
+        queryClient.invalidateQueries(["FetchConfirmPronunFiles", pageNumber]);
+      });
     } catch (error) {
       console.log("Error occured", error);
     }
   };
 
+  const { isLoading, data, isFetching } = useQuery(
+    ["FetchConfirmPronunFiles", pageNumber],
+    () => FetchConfirmPronunFiles(pageNumber),
+    {
+      onSuccess: (res) => {
+        setPageCount(res.pagecount);
+      },
+    }
+  );
+  const { filename: audioConfirmPro } = data || {};
   return (
     <div className="confirm-tiles">
       <h1 className="heading-screens">Confirm Pronunciation</h1>
       <div className="audio-refresh-btn">
         <div className="pagination-class">
-        <Button
-          variant="contained"
-          disableElevation
-          onClick={FetchConfirmPronunFiles}
-        >
-          Confirm Pronunciation Files
-        </Button>
+          <Button
+            variant="contained"
+            disableElevation
+            onClick={() => window.location.reload(false)}
+          >
+            Confirm Pronunciation Files
+          </Button>
           <Pagination
-            onChange={(e, value) => FetchConfirmPronunFiles(e, value)}
+            onChange={(e, value) => {
+              setPageNumber(value);
+            }}
             count={pageCount}
+            page={pageNumber}
             variant="outlined"
           />
         </div>
@@ -124,16 +138,17 @@ const ConfirmPronTile = () => {
       {audioConfirmPro?.map((value, index) => (
         <div key={index} className="au-mt">
           <div className="main-tile">
-          <ColorCheckboxes
-          tileName={audioConfirmPro}
-          handleClickAndSendMessage={handleClickAndSendMessage}
-          />
+            <ColorCheckboxes
+              tileName={audioConfirmPro}
+              handleClickAndSendMessage={handleClickAndSendMessage}
+            />
             <div className="main-tile-head">
               <Typography
                 className="video-name"
                 sx={{
                   paddingLeft: "1rem",
-                }}>
+                }}
+              >
                 {value}
               </Typography>
               {emittedData &&
@@ -143,10 +158,12 @@ const ConfirmPronTile = () => {
                   <Chip
                     label={`In progress: ${
                       JSON.parse(emittedData)?.filter(
-                        (data) => data?.video_id === audioConfirmPro)?.[0]?.user
+                        (data) => data?.video_id === audioConfirmPro
+                      )?.[0]?.user
                     }`}
-                    sx={{ ml: "5px", backgroundColor: "white" }}></Chip>
-            )}
+                    sx={{ ml: "5px", backgroundColor: "white" }}
+                  ></Chip>
+                )}
             </div>
           </div>
           <div className="main-tiles">

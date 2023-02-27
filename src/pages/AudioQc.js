@@ -42,7 +42,6 @@ const AudioQc = ({
     }
   })
   const {filename: audioQcData } = data || {}
-  console.log({isFetching}, 'audioQcData.length------->>>>>>>');
 //   if (isLoading) {
 //     return <div style={{
 //       display: 'flex',
