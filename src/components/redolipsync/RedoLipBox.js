@@ -11,15 +11,46 @@ import useWebSocket, { ReadyState } from "react-use-websocket";
 
 import { useCallback } from "react";
 import RedoLipRowTile from "./RedoLipRowTile";
+import { useQuery } from "react-query";
 
 const RedoLipBox = (sbuck, handleClickSendMessage, destbucket) => {
-  const [pageCount, setPageCount] = useState("");
-  const [redoTileName, setRedoTileName] = useState("");
-  const [nameCode, setNameCode] = useState("");
   const [newNameCode, setNewNameCode] = useState("");
   const [open, setOpen] = useState(false);
   const [emittedData, setemittedData] = useState("");
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageCount, setPageCount] = useState(1);
   const [username, setUsername] = useState(localStorage.getItem("username"));
+  let FetchAudioRedoLipSync = async (value) => {
+    // setLoading(true); // Set loading before sending API request
+    const data = await fetch(`${BASE_URL}/audio/get-redo-lip-files`, {
+      method: "POST",
+      body: JSON.stringify({
+        pageNumber: value,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((response) => response.json());
+    // .then((data) => {
+    //   setRedoTileName(data.filename);
+    //   setNameCode(data.lastnamecode);
+    //   setPageCount(data.pagecount);
+    // });
+    return data;
+    // setLoading(false); // Stop loading
+  };
+  const { isLoading, data, isFetching } = useQuery(
+    ["FetchAudioRedoLipSync", pageNumber],
+    () => FetchAudioRedoLipSync(pageNumber),
+    {
+      onSuccess: (res) => {
+        setPageCount(res.pagecount);
+      },
+    }
+  );
+
+  const { filename: redoTileName, lastnamecode: nameCode } = data || {};
 
   const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/audiomis.io/`);
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
@@ -71,33 +102,6 @@ const RedoLipBox = (sbuck, handleClickSendMessage, destbucket) => {
     }
   };
 
-  let FetchAudioRedoLipSync = async (e, value) => {
-    console.log(value, "value of FetchAudioRedoLipSync---->>");
-    try {
-      // setLoading(true); // Set loading before sending API request
-      fetch(`${BASE_URL}/audio/get-redo-lip-files`, {
-        method: "POST",
-        body: JSON.stringify({
-          pageNumber: value,
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setRedoTileName(data.filename);
-          setNameCode(data.lastnamecode);
-          setPageCount(data.pagecount);
-        });
-      // setLoading(false); // Stop loading
-    } catch (error) {
-      // setLoading(false);
-      console.log("Error occured", error);
-    }
-  };
-
   // useEffect(() => {
   //   if (!destbucket) {
   //     setIsDisabled(true);
@@ -121,15 +125,24 @@ const RedoLipBox = (sbuck, handleClickSendMessage, destbucket) => {
             Get Redo Lip Sync
           </Button>
           <Pagination
-            onChange={(e, value) => FetchAudioRedoLipSync(e, value)}
+            onChange={(e, value) => {
+              setPageNumber(value);
+            }}
             count={pageCount}
+            page={pageNumber}
             variant="outlined"
           />
         </div>
       </div>
       {redoTileName?.length > 0 &&
         redoTileName?.map(([tileName, comments], index) => (
-          <RedoLipRowTile tileName={tileName} comments={comments} nameCode={nameCode[index]}/>
+          <RedoLipRowTile
+            key={`${tileName}-${index}`}
+            tileName={tileName}
+            comments={comments}
+            nameCode={nameCode[index]}
+            pageNumber={pageNumber}
+          />
         ))}
     </div>
   );

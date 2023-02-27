@@ -163,7 +163,7 @@ const AudioMistreated = ({ item,  destbucket }) => {
             <p className="video-name-dynamic">{comments}</p>
           </div>
           <div className="am-main-tiles">
-            <AudioMistreatedTile value={tileName} />
+            <AudioMistreatedTile value={tileName} pageNumber={pageNumber} />
           </div>
         </div>
       ))}

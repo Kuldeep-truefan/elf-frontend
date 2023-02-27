@@ -3,26 +3,28 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import ReactAudioPlayer from "react-audio-player";
 import { BASE_URL } from "../../constants/constant";
+import { useQueryClient } from "react-query";
 
 const AudioMistreatedTile = (value) => {
-  console.log(value, 'value----->>>>>');
+  console.log(value, "value----->>>>>");
   const [showModal, setShowModal] = useState({ raw: false, treated: false });
-  
+
   const [audioUrlMisTreat, setAudioUrlMisTreat] = useState();
-  
+  const queryClient = useQueryClient();
+
   const [sendMisTreatFile, setSendMisTreatFile] = useState(null);
-  
+
   const handleFile = (event) => {
     // if (`${event.target.files[0]?.name}.wav` !== `${fileFirstNameMisTreat}.wav`){
     //   alert("Filename not correct")
     // }else if(`${event.target.files[0]?.name}.wav` === `${fileFirstNameMisTreat}.wav`){
-      const audioUrlMisTreat = URL.createObjectURL(event.target.files[0]);
-      setSendMisTreatFile({
-        url: audioUrlMisTreat,
-        file: event.target.files[0],
-      });
+    const audioUrlMisTreat = URL.createObjectURL(event.target.files[0]);
+    setSendMisTreatFile({
+      url: audioUrlMisTreat,
+      file: event.target.files[0],
+    });
   };
-  
+
   const [audioMisPubLink, setAudioMisPubLink] = useState();
   let FetchRawAudioMistreated = async (fileNameAmt, bucketNameAmt) => {
     return new Promise(function (resolve, reject) {
@@ -53,9 +55,11 @@ const AudioMistreatedTile = (value) => {
     );
   };
 
-
   let UploadAudioMistreatedFile = async () => {
-    console.log(value.value?.split("_")[3].split('.')[0], 'wng----UploadAudioMistreatedFile>>>>.');
+    console.log(
+      value.value?.split("_")[3].split(".")[0],
+      "wng----UploadAudioMistreatedFile>>>>."
+    );
     try {
       let myHeaders = new Headers();
       myHeaders.append(
@@ -65,11 +69,10 @@ const AudioMistreatedTile = (value) => {
 
       let formdata = new FormData();
       formdata.append("audioData", sendMisTreatFile.file);
-      formdata.append("fileName", `${value.value.split("_")[0]}.wav`)
-      formdata.append("folderName", `${value.value.split("_")[1]}-raw`)
-      formdata.append("videoId", value.value.split("_")[3].split(".")[0])
-      formdata.append("screenName", 'amt')
-      
+      formdata.append("fileName", `${value.value.split("_")[0]}.wav`);
+      formdata.append("folderName", `${value.value.split("_")[1]}-raw`);
+      formdata.append("videoId", value.value.split("_")[3].split(".")[0]);
+      formdata.append("screenName", "amt");
 
       let requestOptions = {
         method: "POST",
@@ -81,6 +84,7 @@ const AudioMistreatedTile = (value) => {
         requestOptions
       );
       const convertToText = await response.text();
+      queryClient.invalidateQueries(["FetchAudioMisTreated", value.pageNumber]);
       return convertToText;
     } catch (error) {
       console.log(error);
@@ -90,7 +94,7 @@ const AudioMistreatedTile = (value) => {
   return (
     <div>
       <Stack
-        style={{ position: "relative", width:'100%' }}
+        style={{ position: "relative", width: "100%" }}
         direction="row"
         alignItems="center"
         spacing={2}
@@ -173,8 +177,8 @@ const AudioMistreatedTile = (value) => {
             },
           }}
           onClick={() => {
-            UploadAudioMistreatedFile(
-          )}}
+            UploadAudioMistreatedFile();
+          }}
         >
           Done
         </Button>

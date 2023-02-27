@@ -97,7 +97,7 @@ const AudioQc = ({
       </div>
       {audioQcData?.length > 0 &&audioQcData?.map(([tileName, comments], index) => (
 
-        <AudioQcRow item={item} emittedData={emittedData} tileName={tileName} comments={comments} index={index} pageNumber={pageNumber}/>
+        <AudioQcRow key={`${tileName}-${index}`} item={item} emittedData={emittedData} tileName={tileName} comments={comments} index={index} pageNumber={pageNumber}/>
       )
       )}
     </div>

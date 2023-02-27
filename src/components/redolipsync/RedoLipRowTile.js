@@ -1,5 +1,6 @@
 import { Box, Button, Chip, TextField, Typography } from "@mui/material";
 import React, { useCallback, useState } from "react";
+import { useQueryClient } from "react-query";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
@@ -9,7 +10,8 @@ const username = localStorage.getItem("username");
 const socketUrl = `${WEB_BASE_URL}/audiomis.io/`;
 const accessToken = localStorage.getItem("authToken");
 
-const RedoLipRowTile = ({ tileName, comments, nameCode }) => {
+const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
+  const queryClient = useQueryClient();
   const [emittedData, setemittedData] = useState("");
   const [open, setOpen] = useState(false);
   const [newNameCode, setNewNameCode] = useState("");
@@ -51,14 +53,16 @@ const RedoLipRowTile = ({ tileName, comments, nameCode }) => {
           Authorization: `Bearer ${accessToken}`,
         },
       })
-        .then((response) => response.json())
+        .then(() => {
+          queryClient.invalidateQueries(["FetchAudioRedoLipSync", pageNumber]);
+        })
         .then((data) => {});
     } catch (error) {
       console.log("Error occured", error);
     }
   };
   return (
-    <div lassName="au-mt">
+    <div className="au-mt">
       <div className="main-tile">
         <ColorCheckboxes
           tileName={tileName}
