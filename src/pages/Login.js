@@ -36,6 +36,8 @@ function Login() {
   }
 
   const handelPassword = (event) => {
+    setPassword(event.target.value)
+    console.log("password",event.target.value)
   }
 //   const myStyle={
 //     backgroundColor: "#ba57e8",
