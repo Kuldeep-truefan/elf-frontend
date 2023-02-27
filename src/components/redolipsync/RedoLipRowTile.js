@@ -10,7 +10,7 @@ const username = localStorage.getItem("username");
 const socketUrl = `${WEB_BASE_URL}/audiomis.io/`;
 const accessToken = localStorage.getItem("authToken");
 
-const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
+const RedoLipRowTile = ({ key, tileName, comments, nameCode, pageNumber }) => {
   const queryClient = useQueryClient();
   const [emittedData, setemittedData] = useState("");
   const [open, setOpen] = useState(false);

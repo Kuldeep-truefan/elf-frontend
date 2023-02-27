@@ -27,11 +27,11 @@ export default function RedoLipModal({item, sendMessage}) {
   const [loading, setLoading] = useState(false);    
   const [open , setOpen] = useState(false);
 
+
   const handleOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
-    console.log("false")
     setRedourl(false)
     setOpen(false)};
   //  console.log(redoPubUrl , '-----redoPubUrl----');

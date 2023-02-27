@@ -92,21 +92,7 @@ function Qc() {
     [ReadyState.UNINSTANTIATED]: "Uninstantiated",
   }[readyState];
 
-  // console.log(setLink, 'setlink')
-  // if (fetchLinkLoading) {
-  //   return (
-  // <div
-  //   style={{
-  //     display: "flex",
-  //     height: "100vh",
-  //     alignItems: "center",
-  //     justifyContent: "center",
-  //   }}
-  // >
-  //       <p>Loading....</p>
-  //     </div>
-  //   );
-  // }
+
   return (
     <>
       {fetchLinkLoading && (

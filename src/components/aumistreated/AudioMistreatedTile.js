@@ -109,6 +109,15 @@ const AudioMistreatedTile = (value) => {
 
         {!showModal.raw ? (
           <Button
+          sx={{
+            height: "2.5rem",
+            backgroundColor: "#D7B8FD",
+            color: "white",
+            "&:hover": {
+              backgroundColor: "#ad6efb",
+              color: "#fff",
+            },
+          }}          
             variant="contained"
             component="label"
             onClick={() => {
@@ -129,7 +138,7 @@ const AudioMistreatedTile = (value) => {
             style={{
               position: "absolute",
               top: "2px",
-              left: "39%",
+              left: "35%",
               fontSize: "12px",
             }}
           >
@@ -138,6 +147,15 @@ const AudioMistreatedTile = (value) => {
         )}
         {!showModal.treated ? (
           <Button
+          sx={{
+            height: "2.5rem",
+            backgroundColor: "#D7B8FD",
+            color: "white",
+            "&:hover": {
+              backgroundColor: "#ad6efb",
+              color: "#fff",
+            },
+          }}          
             variant="contained"
             component="label"
             onClick={() => {
@@ -158,7 +176,7 @@ const AudioMistreatedTile = (value) => {
             style={{
               position: "absolute",
               top: "2px",
-              left: "75%",
+              left: "66%",
               fontSize: "12px",
             }}
           >
