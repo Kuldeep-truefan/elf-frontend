@@ -20,10 +20,10 @@ const Dashboard = () => {
         padding="1%"
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingLeft: "5%",paddingRight: "17%" }}>
-          <Typography variant="h4" gutterBottom>Welcome <span style={{fontWeight: "bold"}}>{showname} 🙂,</span></Typography>
-          <Button variant="contained" onClick={() => {
+          <Typography variant="h4" gutterBottom>Welcome <span style={{fontWeight: "bold"}}>{showname} &#128578;,</span></Typography>
+          <Button variant="contained" sx={{background: '#D7B8FD', '&:hover':{backgroundColor: '#ad6efb'}}} onClick={() => {
             document.location.reload(false);
-          }} style={{backgroundColor:"#D7B8FD"}}>Refresh</Button>
+          }}>Refresh</Button>
         </div>
         <MatTableComp />
       </Stack>
