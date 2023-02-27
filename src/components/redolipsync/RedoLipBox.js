@@ -13,7 +13,7 @@ import { useCallback } from "react";
 import RedoLipRowTile from "./RedoLipRowTile";
 import { useQuery } from "react-query";
 
-const RedoLipBox = (sbuck, handleClickSendMessage, destbucket) => {
+const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
   const [newNameCode, setNewNameCode] = useState("");
   const [open, setOpen] = useState(false);
   const [emittedData, setemittedData] = useState("");
@@ -50,7 +50,7 @@ const RedoLipBox = (sbuck, handleClickSendMessage, destbucket) => {
     }
   );
 
-  const { filename: redoTileName, lastnamecode: nameCode } = data || {};
+  const { filename: redoTileName} = data || {};
 
   const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/audiomis.io/`);
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
@@ -133,11 +133,12 @@ const RedoLipBox = (sbuck, handleClickSendMessage, destbucket) => {
         </div>
       </div>
       {redoTileName?.length > 0 &&
-        redoTileName?.map(([tileName, comments], index) => (
+        redoTileName?.map(([tileName, comments, namecode], index) => (
           <RedoLipRowTile
+            key = {`${tileName}-${index}`}
             tileName={tileName}
             comments={comments}
-            nameCode={nameCode[index]}
+            nameCode={namecode}
             pageNumber={pageNumber}
           />
         ))}
