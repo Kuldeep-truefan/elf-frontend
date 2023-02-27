@@ -14,8 +14,7 @@ import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
 const username = localStorage.getItem("username");
 const socketUrl = `${WEB_BASE_URL}/audiomis.io/`;
 
-const ConfirmPronTile = ({tileName}) => {
-  console.log(tileName, '------>>>>>>tileName');
+const ConfirmPronTile = () => {
   const [emittedData, setemittedData] = useState("");
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
@@ -30,19 +29,28 @@ const ConfirmPronTile = ({tileName}) => {
       console.log(message, "message------->>>>>");
     },
   });
-  // const handleChange = (event) => {
-  //   setNewNameCode(event.target.value);
-  // };
-  const handleClickAndSendMessage = useCallback(
-    (payload) =>
+
+  const handleClickAndSendMessage = useCallback((payload)=>{
+    console.log(payload, "payload")
+    if (payload.true){
+      sendMessage(
+        JSON.stringify({
+          user: username,
+          true:true,
+          ...payload,
+        })
+      )
+    }
+    else{
       sendMessage(
         JSON.stringify({
           user: username,
           ...payload,
         })
-      ),
-    [username]
-  );
+      )
+
+    }
+  },[username])
 
   const handleStatus = (event) => {
     setStatus(event.target.value);
@@ -117,7 +125,7 @@ const ConfirmPronTile = ({tileName}) => {
         <div key={index} className="au-mt">
           <div className="main-tile">
           <ColorCheckboxes
-          tileName={tileName}
+          tileName={audioConfirmPro}
           handleClickAndSendMessage={handleClickAndSendMessage}
           />
             <div className="main-tile-head">
@@ -130,12 +138,12 @@ const ConfirmPronTile = ({tileName}) => {
               </Typography>
               {emittedData &&
                 JSON.parse(emittedData)?.filter(
-                  (data) => data?.video_id === tileName
+                  (data) => data?.video_id === audioConfirmPro
                 )?.length > 0 && (
                   <Chip
                     label={`In progress: ${
                       JSON.parse(emittedData)?.filter(
-                        (data) => data?.video_id === tileName)?.[0]?.user
+                        (data) => data?.video_id === audioConfirmPro)?.[0]?.user
                     }`}
                     sx={{ ml: "5px", backgroundColor: "white" }}></Chip>
             )}
