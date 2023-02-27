@@ -18,8 +18,8 @@ const socketUrl = `${WEB_BASE_URL}/audiomis.io/`;
 const ConfirmPronTile = () => {
   const [emittedData, setemittedData] = useState("");
   const queryClient = useQueryClient();
-  const [status, setStatus] = useState("");
-  const [option, setOptions] = useState("");
+  // const [status, setStatus] = useState("");
+  // const [option, setOptions] = useState("");
   const [pageCount, setPageCount] = useState(1);
   const [pageNumber, setPageNumber] = useState(1);
   const accessToken = localStorage.getItem("authToken");
@@ -28,13 +28,11 @@ const ConfirmPronTile = () => {
     onMessage: (message) => {
       const data = JSON.parse(message?.data);
       setemittedData(JSON.parse(data?.data));
-      console.log(message, "message------->>>>>");
     },
   });
 
   const handleClickAndSendMessage = useCallback(
     (payload) => {
-      console.log(payload, "payload");
       if (payload.true) {
         sendMessage(
           JSON.stringify({
@@ -55,14 +53,13 @@ const ConfirmPronTile = () => {
     [username]
   );
 
-  const handleStatus = (event) => {
-    setStatus(event.target.value);
-  };
+  // const handleStatus = (event) => {
+  //   setStatus(event.target.value);
+  // };
 
-  const handleOptions = (event) => {
-    setOptions(event.target.value);
-    console.log(event.target.value);
-  };
+  // const handleOptions = (event) => {
+  //   setOptions(event.target.value);
+  // };
 
   let FetchConfirmPronunFiles = async (value) => {
     const data = fetch(`${BASE_URL}/audio/get-confirm-files`, {

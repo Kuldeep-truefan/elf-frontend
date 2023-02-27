@@ -19,7 +19,6 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
     onMessage: (message) => {
       const data = JSON.parse(message?.data);
       setemittedData(JSON.parse(data?.data));
-      console.log(message, "message------->>>>>");
     },
   });
   const handleChange = (event) => {
@@ -37,10 +36,8 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
   );
   const handelClick = () => {
     setOpen(open);
-    console.log(open);
   };
   let UpdateRedoLipSync = async (videoId) => {
-    console.log(videoId, "VideoId");
     try {
       fetch(`${BASE_URL}/audio/updt-redo-lip-newnamecode`, {
         method: "PUT",

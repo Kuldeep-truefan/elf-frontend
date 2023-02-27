@@ -31,15 +31,11 @@ function Login() {
   const handleClose = () => {
     setState({ ...state, open: false });
   };
-  // const handleClick = () => navigate('/login');
   const handelUsername = (text) => {
     setUsername(text)
-    // console.log("usnerame",event.target.value)
   }
 
   const handelPassword = (event) => {
-    setPassword(event.target.value)
-    console.log("password",event.target.value)
   }
 //   const myStyle={
 //     backgroundColor: "#ba57e8",
@@ -60,7 +56,6 @@ function Login() {
   }
   return (
     <div className="App">
-      {/* <div style={myStyle}></div> */}
       <div className="login-div">
         <img src={logo}></img>
           <div className="wel-div">

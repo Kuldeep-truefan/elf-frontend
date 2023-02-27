@@ -31,7 +31,6 @@ const AudioQc = ({
           Authorization: `Bearer ${accessToken}`,
         },
       }).then((response) => response.json())
-        console.log({data});
         return data
   };
   
@@ -86,7 +85,6 @@ const AudioQc = ({
         <div className="pagination-class">
           <Pagination
             onChange={(e, value) => {
-              console.log(value);
               setPageNumber(value)}}
             count={pageCount}
             page={pageNumber}

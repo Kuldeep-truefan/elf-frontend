@@ -57,7 +57,6 @@ const RedoLipBox = (sbuck, handleClickSendMessage, destbucket) => {
     onMessage: (message) => {
       const data = JSON.parse(message?.data);
       setemittedData(JSON.parse(data?.data));
-      console.log(message, "message------->>>>>");
     },
   });
 
@@ -74,7 +73,6 @@ const RedoLipBox = (sbuck, handleClickSendMessage, destbucket) => {
 
   const handelClick = () => {
     setOpen(open);
-    console.log(open);
   };
 
   const handleChange = (event) => {
@@ -137,7 +135,6 @@ const RedoLipBox = (sbuck, handleClickSendMessage, destbucket) => {
       {redoTileName?.length > 0 &&
         redoTileName?.map(([tileName, comments], index) => (
           <RedoLipRowTile
-            // key={`${tileName}-${index}`}
             tileName={tileName}
             comments={comments}
             nameCode={nameCode[index]}

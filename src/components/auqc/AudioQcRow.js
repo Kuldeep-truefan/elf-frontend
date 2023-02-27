@@ -23,7 +23,6 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber }) => {
     onMessage: (message) => {
       const data = JSON.parse(message?.data);
       setemittedData(JSON.parse(data?.data));
-      console.log(message, "message------->>>>>");
     },
   });
 
@@ -111,10 +110,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber }) => {
 
   const handleChange = (event) => {
     setRemark(event.target.value);
-    console.log(event.target.value);
   };
-
-  console.log(emittedData, "emittedData----:::::>>>>");
 
   return (
     <div key={index} className="au-mis">

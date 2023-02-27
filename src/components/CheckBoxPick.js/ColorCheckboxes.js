@@ -7,7 +7,6 @@ export default function ColorCheckboxes({
   tileName,
   handleClickAndSendMessage,
 }) {
-  console.log(tileName, "TileName in colorcheckbox");  
   const [selectedValue, setSelectedValue] = useState("a");
   const handleChange = (event) => {
     // if (event.target.value === selectedValue ) {
