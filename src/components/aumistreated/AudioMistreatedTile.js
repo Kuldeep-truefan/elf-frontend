@@ -176,7 +176,7 @@ const AudioMistreatedTile = (value) => {
             style={{
               position: "absolute",
               top: "2px",
-              left: "67%",
+              left: "66%",
               fontSize: "12px",
             }}
           >
