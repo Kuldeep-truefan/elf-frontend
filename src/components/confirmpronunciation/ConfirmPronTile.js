@@ -51,26 +51,26 @@ const ConfirmPronTile = () => {
     return data;
   };
 
-  let UpdateConfirmName = async (buttonPressed, engName, videoId) => {
-    try {
-      fetch(`${BASE_URL}/audio/update-confirm-pronunciation`, {
-        method: "POST",
-        body: JSON.stringify({
-          englishName: engName,
-          buttonPressed: buttonPressed,
-          videoId: videoId,
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }).then(() => {
-        queryClient.invalidateQueries(["FetchConfirmPronunFiles", pageNumber]);
-      });
-    } catch (error) {
-      console.log("Error occured", error);
-    }
-  };
+  // let UpdateConfirmName = async (buttonPressed, engName, videoId) => {
+  //   try {
+  //     fetch(`${BASE_URL}/audio/update-confirm-pronunciation`, {
+  //       method: "POST",
+  //       body: JSON.stringify({
+  //         englishName: engName,
+  //         buttonPressed: buttonPressed,
+  //         videoId: videoId,
+  //       }),
+  //       headers: {
+  //         "Content-type": "application/json; charset=UTF-8",
+  //         Authorization: `Bearer ${accessToken}`,
+  //       },
+  //     }).then(() => {
+  //       queryClient.invalidateQueries(["FetchConfirmPronunFiles", pageNumber]);
+  //     });
+  //   } catch (error) {
+  //     console.log("Error occured", error);
+  //   }
+  // };
 
   const { isLoading, data, isFetching } = useQuery(
     ["FetchConfirmPronunFiles", pageNumber],
