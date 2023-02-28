@@ -64,6 +64,7 @@ export default function VideoModal({ open, setOpen, item, sbuck, sendMessage}) {
       error => alert(error) // doesn't run
     );
     };
+    
   return (
     <div>
       <PlayCircleRounderIcon

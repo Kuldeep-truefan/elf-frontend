@@ -4,13 +4,34 @@ import Stack from "@mui/material/Stack";
 import ReactAudioPlayer from "react-audio-player";
 import { BASE_URL } from "../../constants/constant";
 import { useQueryClient } from "react-query";
+import { ControlBar, PlaybackRateMenuButton, ReplayControl } from "video-react";
+import PlayCircleRounderIcon from "@mui/icons-material/PlayCircleRounded";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import { BigPlayButton, Player, PlayToggle } from "video-react";
+import ReactLoading from "react-loading";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 const AudioMistreatedTile = (value) => {
   console.log(value, "value----->>>>>");
   const [showModal, setShowModal] = useState({ raw: false, treated: false });
-
+  const [loading, setLoading] = useState(false);
+  const [puburl, setPuburl] = useState(false);
+  console.log(puburl, 'puburl---->>>>');
   const [audioUrlMisTreat, setAudioUrlMisTreat] = useState();
   const queryClient = useQueryClient();
+  const [open, setOpen] = useState(false);
 
   const [sendMisTreatFile, setSendMisTreatFile] = useState(null);
 
@@ -27,7 +48,12 @@ const AudioMistreatedTile = (value) => {
 
   const [rawAudioUrl, setRawAudioUrl] = useState();
   const [treatedAudioUrl, setTreatedAudioUrl] = useState();
-  let FetchRawAudioMistreated = async (fileNameAmt, bucketNameAmt, audioUrlType) => {
+  let FetchRawAudioMistreated = async (
+    fileNameAmt,
+    bucketNameAmt,
+    audioUrlType
+  ) => {
+    console.log(fileNameAmt, "fileNameAmt----.>>>..");
     return new Promise(function (resolve, reject) {
       try {
         fetch(`${BASE_URL}/log/makepub`, {
@@ -50,9 +76,8 @@ const AudioMistreatedTile = (value) => {
       }
     }).then(
       (result) => {
-        if (audioUrlType === 'raw')
-          setRawAudioUrl(result.publink);
-        else setTreatedAudioUrl(result.publink)
+        if (audioUrlType === "raw") setRawAudioUrl(result.publink);
+        else setTreatedAudioUrl(result.publink);
       },
       (error) => alert(error)
     );
@@ -93,6 +118,44 @@ const AudioMistreatedTile = (value) => {
       console.log(error);
     }
   };
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    console.log("false");
+    setPuburl(false);
+    setOpen(false);
+  };
+
+  let FetchPlayVideo = async (video_name) => {
+    return new Promise(function (resolve, reject) {
+      try {
+        setLoading(true);
+        fetch(`${BASE_URL}/log/makepub`, {
+          method: "POST",
+          body: JSON.stringify({
+            fileName: video_name,
+            buckName: "qc-rejects",
+          }),
+          headers: {
+            "Content-type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            resolve(json);
+          });
+      } catch {
+        reject("error");
+      }
+    }).then(
+      (result) => {
+        setLoading(false);
+        setPuburl(result.publink);
+      },
+      (error) => alert(error)
+    );
+  };
 
   return (
     <div>
@@ -102,6 +165,45 @@ const AudioMistreatedTile = (value) => {
         alignItems="center"
         spacing={2}
       >
+        <PlayCircleRounderIcon
+          sx={{ fontSize: "3rem", marginTop: ".35rem", color: "#D7B8FD" }}
+          onClick={() => {
+            handleOpen();
+            FetchPlayVideo(value.value.replace(".wav", ".mp4"));
+          }}
+        />
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            {puburl && (
+              <Player playsInline>
+                <BigPlayButton position="center" />
+                <source src={`${puburl}#t=.01`} type="video/mp4" />
+                <ControlBar>
+                  <PlayToggle />
+                  <PlaybackRateMenuButton rates={[5, 2, 1, 0.5, 0.1]} />
+                  <ReplayControl seconds={5} />
+                </ControlBar>
+              </Player>
+            )}
+            {loading && (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  width: "100%",
+                }}
+              >
+                Loading...
+                <ReactLoading type="balls" color="#black" />
+              </Box>
+            )}
+          </Box>
+        </Modal>
         <div style={{ width: "300px" }}>
           {!sendMisTreatFile?.url ? (
             <input type="file" onChange={handleFile} />
@@ -128,7 +230,7 @@ const AudioMistreatedTile = (value) => {
               FetchRawAudioMistreated(
                 `${value.value.split("_")[0]}.wav`,
                 `${value.value.split("_")[1]}-raw`,
-                'raw'
+                "raw"
               );
             }}
           >
