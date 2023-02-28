@@ -1,6 +1,7 @@
 import React from 'react'
 import "./index.css";
 import "./App.css";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import { Route, Routes, useLocation } from 'react-router-dom';
 import PrivateRoute from "./components/PrivateRoute";
 import PageNotFound from "./components/PageNotFound";

@@ -5,6 +5,7 @@ import { BASE_URL } from "../../constants/constant";
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import { useQuery } from 'react-query';
 
 
 const MatTableComp = () => {
@@ -70,24 +71,47 @@ const MatTableComp = () => {
   }
 
   let FetchDetailsOnDashboard = async (e) => {
-    try {
-        fetch(`${BASE_URL}/audio/data-for-dashboard`, {
+        const data = await fetch(`${BASE_URL}/audio/data-for-dashboard`, {
         method: "POST",
         headers: {
             "Content-type": "application/json; charset=UTF-8",
         },
         })
         .then((response) => response.json())
-        .then((data) => setRowsData(data["data"]));
-    } catch (error) {
-        // setLoading(false);
-        setRowData([]);
-        console.log("Error occured", error);
-    }
+
+        return data;
+        // .then((data) => setRowsData(data["data"]));
   };
-  if(rowData===null){
-    FetchDetailsOnDashboard(); 
-  }
+
+  const { isLoading } = useQuery(['FetchDetailsOnDashboard'],() => FetchDetailsOnDashboard(),
+  {
+    onSuccess: (res) => {
+      const {data} = res
+      let temp_arr = [];
+      for(let i=0;i<data.length;i++){
+        temp_arr.push({
+          id: i,
+          date: data[i][0],
+          video_id: data[i][1],
+          vas: data[i][2],
+          request_name: data[i][3],
+          simplified_name: data[i][4],
+          hindi_name: data[i][5],
+          celeb: data[i][6],
+          occasion: data[i][7],
+          ipa: data[i][8],
+          namecode: data[i][9],
+          qc_status: data[i][10],
+          qc_comment: data[i][11],
+          output_link: data[i][12],
+        })
+      }
+      setRowData(temp_arr);
+    }
+  })
+  // if(rowData===null){
+  //   FetchDetailsOnDashboard(); 
+  // }
 
   let UpdateRowData = async (date, video_id, vas, request_name, simplified_name, hindi_name, celeb, occasion, output_link) => {
     try {
