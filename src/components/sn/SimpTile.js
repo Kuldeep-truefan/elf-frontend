@@ -32,7 +32,6 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
   });
   
   const handleClickAndSendMessage = useCallback((payload)=>{
-    console.log(payload, "payload")
     if (payload.true){
       sendMessage(
         JSON.stringify({
