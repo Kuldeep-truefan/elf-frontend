@@ -10,7 +10,7 @@ import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
 import { useQueryClient } from "react-query";
 
 const username = localStorage.getItem("username");
-const socketUrl = `${WEB_BASE_URL}/audiomis.io/`;
+const socketUrl = `${WEB_BASE_URL}/simpredocon.io/`;
 
 const ConfirmPronRow = ({ value }) => {
     const queryClient = useQueryClient();

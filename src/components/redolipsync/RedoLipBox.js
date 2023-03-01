@@ -52,7 +52,7 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
 
   const { filename: redoTileName, lastnamecode: nameCode } = data || {};
   console.log(nameCode, 'nameCode------->>');
-  const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/audiomis.io/`);
+  const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/simpredocon.io/`);
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
     onMessage: (message) => {
       const data = JSON.parse(message?.data);
