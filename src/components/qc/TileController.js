@@ -13,10 +13,10 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, 
   const accessToken = localStorage.getItem('authToken');
 
   // // PROD ENV BUCKETS
-  const [loadbucketoption, setLoadbucketoption] = useState([{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}])
-  const [movebucketoption, setMovebucketoption] = useState([{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}, {label:"qc-rejects",value:"qc-rejects"}])
-  const defaultloadbucketoption = [{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}]
-  const defaultmovebucketoption = [{label:"qc2",value:"qc2"}, {label:"final-qc",value:"final-qc"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}, {label:"qc-rejects",value:"qc-rejects"}]
+  const [loadbucketoption, setLoadbucketoption] = useState([{label:"qc2",value:"qc2"},{label:"n2v-outputs",value:"n2v-outputs"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}])
+  const [movebucketoption, setMovebucketoption] = useState([{label:"qc2",value:"qc2"},{label:"n2v-outputs",value:"n2v-outputs"}, {label:"final-qc",value:"final-qc"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}, {label:"qc-rejects",value:"qc-rejects"}])
+  const defaultloadbucketoption = [{label:"qc2",value:"qc2"},{label:"n2v-outputs",value:"n2v-outputs"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}]
+  const defaultmovebucketoption = [{label:"qc2",value:"qc2"},{label:"n2v-outputs",value:"n2v-outputs"}, {label:"final-qc",value:"final-qc"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}, {label:"qc-rejects",value:"qc-rejects"}]
 
   // Dev ENV Bucket
   // const [loadbucketoption, setLoadbucketoption] = useState([{label:"test-qc2",value:"dev-ans-test-qc2"}, {label:"test-final",value:"dev-ans-test-final"}, {label:"qc-rejects",value:"qc-rejects"}])
