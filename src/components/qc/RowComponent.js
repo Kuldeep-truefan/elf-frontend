@@ -34,7 +34,6 @@ const RowComponent = ({
 
   const handelClick = () => {
     setOpen(!open);
-    console.log(open);
   };
 
   const handleStatus = (event) => {
@@ -43,7 +42,6 @@ const RowComponent = ({
 
   const handleOptions = (event) => {
     setOptions(event.target.value);
-    console.log(event.target.value);
   };
 
   const handleChange = (event) => {

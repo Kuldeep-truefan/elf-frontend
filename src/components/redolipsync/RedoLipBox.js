@@ -19,7 +19,7 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
   const [emittedData, setemittedData] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const [pageCount, setPageCount] = useState(1);
-  const [username, setUsername] = useState(localStorage.getItem("username"));
+
   let FetchAudioRedoLipSync = async (value) => {
     // setLoading(true); // Set loading before sending API request
     const data = await fetch(`${BASE_URL}/audio/get-redo-lip-files`, {
@@ -32,13 +32,7 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
         Authorization: `Bearer ${accessToken}`,
       },
     }).then((response) => response.json());
-    // .then((data) => {
-    //   setRedoTileName(data.filename);
-    //   setNameCode(data.lastnamecode);
-    //   setPageCount(data.pagecount);
-    // });
     return data;
-    // setLoading(false); // Stop loading
   };
   const { isLoading, data, isFetching } = useQuery(
     ["FetchAudioRedoLipSync", pageNumber],
@@ -51,7 +45,6 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
   );
 
   const { filename: redoTileName, lastnamecode: nameCode } = data || {};
-  console.log(nameCode, 'nameCode------->>');
   const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/simpredocon.io/`);
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
     onMessage: (message) => {
@@ -80,7 +73,6 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
   };
 
   let UpdateRedoLipSync = async (videoId) => {
-    console.log(videoId, "VideoId");
     try {
       fetch(`${BASE_URL}/audio/updt-redo-lip-newnamecode`, {
         method: "PUT",
@@ -100,16 +92,6 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (!destbucket) {
-  //     setIsDisabled(true);
-  //   } else if (option && status === "Rejected") setIsDisabled(false);
-  //   else if (status && status !== "Rejected") {
-  //     setIsDisabled(false);
-  //   } else {
-  //     setIsDisabled(true);
-  //   }
-  // }, [status, option, destbucket]);
   return (
     <div className="tiles">
       <h1 className="heading-screens">Redo Lip Sync</h1>

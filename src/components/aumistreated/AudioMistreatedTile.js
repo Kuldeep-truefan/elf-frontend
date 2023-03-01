@@ -24,11 +24,9 @@ const style = {
 };
 
 const AudioMistreatedTile = (value) => {
-  console.log(value, "value----->>>>>");
   const [showModal, setShowModal] = useState({ raw: false, treated: false });
   const [loading, setLoading] = useState(false);
   const [puburl, setPuburl] = useState(false);
-  console.log(puburl, 'puburl---->>>>');
   const [audioUrlMisTreat, setAudioUrlMisTreat] = useState();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -53,7 +51,6 @@ const AudioMistreatedTile = (value) => {
     bucketNameAmt,
     audioUrlType
   ) => {
-    console.log(fileNameAmt, "fileNameAmt----.>>>..");
     return new Promise(function (resolve, reject) {
       try {
         fetch(`${BASE_URL}/log/makepub`, {
@@ -84,10 +81,6 @@ const AudioMistreatedTile = (value) => {
   };
 
   let UploadAudioMistreatedFile = async () => {
-    console.log(
-      value.value?.split("_")[3].split(".")[0],
-      "wng----UploadAudioMistreatedFile>>>>."
-    );
     try {
       let myHeaders = new Headers();
       myHeaders.append(
@@ -122,7 +115,6 @@ const AudioMistreatedTile = (value) => {
     setOpen(true);
   };
   const handleClose = () => {
-    console.log("false");
     setPuburl(false);
     setOpen(false);
   };
