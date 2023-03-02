@@ -6,9 +6,27 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { useQuery } from 'react-query';
+import { Icon } from '@mui/material';
+// import { IconButton } from '@mui/material';
+import DownloadIcon from '@mui/icons-material/Download';
+import Modal from '@mui/material/Modal';
+import PopUp from './PopUp';
 
 
 const MatTableComp = () => {
+
+  // Modal States 
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [fileData, setFileData] = useState({
+    blob:'',
+    subBucket:''
+  })
+  const sheet_wish_dict = {'BIRTHDAY': 'bd', 'BEST_WISHES': 'bw', 'DIWALI': 'dw', 'CHRISTMAS': 'xmas', 'MAKAR_SANKRANTI': 'ms',
+  'NEW_YEAR_WISH': 'ny', 'REPUBLIC_DAY': 'rd', 'REPUBLIC_DAY_V2': 'rd', 'VALENTINE_DAY': 'vd', 'LOHRI': 'ld', 'PROPOSAL':'pro'}
+  const sheet_id_dict = {14: 'rs', 7: 'kk', 16: 'jk', 15: 'jf', 18: 'ap', 23: 'ak'}
+
   const [columns, setColumns] = useState([
     { title: 'Date', field: 'date', editable: 'never' },
     { title: 'Video ID', field: 'video_id', editable: 'never' },
@@ -27,12 +45,31 @@ const MatTableComp = () => {
     "TEST":"TEST" }},
     { title: 'QC Comment', field: 'qc_comment', editable:'never' },
     { title: 'Output Link', field: 'output_link', editable:'never' },
-    // {
-    //   title: 'Birth Place',
-    //   field: 'birthCity',
-    //   lookup: { 34: 'İstanbul', 63: 'Şanlurfa' },
-    // },
+    {
+      title: 'Download',
+      render: rowData => (
+
+        <DownloadIcon sx={{'&:hover':{backgroundColor: '#ad6efb'}}} onClick={() => { 
+          let blob =   `${rowData.simplified_name}_${sheet_id_dict[rowData.celeb]}_${sheet_wish_dict[rowData.occasion]}_${rowData.video_id}`
+          let subbucket = sheet_id_dict[rowData.celeb]
+          setFileData({
+            blob: blob,
+            subBucket:subbucket
+          })
+          handleOpen();
+        }} variant="contained"></DownloadIcon>     
+      ),
+    },
   ]);
+
+  const createDataForModal = (rowData)=>{
+    let blob =   `${rowData.simplified_name}_${rowData.celeb}_${rowData.occasion}_${rowData.video_id}`
+    let subbucket = `${rowData.celeb}`
+    setFileData({
+      blob: blob,
+      subBucket:subbucket
+    })
+  }
     
   const [rowData, setRowData] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -106,6 +143,19 @@ const MatTableComp = () => {
   </Box>
   }else{
     mat_tablle = <div>
+
+    
+
+    <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box>
+        <PopUp data={fileData}/>
+        </Box>
+        </Modal>
       <MaterialTable
     title="Video Production Requests"
     data={rowData}
