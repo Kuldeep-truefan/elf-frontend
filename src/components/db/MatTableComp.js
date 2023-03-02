@@ -109,19 +109,6 @@ const MatTableComp = () => {
     title="Video Production Requests"
     data={rowData}
     columns={columns}
-    onRowClick={((evt, selectedRow) => setSelectedRow(selectedRow.tableData.id))}
-    options={{
-      tableLayout: "fixed",
-      rowStyle: rowData => ({
-        backgroundColor: (selectedRow === rowData.tableData.id) ? '#EEE' : '#FFF'
-      }),
-      pageSize: 50,
-      pageSizeOptions: [50],
-      headerStyle: {
-        backgroundColor: '#cab6e2',
-        color: '#FFF'
-      }
-    }}
     editable={{
       onRowUpdateCancelled: (rowData) => console.log("Row editing cancelled"),
       onRowUpdate: (newData, oldData) => {
