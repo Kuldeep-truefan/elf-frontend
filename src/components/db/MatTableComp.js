@@ -23,7 +23,8 @@ const MatTableComp = () => {
     { title: 'QC Status', field: 'qc_status', lookup: {"Approved":"Approved", "NEW":"NEW", "Redo Lipsync":"Redo Lipsync", "Audio Mistreated":"Audio Mistreated", "Audio Mispronounced":"Audio Mispronounced",
     "AV Redo":"AV Redo", "AV Sync Mismatch":"AV Sync Mismatch", "Fix hi":"Fix hi", "Trim Reject":"Trim Reject", 
     "Add gap between A & B":"Add gap between A & B", "Reduce gap between A & B":"Reduce gap between A & B",
-    "AV Redo (mistreated)":"AV Redo (mistreated)", "Confirm Pronunciation":"Confirm Pronunciation", "REFUNDED":"REFUNDED", "Final QC":"Final QC", "In Queue":"In Queue", "QC2":"QC2", "In Progress":"In Progress", "N2V QC2":"N2V QC2" }},
+    "AV Redo (mistreated)":"AV Redo (mistreated)", "Confirm Pronunciation":"Confirm Pronunciation", "REFUNDED":"REFUNDED", "Final QC":"Final QC", "In Queue":"In Queue", "QC2":"QC2", "In Progress":"In Progress", "N2V QC2":"N2V QC2",
+    "TEST":"TEST" }},
     { title: 'QC Comment', field: 'qc_comment', editable:'never' },
     { title: 'Output Link', field: 'output_link', editable:'never' },
     // {
