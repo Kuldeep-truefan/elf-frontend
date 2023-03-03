@@ -44,9 +44,8 @@ const AudioModal = ({
    }
  }).then(
    result => {
-      //  setLoading(false);
       setAudio(result.publink)
-   }, // shows "done!" after 1 second
+   },
    error => alert(error) // doesn't run
  );
 };

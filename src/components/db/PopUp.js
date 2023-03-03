@@ -9,8 +9,14 @@ import { BASE_URL } from "../../constants/constant";
 export default function PopUp({ data }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const [downloadAvailable, setDownloadAvailable] = useState(false)
+  const [downloadLink, setDownloadLink] = useState('')
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+  };
+  const handleDownload = () => {
+    window.location.href = downloadLink;
   };
 
   const handleClose = () => {
@@ -22,16 +28,16 @@ export default function PopUp({ data }) {
     // console.log(['raw','treated'].includes(btnType)?'cleb-audio-data':'lipsync-outputs')
     return new Promise(function (resolve, reject) {
       try {
-        fetch(`${BASE_URL}/audio/download-file`, {
+        fetch(`${BASE_URL}/log/makepub`, {
           method: "POST",
           body: JSON.stringify({
-            blobName: ["raw", "treated"].includes(btnType)
+            fileName: ["raw", "treated"].includes(btnType)
               ? data.blob.split("_")[0] + ".wav"
               : data.blob + ".mp4",
-            buckName: ["raw", "treated"].includes(btnType)
+              buckName: ["raw", "treated"].includes(btnType)
               ? "celeb-audio-data"
               : "lipsync-outputs",
-            subBuck: ["raw", "treated"].includes(btnType)
+              subpath: ["raw", "treated"].includes(btnType)
               ? data.subBucket + "-" + btnType
               : null,
           }),
@@ -42,6 +48,8 @@ export default function PopUp({ data }) {
           .then((response) => response.json())
           .then((json) => {
             resolve(json);
+            setDownloadLink(json.publink)   
+            setDownloadAvailable(true)
           });
       } catch {
         reject("error");
@@ -58,7 +66,7 @@ export default function PopUp({ data }) {
           DownloadFiles("raw");
         }}
       >
-        Raw{" "}
+        Raw
       </Button>
       <Button
         variant="contained"
@@ -78,7 +86,7 @@ export default function PopUp({ data }) {
       >
         Redo Lip
       </Button>
-      {/* </Menu> */}
+      {downloadAvailable && <a href={downloadLink} onClick={handleDownload} download>Link</a>}
     </div>
   );
 }
