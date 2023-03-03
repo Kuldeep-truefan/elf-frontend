@@ -12,6 +12,17 @@ import DownloadIcon from '@mui/icons-material/Download';
 import Modal from '@mui/material/Modal';
 import PopUp from './PopUp';
 
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 const MatTableComp = () => {
 
@@ -62,14 +73,14 @@ const MatTableComp = () => {
     },
   ]);
 
-  const createDataForModal = (rowData)=>{
-    let blob =   `${rowData.simplified_name}_${rowData.celeb}_${rowData.occasion}_${rowData.video_id}`
-    let subbucket = `${rowData.celeb}`
-    setFileData({
-      blob: blob,
-      subBucket:subbucket
-    })
-  }
+  // const createDataForModal = (rowData)=>{
+  //   let blob =   `${rowData.simplified_name}_${rowData.celeb}_${rowData.occasion}_${rowData.video_id}`
+  //   let subbucket = `${rowData.celeb}`
+  //   setFileData({
+  //     blob: blob,
+  //     subBucket:subbucket
+  //   })
+  // }
     
   const [rowData, setRowData] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -152,7 +163,7 @@ const MatTableComp = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box>
+        <Box sx={style}>
         <PopUp data={fileData}/>
         </Box>
         </Modal>

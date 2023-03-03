@@ -38,9 +38,10 @@
   font-family: Courier;
   font-weight:200;
 }
-/* body{
-  background-color: black;
-} */
+
+body{
+  overflow: "unset";
+}
 
 .Nav{
   background-color: black;
@@ -391,4 +392,11 @@
   margin-top: 10px;
   font-weight: bold;
   font-size: 40px;
+}
+
+.popup{
+  display: flex;
+  padding: 20px 10px;
+  gap: 10px;
+  border: 0px;
 }
