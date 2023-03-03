@@ -23,7 +23,7 @@ const AudioMistreated = ({ item,  destbucket }) => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageCount, setPageCount] = useState(1);
 
-  const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/audiomis.io/`);
+  const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/ausoket.io/`);
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
     onMessage: (message) => {
       const data = JSON.parse(message?.data);

@@ -7,7 +7,7 @@ import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
 import RedoLipModal from "./RedoLipModal";
 
 const username = localStorage.getItem("username");
-const socketUrl = `${WEB_BASE_URL}/audiomis.io/`;
+const socketUrl = `${WEB_BASE_URL}/ausoket.io/`;
 const accessToken = localStorage.getItem("authToken");
 
 const RedoLipRowTile = ({ key, tileName, comments, nameCode, pageNumber }) => {
