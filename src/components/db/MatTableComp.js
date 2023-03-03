@@ -206,7 +206,6 @@ const MatTableComp = () => {
   /></div>;
   };
   
-  
   return mat_tablle;
 }
 

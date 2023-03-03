@@ -6,11 +6,25 @@ import Typography from "@mui/material/Typography";
 
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
+import PopUp from "../components/db/PopUp";
+import { useState } from "react";
 
 // For sheet thing
 import MatTableComp from "../components/db/MatTableComp";
+
 const Dashboard = () => {
   const showname = localStorage.getItem("username");
+
+  const [isPopUpOpen, setIsPopUpOpen] = useState(false);
+  
+  const callPopUp = () => {
+    setIsPopUpOpen(true);
+  };
+
+  const closePopUp = () => {
+    setIsPopUpOpen(false);
+  };
+
   return (
     <Stack
       style={{ position: "relative" }}
@@ -44,7 +58,8 @@ const Dashboard = () => {
           Refresh
         </Button>
       </div>
-      <MatTableComp />
+      <MatTableComp openPopUp={callPopUp} />
+      {isPopUpOpen && <PopUp onClose={closePopUp} />}
     </Stack>
   );
 };
