@@ -10,6 +10,7 @@ import {
 } from 'react-query'
 import Button from "@mui/material/Button";
 import { useQueryClient } from "react-query";
+import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoader";
 
 const AudioQc = ({
   item,
@@ -53,7 +54,7 @@ const AudioQc = ({
 //   }
   return (
     <>
-    {isLoading && (
+    {/* {isLoading && (
       <div
         style={{
           position: "absolute",
@@ -68,7 +69,7 @@ const AudioQc = ({
       >
         <ClockLoader color="#ad6efb" />
       </div>
-    )}
+    )} */}
     <div className="am-tiles">
       <h1 className="heading-screens">Audio QC</h1>
       <div className="audio-refresh-btn">
@@ -92,11 +93,16 @@ const AudioQc = ({
           />
         </div>
       </div>
-      {audioQcData?.length > 0 &&audioQcData?.map(([tileName, comments], index) => (
+      {isLoading?<DataTilesLoader/> : audioQcData?.map(([tileName, comments], index) => (
 
         <AudioQcRow key={`${tileName}-${index}`} item={item} emittedData={emittedData} tileName={tileName} comments={comments} index={index} pageNumber={pageNumber}/>
       )
       )}
+      {/* {audioQcData?.length > 0 &&audioQcData?.map(([tileName, comments], index) => (
+
+        <AudioQcRow key={`${tileName}-${index}`} item={item} emittedData={emittedData} tileName={tileName} comments={comments} index={index} pageNumber={pageNumber}/>
+      )
+      )} */}
     </div>
     </>
   );

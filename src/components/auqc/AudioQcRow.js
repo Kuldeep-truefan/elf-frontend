@@ -156,7 +156,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber }) => {
           value={remark}
           onChange={handleChange}
         />
-        <div>
+        <div style={{display:'flex',gap:'10px'}}>
           <Button
             variant="contained"
             disabled={isDisabled}
@@ -210,6 +210,35 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber }) => {
             }}
           >
             Reject
+          </Button>
+          <Button
+            variant="contained"
+            disabled={isDisabled}
+            onClick={() => {
+              UpdateQcComtStatus(
+                "Audio Mistreated",
+                tileName.split("_")[3].split(".")[0],
+                remark,
+                tileName,
+                tileName
+              );
+              // UploadAudioRecored(
+              //   tileName,
+              //   tileName.split("_")[3].split(".")[0]
+              // );
+            }}
+            sx={{
+              height: "2.5rem",
+              // marginTop: ".46rem",
+              backgroundColor: "#D7B8FD",
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#ad6efb",
+                color: "#fff",
+              },
+            }}
+          >
+            Audio Mistreated
           </Button>
         </div>
       </div>

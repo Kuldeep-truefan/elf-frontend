@@ -9,6 +9,7 @@ import ColorCheckboxes from "../components/CheckBoxPick.js/ColorCheckboxes";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { useCallback } from "react";
 import { useQuery } from "react-query";
+import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoader";
 
 const AudioMistreated = ({ item,  destbucket }) => {
   const [status, setStatus] = useState("");
@@ -133,7 +134,7 @@ const AudioMistreated = ({ item,  destbucket }) => {
           />
         </div>
       </div>
-      {audTreData?.length > 0 && audTreData?.map(([tileName, comments], index) => (
+      {isLoading?<DataTilesLoader/> : audTreData?.map(([tileName, comments], index) => (
         <div key={`${tileName}-${index}`} className="au-mt">
           <div className="main-tile">
             <ColorCheckboxes
@@ -167,6 +168,40 @@ const AudioMistreated = ({ item,  destbucket }) => {
           </div>
         </div>
       ))}
+      {/* {audTreData?.length > 0 && audTreData?.map(([tileName, comments], index) => (
+        <div key={`${tileName}-${index}`} className="au-mt">
+          <div className="main-tile">
+            <ColorCheckboxes
+              tileName={tileName}
+              handleClickAndSendMessage={handleClickAndSendMessage}/>
+            <div className="main-tile-head">
+              <Typography
+                className="video-name"
+                sx={{
+                  paddingLeft: "1rem",
+                }}
+              >
+                {tileName}
+              </Typography>
+              {!!emittedData &&
+              JSON.parse(emittedData)?.filter(
+                  (data) => data?.video_id === tileName
+                )?.length > 0 && (
+                  <Chip
+                    label={`In progress: ${
+                      JSON.parse(emittedData)?.filter(
+                        (data) => data?.video_id === tileName)?.[0]?.user}`}
+                    sx={{ ml: "5px", backgroundColor: "white" }}
+                  ></Chip>
+                )}
+            </div>
+            <p className="video-name-dynamic">{comments}</p>
+          </div>
+          <div className="am-main-tiles">
+            <AudioMistreatedTile value={tileName} pageNumber={pageNumber} />
+          </div>
+        </div>
+      ))} */}
     </div>
   );
 };
