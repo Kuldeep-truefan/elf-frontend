@@ -35,8 +35,9 @@ const MatTableComp = () => {
     subBucket:''
   })
   const sheet_wish_dict = {'BIRTHDAY': 'bd', 'BEST_WISHES': 'bw', 'DIWALI': 'dw', 'CHRISTMAS': 'xmas', 'MAKAR_SANKRANTI': 'ms',
-  'NEW_YEAR_WISH': 'ny', 'REPUBLIC_DAY': 'rd', 'REPUBLIC_DAY_V2': 'rd', 'VALENTINE_DAY': 'vd', 'LOHRI': 'ld', 'PROPOSAL':'pro'}
-  const sheet_id_dict = {14: 'rs', 7: 'kk', 16: 'jk', 15: 'jf', 18: 'ap', 23: 'ak'}
+  'NEW_YEAR_WISH': 'ny', 'REPUBLIC_DAY': 'rd', 'REPUBLIC_DAY_V2': 'rd', 'VALENTINE_DAY': 'vd', 'LOHRI': 'ld', 'PROPOSAL':'pro',
+  'INDIVIDUAL_HOLI_WISH':'ihw', 'HOLI_WISH':'hw'}
+  const sheet_id_dict = {14: 'rs', 7: 'kk', 16: 'jk', 15: 'jf', 18: 'ap', 23: 'ak', 24:'rm', 25:'vb'}
 
   const [columns, setColumns] = useState([
     { title: 'Date', field: 'date', editable: 'never' },
