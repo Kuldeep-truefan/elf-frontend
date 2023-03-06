@@ -1,36 +1,55 @@
-import React from 'react'
-import AudioMistreatedTile from '../components/aumistreated/AudioMistreatedTile'
-
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
+import React, { useEffect } from "react";
+import AudioMistreatedTile from "../components/aumistreated/AudioMistreatedTile";
 import "../App.css";
-import { Button, Chip, FormHelperText, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../constants/constant";
+import { Button, Chip, Typography } from "@mui/material";
+import {  useState } from "react";
+import { BASE_URL, WEB_BASE_URL } from "../constants/constant";
+import Pagination from "@mui/material/Pagination";
+import ColorCheckboxes from "../components/CheckBoxPick.js/ColorCheckboxes";
+import useWebSocket, { ReadyState } from "react-use-websocket";
+import { useCallback } from "react";
+import { useQuery } from "react-query";
 
-
-const AudioMistreated = ({
-  item,
-  sbuck,
-  dbuck,
-  handleClickSendMessage,
-  emittedData,
-  setLink,
-  index,
-  link,
-  destbucket,
-}) => {
+const AudioMistreated = ({ item,  destbucket }) => {
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
   const [remark, setRemark] = useState("");
+  const [audioMistreatedFile, setAudioMistreatedFile] = useState([]);
   const [isDisabled, setIsDisabled] = useState(false);
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
-  // const[required,setRequired]=useState(false)
+  const [emittedData, setemittedData] = useState('');
   const accessToken = localStorage.getItem("authToken");
+  const [username, setUsername] = useState(localStorage.getItem("username"));
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageCount, setPageCount] = useState(1);
+
+  const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/ausoket.io/`);
+  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
+    onMessage: (message) => {
+      const data = JSON.parse(message?.data);
+      setemittedData(JSON.parse(data?.data));
+      console.log(message, "message------->>>>>");
+    },
+  });
+
+  const handleClickAndSendMessage = useCallback(
+    (payload) =>
+      sendMessage(
+        JSON.stringify({
+          user: username,
+          ...payload,
+        })
+      ),
+    [username]
+  );
+
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: "Connecting",
+    [ReadyState.OPEN]: "Open",
+    [ReadyState.CLOSING]: "Closing",
+    [ReadyState.CLOSED]: "Closed",
+    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  }[readyState];
 
   const handelClick = () => {
     setOpen(!open);
@@ -51,131 +70,103 @@ const AudioMistreated = ({
     console.log(event.target.value);
   };
 
-  useEffect(() => {
-    if (!destbucket) {
-      setIsDisabled(false);
-    } else if (option && status === "Rejected") setIsDisabled(false);
-    else if (status && status !== "Rejected") {
-      setIsDisabled(false);
-    } else {
-      setIsDisabled(true);
+  let FetchAudioMisTreated = async (value) => {
+      const data = await fetch(`${BASE_URL}/audio/get-amt-files`, {
+        method: "POST",
+        body: JSON.stringify({
+          pageNumber: value,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => response)
+
+        return data;
+      // setLoading(false); // Stop loading
+  };
+
+  const { isLoading, data } = useQuery(
+    ["FetchAudioMisTreated", pageNumber],
+    () => FetchAudioMisTreated(pageNumber), {
+      onSuccess: (res) => {
+        setPageCount(res.pagecount)
+      }
     }
-  }, [status, option, destbucket]);
+  );
+
+  const { filename: audTreData } = data || {};
+
+  // useEffect(() => {
+  //   if (!destbucket) {
+  //     setIsDisabled(false);
+  //   } else if (option && status === "Rejected") setIsDisabled(false);
+  //   else if (status && status !== "Rejected") {
+  //     setIsDisabled(false);
+  //   } else {
+  //     setIsDisabled(true);
+  //   }
+  // }, [status, option, destbucket]);
   return (
     <div className="amt-tiles">
-        <h1 className='heading-screens'>Audio Mistreated</h1>
-      <div className="main-tile">
-        <div className="main-tile-head">
-          <Typography
-            className="video-name"
-            sx={{
-              // fontSize: "11px",
-              // width: "71.7%",
-              // marginLeft: "2.4rem",
-              // position: "relative",
-              // right: "10%",
-              paddingLeft: "1rem",
-            }}
-          >
-            ritesh-singh.wav
-          </Typography>
-          {emittedData?.video_id === item && (
-            <Chip
-              label={`In progress: admin`}
-              sx={{ ml: "5px", backgroundColor: "white" }}
-            />
-          )}
-        </div>
-        <p className="video-name-dynamic">No Comment Found</p>
-      </div>
-      <div className="am-main-tiles">
-      <AudioMistreatedTile/>
-        {/* <TextareaAutosize
-          required={true}
-          className="remark-area"
-          aria-label="minimum height"
-          minRows={2.2}
-          placeholder="Remarks"
-          value= ""
-          onChange={handleChange}
-        /> */}
+      <h1 className="heading-screens">Audio Mistreated</h1>
+      <div className="audio-refresh-btn">
         <Button
-          variant="contained"x
-          disabled={isDisabled}
-          sx={{
-            height: "2.5rem",
-            // marginTop: ".46rem",
-            backgroundColor: "#D7B8FD",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#ad6efb",
-              color: "#fff",
-            },
+          onClick={() => {
+            window.location.reload(false);
           }}
-        >
-          Done
-        </Button>
-        {/* <Alertbox 
-        open={alertOpen} setOpen={setAlertOpen} item={item} status={status} remark={remark} option= {option} onClick={handleAlert}
-        /> */}
-      </div>
-      <br/>
-      <div className="main-tile">
-        <div className="main-tile-head">
-          <Typography
-            className="video-name"
-            sx={{
-              // fontSize: "11px",
-              // width: "71.7%",
-              // marginLeft: "2.4rem",
-              // position: "relative",
-              // right: "10%",
-              paddingLeft: "1rem",
-            }}
-          >
-            ritesh-singh.wav
-          </Typography>
-          {emittedData?.video_id === item && (
-            <Chip
-              label={`In progress: admin`}
-              sx={{ ml: "5px", backgroundColor: "white" }}
-            />
-          )}
-        </div>
-        <p className="video-name-dynamic">No Comment Found</p>
-      </div>
-      <div className="am-main-tiles">
-      <AudioMistreatedTile/>
-        {/* <TextareaAutosize
-          required={true}
-          className="remark-area"
-          aria-label="minimum height"
-          minRows={2.2}
-          placeholder="Remarks"
-          value= ""
-          onChange={handleChange}
-        /> */}
-        <Button
           variant="contained"
-          disabled={isDisabled}
-          sx={{
-            height: "2.5rem",
-            // marginTop: ".46rem",
-            backgroundColor: "#D7B8FD",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#ad6efb",
-              color: "#fff",
-            },
-          }}
+          disableElevation
         >
-          Done
+          GET AUDIO Mistreated
         </Button>
-        {/* <Alertbox 
-        open={alertOpen} setOpen={setAlertOpen} item={item} status={status} remark={remark} option= {option} onClick={handleAlert}
-        /> */}
+        <div className="pagination-class">
+          <Pagination
+            onChange={(e, value) => {
+              setPageNumber(value);
+            }}
+            count={pageCount}
+            page={pageNumber}
+            variant="outlined"
+          />
+        </div>
       </div>
-      {/* <VideoModal open={open} setOpen={setOpen} /> */}
+      {audTreData?.length > 0 && audTreData?.map(([tileName, comments], index) => (
+        <div key={`${tileName}-${index}`} className="au-mt">
+          <div className="main-tile">
+            <ColorCheckboxes
+              tileName={tileName}
+              handleClickAndSendMessage={handleClickAndSendMessage}/>
+            <div className="main-tile-head">
+              <Typography
+                className="video-name"
+                sx={{
+                  paddingLeft: "1rem",
+                }}
+              >
+                {tileName}
+              </Typography>
+              {!!emittedData &&
+              JSON.parse(emittedData)?.filter(
+                  (data) => data?.video_id === tileName
+                )?.length > 0 && (
+                  <Chip
+                    label={`In progress: ${
+                      JSON.parse(emittedData)?.filter(
+                        (data) => data?.video_id === tileName)?.[0]?.user}`}
+                    sx={{ ml: "5px", backgroundColor: "white" }}
+                  ></Chip>
+                )}
+            </div>
+            <p className="video-name-dynamic">{comments}</p>
+          </div>
+          <div className="am-main-tiles">
+            <AudioMistreatedTile value={tileName} pageNumber={pageNumber} />
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

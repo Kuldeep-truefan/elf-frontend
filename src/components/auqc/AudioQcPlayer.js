@@ -27,7 +27,7 @@ const AudioModal = ({
        body: JSON.stringify({
         //  fileName: fileFirstName&&`${fileFirstName}.wav`,
          fileName: `${audioQcFileName}.wav`,
-         buckName: 'dev-ans-test-final',
+         buckName: 'celeb-audio-data',
          subpath:`${qcBucketName}-raw`
       }),
        headers: {
@@ -44,9 +44,8 @@ const AudioModal = ({
    }
  }).then(
    result => {
-      //  setLoading(false);
       setAudio(result.publink)
-   }, // shows "done!" after 1 second
+   },
    error => alert(error) // doesn't run
  );
 };

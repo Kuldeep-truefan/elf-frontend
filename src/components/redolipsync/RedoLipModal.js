@@ -8,7 +8,7 @@ import { ControlBar, PlaybackRateMenuButton, ReplayControl } from "video-react";
 import { useState } from "react";
 import { BASE_URL } from "../../constants/constant";
 import ReactLoading from "react-loading";
-// import video from "../../assets/video/Sample_4.mp4"
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -22,73 +22,73 @@ const style = {
 };
 
 
-export default function RedoLipModal({item, sbuck, sendMessage}) {
-  const [puburl, setPuburl] = useState(false);
+export default function RedoLipModal({item, sendMessage}) {
+  const [redoPubUrl, setRedourl] = useState(false);
   const [loading, setLoading] = useState(false);    
   const [open , setOpen] = useState(false);
 
+
   const handleOpen = () => {
     setOpen(true);
-    console.log("true");
   };
   const handleClose = () => {
-    console.log("false")
-    setPuburl(false)
+    setRedourl(false)
     setOpen(false)};
-   
-//   let FetchPlayVideo = async() => {
-//        return new Promise(function(resolve, reject) {
-//         try{
-//           setLoading(true)
-//           fetch(`${BASE_URL}/log/makepub`, {
-//           method: "POST",
-//           body: JSON.stringify({
-//             fileName: item,
-//             buckName: sbuck 
-//           }),
-//           headers: {
-//             "Content-type": "application/json"
-//         }
-//       })
-//         .then(response => response.json())
-//         .then(json => { 
-//           resolve(json);
-//           });
-//       }
-//       catch{
-//         reject("error")
-//       }
-//     }).then(
-//       result => {
-//           setLoading(false);
-//           setPuburl(result.publink)
-//       }, // shows "done!" after 1 second
-//       error => alert(error) // doesn't run
-//     );
-//     };
+  //  console.log(redoPubUrl , '-----redoPubUrl----');
+  let FetchRedoLipVideo = async() => {
+       return new Promise(function(resolve, reject) {
+        try{
+          setLoading(true)
+          fetch(`${BASE_URL}/log/makepub`, {
+          method: "POST",
+          body: JSON.stringify({
+            fileName: item,
+            buckName: 'qc-rejects' 
+          }),
+          headers: {
+            "Content-type": "application/json"
+        }
+      })
+        .then(response => response.json())
+        .then(json => { 
+          resolve(json);
+          });
+      }
+      catch{
+        reject("error")
+      }
+    }).then(
+      result => {
+          setLoading(false);
+          setRedourl(result.publink)
+      }, 
+      error => alert(error)
+    );
+    };
+
   return (
     <div>
       <PlayCircleRounderIcon
         sx={{ fontSize: "3rem", marginTop: ".35rem", color:"#D7B8FD"}}
-         onClick={() => {handleOpen();}}
+        onClick={() => {handleOpen(); FetchRedoLipVideo();}}
       />
       <Modal 
-        // open={open}
+        open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         >
         <Box sx={style}>
+          {redoPubUrl &&
           <Player playsInline>
             <BigPlayButton position="center"/>
-            <source src={require("../../assets/video/Sample_4.mp4")} type="video/mp4" />
-            {/* <source src={`${puburl}#t=.01`} type="video/mp4" /> */}
+            <source src={`${redoPubUrl}#t=.01`} type="video/mp4" />
             <ControlBar>
               <PlayToggle />
               <PlaybackRateMenuButton rates={[5, 2, 1, 0.5, 0.1]} />
               <ReplayControl seconds={5}/>
             </ControlBar>
-          </Player>
+          </Player>}
           {loading&&<Box sx={{display:"flex",justifyContent:"center",width:"100%"}}>Loading...<ReactLoading type="balls" color="#black"/></Box>}
         </Box>
       </Modal>

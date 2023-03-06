@@ -1,184 +1,73 @@
-import React from "react";
-
+import React, { useCallback, useState } from "react";
 import "../../App.css";
-import { Button, Chip, FormHelperText, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../constants/constant";
+import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
+
+import { Button,} from "@mui/material";
+import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import Pagination from "@mui/material/Pagination";
+import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
+import { useQuery, useQueryClient } from "react-query";
+import ConfirmPronRow from "./ConfirmPronRow";
 
-const ConfirmPronTile = (
-  item,
-  sbuck,
-  dbuck,
-  handleClickSendMessage,
-  emittedData,
-  setLink,
-  index,
-  link,
-  destbucket
-) => {
-  const [status, setStatus] = useState("");
-  const [option, setOptions] = useState("");
-  const [remark, setRemark] = useState("");
-  const [isDisabled, setIsDisabled] = useState(true);
-  const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
-  // const[required,setRequired]=useState(false)
+const ConfirmPronTile = () => {
+  const queryClient = useQueryClient();
+  // const [status, setStatus] = useState("");
+  // const [option, setOptions] = useState("");
+  const [pageCount, setPageCount] = useState(1);
+  const [pageNumber, setPageNumber] = useState(1);
   const accessToken = localStorage.getItem("authToken");
 
-  const handelClick = () => {
-    setOpen(!open);
-    console.log(open);
+  let FetchConfirmPronunFiles = async (value) => {
+    const data = fetch(`${BASE_URL}/audio/get-confirm-files`, {
+      method: "POST",
+      body: JSON.stringify({
+        pageNumber: value,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }).then((response) => response.json());
+    return data;
   };
 
-  const handleStatus = (event) => {
-    setStatus(event.target.value);
-  };
-
-  const handleOptions = (event) => {
-    setOptions(event.target.value);
-    console.log(event.target.value);
-  };
-
-  const handleChange = (event) => {
-    setRemark(event.target.value);
-    // console.log(event.target.value);
-  };
-
-  let GetQCDone = async () => {
-    // console.log("Checking the access token");
-    handleClickSendMessage({ msg: "updated", video_id: item });
-
-    const saveStatus = status;
-    const saveOption = option;
-    const saveRemark = remark;
-    setStatus("");
-    setOptions("");
-    setRemark("");
-    if (!accessToken) {
-      navigate("/");
+  const { isLoading, data, isFetching } = useQuery(
+    ["FetchConfirmPronunFiles", pageNumber],
+    () => FetchConfirmPronunFiles(pageNumber),
+    {
+      onSuccess: (res) => {
+        setPageCount(res.pagecount);
+      },
     }
-    const remainingData = link.filter((x) => x !== item);
-    setLink(remainingData);
-    try {
-      fetch(`${BASE_URL}/log/tilestatus`, {
-        method: "POST",
-        body: JSON.stringify({
-          sourceBucket: sbuck,
-          destinationBucket: dbuck,
-          videoName: item,
-          videoStatus: saveStatus,
-          videoOption: saveOption,
-          videoRemarks: saveRemark,
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          data.success ? setLink(remainingData) : console.log("No Data Found");
-        });
-    } catch (error) {
-      console.log("Error occured", error);
-    }
-  };
-  useEffect(() => {
-    if (!destbucket) {
-      setIsDisabled(true);
-    } else if (option && status === "Rejected") setIsDisabled(false);
-    else if (status && status !== "Rejected") {
-      setIsDisabled(false);
-    } else {
-      setIsDisabled(true);
-    }
-  }, [status, option, destbucket]);
-
+  );
+  const { filename: audioConfirmPro } = data || {};
   return (
     <div className="confirm-tiles">
-    <h1 className='heading-screens'>Confirm Pronunciation</h1>
-      <div className="main-tile">
-        <div className="main-tile-head">
-          <Typography
-            className="video-name"
-            sx={{
-              // fontSize: "11px",
-              // width: "71.7%",
-              // marginLeft: "2.4rem",
-              // position: "relative",
-              // right: "10%",
-              paddingLeft: "1rem",
-            }}
+      <h1 className="heading-screens">Confirm Pronunciation</h1>
+      <div className="audio-refresh-btn">
+        <div className="pagination-class">
+          <Button
+            variant="contained"
+            disableElevation
+            onClick={() => window.location.reload(false)}
           >
-            {" "}
-            Sample_4.mp4
-          </Typography>
-          <Chip
-            label={`In progress: admin`}
-            sx={{ ml: "5px", backgroundColor: "white" }}
-          />
-        </div>
-        <p className="video-name-dynamic">No comment Found</p>
-      </div>
-      <div className="main-tiles">
-        <Box
-          component="form"
-          sx={{
-            "& > :not(style)": { m: 1, width: "25ch" },
-          }}
-          noValidate
-          autoComplete="off"
-        >
-          <TextField
-            sx={{
-              width: { sm: 200, md: 300 },
-              "& .MuiInputBase-root": {
-                width: 250,
-              },
+            Confirm Pronunciation Files
+          </Button>
+          <Pagination
+            onChange={(e, value) => {
+              setPageNumber(value);
             }}
-            id="outlined-basic"
-            label="English Name"
+            count={pageCount}
+            page={pageNumber}
             variant="outlined"
           />
-        </Box>
-        <Button
-          // onClick={GetQCDone}
-          variant="contained"
-          // disabled={isDisabled}
-          sx={{
-            height: "2.5rem",
-            // marginTop: ".46rem",
-            backgroundColor: "#D7B8FD",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#ad6efb",
-              color: "#fff",
-            },
-          }}
-        >
-          Refunded
-        </Button>
-        <Button
-          // onClick={GetQCDone}
-          variant="contained"
-          // disabled={isDisabled}
-          sx={{
-            height: "2.5rem",
-            // marginTop: ".46rem",
-            backgroundColor: "#D7B8FD",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#ad6efb",
-              color: "#fff",
-            },
-          }}
-        >
-          Confirmed
-        </Button>
+        </div>
       </div>
+      {audioConfirmPro?.map((value, index) => (
+        <ConfirmPronRow key={`${value}-${index}`} value={value} />
+      ))}
     </div>
   );
 };

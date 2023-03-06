@@ -1,209 +1,104 @@
 import React from "react";
 import "../App.css";
-import { Button, Chip, FormHelperText, Typography } from "@mui/material";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { BASE_URL } from "../constants/constant";
-import AudioQcPlayer from "../components/auqc/AudioQcPlayer";
-import AudioRecorders from "../components/auqc/AudioRecorders";
+import Pagination from "@mui/material/Pagination";
+import ClockLoader from "react-spinners/ClockLoader";
+import AudioQcRow from "../components/auqc/AudioQcRow";
+import {
+  useQuery,
+} from 'react-query'
+import Button from "@mui/material/Button";
+import { useQueryClient } from "react-query";
 
 const AudioQc = ({
   item,
-  sbuck,
-  dbuck,
-  handleClickSendMessage,
-  emittedData,
-  setLink,
-  index,
-  link,
-  destbucket,
+  emittedData
 }) => {
-  const [remark, setRemark] = useState("");
-  const [audioQcFiles, setAudioQcFiles] = useState([]);
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [recordedAudio, setRecordedAudio] = useState();
-  const navigate = useNavigate();
-  // const[required,setRequired]=useState(false)
   const accessToken = localStorage.getItem("authToken");
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageCount, setPageCount] = useState(1);
+  // const queryClient = useQueryClient()
 
-  let UploadAudioRecored = async (fullFileName, vidAuRec) => {
-    try {
-      let myHeaders = new Headers();
-      myHeaders.append(
-        "Cookie",
-        "csrftoken=L2ETtVsdGnxYzQ4llNrKESv7Evm5nGa5N7SWvkTt488G43CzM7AnoWHJoxr8GNSC"
-      );
-
-      let formdata = new FormData();
-      formdata.append("fileName", fullFileName);
-      formdata.append("file", recordedAudio);
-      formdata.append("videoId", vidAuRec);
-
-      let requestOptions = {
+  let FetchAudioQcTiles = async (value) => {
+     const data = await fetch(`${BASE_URL}/audio/audioqc`, {
         method: "POST",
-        headers: myHeaders,
-        body: formdata,
-      };
-      const response = await fetch(`${BASE_URL}/audio/upload-rec-auqc-file`,
-        requestOptions
-      );
-      const convertToText = await response.text();
-      return convertToText;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  let UpdateQcComtStatus = async (audioQcStatus, audioId, remark, blobToDelete) => {
-    try{
-        fetch(`${BASE_URL}/audio/qccommentstatus`,{
-        method: "POST",
-        body: JSON.stringify({  
-          audioQc: audioQcStatus,
-          audioQcId: audioId,
-          audioQcRemarks: remark,
-          deleteBlob: blobToDelete? blobToDelete:''
+        body: JSON.stringify({
+          pageNumber: value,
         }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${accessToken}`
-        }
-      })
-      // .then((response) => response.json())
-      // .then((data) => setLink(data.filename))
-      // setLoading(false); // Stop loading
-    }
-    catch (error) {
-      console.log("Error occured", error)
-    }
-  }
-
-  const handleChange = (event) => {
-    setRemark(event.target.value);
-    console.log(event.target.value);
-  };
-
-  let FetchAudioQcTiles = async () => {
-    console.log("In FetchAudioMisTiles");
-    if (!accessToken) {
-      navigate("/");
-    }
-    try {
-      // setLoading(true); // Set loading before sending API request
-      fetch(`${BASE_URL}/audio/audioqc`, {
-        method: "GET",
         headers: {
           "Content-type": "application/json; charset=UTF-8",
           Authorization: `Bearer ${accessToken}`,
         },
-      })
-        .then((response) => response.json())
-        .then((data) => setAudioQcFiles(data.filename))
-        // .then((data) => console.log(data));
-      // setLoading(false); // Stop loading
-    } catch (error) {
-      console.log("Error occured", error);
+      }).then((response) => response.json())
+        return data
+  };
+  
+  const {isLoading, data, isFetching} = useQuery(['FetchAudioQcTiles', pageNumber],() => FetchAudioQcTiles(pageNumber),
+  {
+    onSuccess: (res) => {
+      setPageCount(res.pagecount)
     }
-  };  
-
+  })
+  const {filename: audioQcData } = data || {}
+//   if (isLoading) {
+//     return <div style={{
+//       display: 'flex',
+//       height:'100vh',
+//       alignItems: 'center',
+//       justifyContent: 'center'
+//     }}>
+// <p>Loading....</p>
+//     </div>
+//   }
   return (
+    <>
+    {isLoading && (
+      <div
+        style={{
+          position: "absolute",
+          background: "rgba(0,0,0,0.3)",
+          zIndex: 2,
+          display: "flex",
+          width: "100%",
+          height: "100%",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <ClockLoader color="#ad6efb" />
+      </div>
+    )}
     <div className="am-tiles">
       <h1 className="heading-screens">Audio QC</h1>
       <div className="audio-refresh-btn">
         <Button
-          onClick={FetchAudioQcTiles}
+          onClick={() => {
+            window.location.reload(false);
+            // queryClient.invalidateQueries(["FetchAudioQcTiles", pageNumber]);
+          }}
           variant="contained"
           disableElevation
-          // disabled={isDisabled}
         >
           GET AUDIO QC
         </Button>
-      </div>
-      {audioQcFiles?.map((value, index) => (
-        <div key={index} className="au-mis">
-          <div className="main-tile">
-            <div className="main-tile-head">
-              <Typography
-                className="video-name"
-                sx={{
-                  // fontSize: "11px",
-                  // width: "71.7%",
-                  // marginLeft: "2.4rem",
-                  // position: "relative",
-                  // right: "10%",
-                  paddingLeft: "1rem",
-                }}
-              >
-                {value}
-              </Typography>
-              {emittedData?.video_id === item && (
-                <Chip
-                  label={`In progress: admin`}
-                  sx={{ ml: "5px", backgroundColor: "white" }}
-                />
-              )}
-            </div>
-            <p className="video-name-dynamic">No Comment Found</p>
-          </div>
-          <div className="am-main-tiles">
-            <AudioQcPlayer value={value}/>
-            <AudioRecorders setRecordedAudio={setRecordedAudio}/>
-            {/* <SettingsVoiceRoundedIcon/> */}
-            <TextareaAutosize
-              required={true}
-              className="remark-area"
-              aria-label="minimum height"
-              minRows={2.2}
-              placeholder="Remarks"
-              value={remark}
-              onChange={handleChange}
-            />
-            <div>
-              <Button
-                variant="contained"
-                disabled={isDisabled}
-                onClick={() =>{
-                  UpdateQcComtStatus("Approved",value.split("_")[3].split(".")[0],'',value)
-                }}
-                sx={{
-                  height: "2.5rem",
-                  marginRight: "1rem",
-                  // marginTop: ".46rem",
-                  backgroundColor: "#D7B8FD",
-                  color: "white",
-                  "&:hover": {
-                    backgroundColor: "#ad6efb",
-                    color: "#fff",
-                  },
-                }}
-              >
-                Approve
-              </Button>
-              <Button
-                variant="contained"
-                disabled={isDisabled}
-                onClick={() =>{
-                  UpdateQcComtStatus("Rejected", value.split("_")[3].split(".")[0], remark, '')
-                  UploadAudioRecored(value, value.split("_")[3].split(".")[0])
-                }}
-                sx={{
-                  height: "2.5rem",
-                  // marginTop: ".46rem",
-                  backgroundColor: "#D7B8FD",
-                  color: "white",
-                  "&:hover": {
-                    backgroundColor: "#ad6efb",
-                    color: "#fff",
-                  },
-                }}
-              >
-                Reject
-              </Button>
-            </div>
-          </div>
+        <div className="pagination-class">
+          <Pagination
+            onChange={(e, value) => {
+              setPageNumber(value)}}
+            count={pageCount}
+            page={pageNumber}
+            variant="outlined"
+          />
         </div>
-      ))}
+      </div>
+      {audioQcData?.length > 0 &&audioQcData?.map(([tileName, comments], index) => (
+
+        <AudioQcRow key={`${tileName}-${index}`} item={item} emittedData={emittedData} tileName={tileName} comments={comments} index={index} pageNumber={pageNumber}/>
+      )
+      )}
     </div>
+    </>
   );
 };
 

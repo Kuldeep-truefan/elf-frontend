@@ -41,6 +41,7 @@ function Nav() {
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
+    console.log('OnClick------->>>>');
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -56,6 +57,8 @@ function Nav() {
       navigate("/audiomt")
     }else if (path === "confpron"){
       navigate("/confpron")
+    }else if(path === "videoupload"){
+      navigate("/videoupload")
     }
   }
 
@@ -167,6 +170,8 @@ function Nav() {
                 <MenuItem onClick={ () => {handleClose(); pageRedirect('simpname');}}>SIMPLIFIED NAMES</MenuItem>
                 <MenuItem onClick={ () => {handleClose(); pageRedirect('redlip');}}>REDO LIP SYNC</MenuItem>
                 <MenuItem onClick={ () => {handleClose(); pageRedirect('confpron');}}>CONFIRM PRONUNCIATION</MenuItem>
+                <MenuItem onClick={ () => {handleClose(); pageRedirect('videoupload');}}>UPLOAD VIDEOS</MenuItem>
+              
               </Menu>
             </Box>
             <Box sx={{ flexGrow: 0 }}>

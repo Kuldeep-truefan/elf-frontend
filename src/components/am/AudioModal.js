@@ -1,30 +1,29 @@
 import React, { useEffect, useRef, useState } from "react";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
-import IconButton from "@mui/material/IconButton";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import ReactAudioPlayer from "react-audio-player";
-// import locaudio from "../../assets/audio/jf-raw_aabheri.wav";
 import { BASE_URL } from "../../constants/constant";
+import { useQueryClient } from "react-query";
 const accessToken = localStorage.getItem("authToken");
 
-const AudioModal = ({ value}) => {
+const AudioModal = ({ value, pageNumber }) => {
   const [sendFile, setSendFile] = useState(null);
-
-  // console.log(audioUrl);
   const fileFirstName = value.split("_")[0];
   const fileBucket = value.split("_")[1];
+  const queryClient = useQueryClient()
+
   
   const handleFile = (event) => {
-    if (`${event.target.files[0]?.name}.wav` !== `${fileFirstName}.wav`){
-      alert("Filename not correct")
-    }else if(`${event.target.files[0]?.name}.wav` === `${fileFirstName}.wav`){
-      const audioUrl = URL.createObjectURL(event.target.files[0]);
+    let matchWith = `${event.target.files[0]?.name}`
+    let matchWithFile = `${fileFirstName}.wav`
+    if(matchWith === matchWithFile){
+      const audioUrl = URL.createObjectURL(event.target.files[0]);      
       setSendFile({
         url: audioUrl,
         file: event.target.files[0],
       });
+    }else if (`${event.target.files[0]?.name}` !== `${fileFirstName}.wav`){
+      alert("Filename not matched choose the correct file")
     }
   };
 
@@ -34,36 +33,10 @@ const AudioModal = ({ value}) => {
     remark: false,
   });
 
-  const [audioUrl, setAudioUrl] = useState(false);
-  const [aaudio, setAudio] = useState();
-  const previewFile = (e) => {
-    const audioUrl = URL.createObjectURL(e.target.files[0]);
-    setAudio(audioUrl);
-  };
-  const [showAlert, setShowAlert] = useState(false);
+  const [lastAudioUrl, setLastAudioUrl] = useState(false);
+  const [remarksAudioUrl, setRemarksAudioUrl] = useState(false);
 
-  // const alertUncracked = () => {
-  //   alert("Are you sure!!");
-  // };
-
-
-  // const showConfirmBox = () => {
-  //   if (window.confirm("Do you want to proceed?")) {
-  //     alert();
-  //   } 
-  //   alert("Do you want to proceed")
-  // };    
-
-  // const alertUncracked = () => {
-  //   let text = "Press a button!\nEither OK or Cancel.";
-  //   if (confirm(text)) {
-  //     text = "You pressed OK!";
-  //   } else {
-  //     text = "You canceled!";
-  //   }
-  //   document.getElementById("demo").innerHTML = text;
-  // };
-  let FetchPlayAudio = async (bucketName, audioFileName, subBucketName=null) => {
+  let FetchPlayAudio = async (bucketName, audioFileName, subBucketName=null, audioUrlType) => {
     return new Promise(function (resolve, reject) {
       try {
         //  setLoading(true)
@@ -88,11 +61,15 @@ const AudioModal = ({ value}) => {
     }).then(
       (result) => {
         //  setLoading(false);
-        setAudioUrl(result.publink);
+        if(audioUrlType === 'last')
+         setLastAudioUrl(result.publink);
+        else 
+         setRemarksAudioUrl(result.publink);
       }, // shows "done!" after 1 second
       (error) => alert(error) // doesn't run
     );
   };
+
   let AudioUncracked = async (id) => {
     try {
       fetch(`${BASE_URL}/audio/update-miscracked-field`, {
@@ -123,7 +100,8 @@ const AudioModal = ({ value}) => {
       formdata.append("fileName", `${filename}.wav`);
       formdata.append("folderName", `${subBuckName}-raw`);
       formdata.append("videoId", vid);
-
+      formdata.append("screenName", 'am');
+      
       let requestOptions = {
         method: "POST",
         headers: myHeaders,
@@ -133,6 +111,10 @@ const AudioModal = ({ value}) => {
         `${BASE_URL}/audio/audio_mispronounced`,
         requestOptions
       );
+      // if (response.status === 'success') {
+        queryClient.invalidateQueries(["FetchAudioMisTiles", pageNumber]);
+        setSendFile(null)
+      // }
       const convertToText = await response.text();
       return convertToText;
     } catch (error) {
@@ -150,16 +132,16 @@ const AudioModal = ({ value}) => {
       >
         {/* <input type="file" onChange={previewFile} /> */}
         <div style={{ width: "300px" }}>
-          {!sendFile?.url ? (
-            <input id="audio" type="file" onChange={handleFile} />
-          ) : (
+          {!sendFile?.url? (
+            <input id="audio" type="file" onChange={handleFile}/>
+          ):(
             <audio src={sendFile.url} controls />
           )}
         </div>
         {!showModal.last ? (
           <Button
             onClick={() => {
-              FetchPlayAudio("celeb-audio-data", fileFirstName && `${fileFirstName}.wav`, fileBucket && `${fileBucket}-raw`);
+              FetchPlayAudio("celeb-audio-data", fileFirstName && `${fileFirstName}.wav`, fileBucket && `${fileBucket}-raw`, 'last');
               setShowModal({ ...showModal, last: !showModal.last });
             }}
             variant="contained"
@@ -178,7 +160,7 @@ const AudioModal = ({ value}) => {
             Last Audio
           </Button>
         ) : (
-          <ReactAudioPlayer src={audioUrl} controls />
+          <ReactAudioPlayer src={lastAudioUrl} controls />
         )}
         {showModal.attach && (
           <p
@@ -199,10 +181,8 @@ const AudioModal = ({ value}) => {
               setShowModal({ ...showModal, remark: !showModal.remark })
             }}
             variant="contained"
-            // disabled={isDisabled}
             sx={{
               height: "2.5rem",
-              // marginTop: ".46rem",
               backgroundColor: "#D7B8FD",
               color: "white",
               "&:hover": {
@@ -214,7 +194,7 @@ const AudioModal = ({ value}) => {
             Remarks Audio
           </Button>
         ) : (
-          <ReactAudioPlayer src={audioUrl} controls />
+          <ReactAudioPlayer src={remarksAudioUrl} controls />
         )}
         {showModal.attach && (
           <p
@@ -231,7 +211,6 @@ const AudioModal = ({ value}) => {
         <div className="au-dn-uncracked-btns">
         <Button
           onClick={() => {
-            // alertUncracked();
             if (window.confirm("Do you want to proceed?")) {
               AudioUncracked(value.split("_")[3].split(".")[0]);
             } 
@@ -239,7 +218,6 @@ const AudioModal = ({ value}) => {
           variant="contained"
           sx={{
             height: "2.5rem",
-            // marginTop: ".46rem",
             backgroundColor: "#D7B8FD",
             color: "white",
             "&:hover": {
@@ -257,7 +235,7 @@ const AudioModal = ({ value}) => {
             UploadAudioFileMispronounced(
               value.split("_")[0],
               value.split("_")[1],
-              value.split("_")[4].split(".")[0]
+              value.split("_")[3].split(".")[0]
             );
           }}
           variant="contained"

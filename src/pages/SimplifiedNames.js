@@ -2,89 +2,81 @@ import React from "react";
 import "../App.css";
 import { Button, Chip, Typography } from "@mui/material";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../constants/constant";
-import TextField from "@mui/material/TextField";
-import { ReactTransliterate } from "react-transliterate";
 import "react-transliterate/dist/index.css";
 import SimpTile from "../components/sn/SimpTile";
+import Pagination from "@mui/material/Pagination";
+import useWebSocket, { ReadyState } from "react-use-websocket";
+import { WEB_BASE_URL } from "../constants/constant";
+import { useQuery } from "react-query";
 
 const SimplifiedNames = () => {
-  const [englishName, setEnglishName] = useState("");
-  const [hinName, setHinName] = useState("");
   const [simpFileName, setSimpFileName] = useState([]);
-  const navigate = useNavigate();
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageCount, setPageCount] = useState(1);
   const accessToken = localStorage.getItem("authToken");
 
-  const handleEngName = (event) => {
-    setEnglishName(event.target.value);
-    console.log(event.target.value);
+  let FetchSimplifiedNames = async (value) => {
+    const data = fetch(`${BASE_URL}/audio/simpnametiles`, {
+      method: "POST",
+      body: JSON.stringify({
+        pageNumber: value,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => response);
+    return data;
   };
 
-  const handleHinName = (event) => {
-    setHinName(event.target.value);
-    console.log(event.target.value);
-  };
-
-  // let UpdateSimpNames = async (id, button_type) => {
-  //   try {
-  //     fetch(`${BASE_URL}/audio/update-simplified-fields`, {
-  //       method: "POST",
-  //       body: JSON.stringify({
-  //         englishName: englishName,
-  //         hindiName: hindiName,
-  //         videoId: id,
-  //         button_type,
-  //       }),
-  //       headers: {
-  //         "Content-type": "application/json; charset=UTF-8",
-  //         Authorization: `Bearer ${accessToken}`,
-  //       },
-  //     })
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //       });
-  //   } catch (error) {
-  //     console.log("Error occured", error);
-  //   }
-  // };
-
-  let FetchSimplifiedNames = async () => {
-    if (!accessToken) {
-      navigate("/");
+  const { isLoading, data } = useQuery(
+    ["FetchSimplifiedNames", pageNumber],
+    () => FetchSimplifiedNames(pageNumber),
+    {
+      onSuccess: (res) => {
+        setPageCount(res.pagecount);
+      },
     }
-    try {
-      fetch(`${BASE_URL}/audio/simpnametiles`, {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setSimpFileName(data.filename);
-        });
-    } catch (error) {
-      console.log("Error occured", error);
-    }
-  };
+  );
+
+  const { filename: simpNamesData } = data || {};
 
   return (
     <div className="sn-tiles">
       <h1 className="heading-screens">Simplified Names</h1>
       <div className="audio-refresh-btn">
-        <Button
-          onClick={FetchSimplifiedNames}
-          variant="contained"
-          disableElevation
-        >
-          GET Simplified Names
-        </Button>
+        <div className="pagination-class">
+          <Button
+            onClick={() => {
+              window.location.reload(false);
+            }}
+            variant="contained"
+            disableElevation
+          >
+            GET Simplified Names
+          </Button>
+          <Pagination
+            onChange={(e, value) => {
+              setPageNumber(value);
+            }}
+            count={pageCount}
+            page={pageNumber}
+            variant="outlined"
+          />
+        </div>
       </div>
-      {simpFileName?.map((value, index) => (
-        <SimpTile key={index} value={value}/>
-      ))}
+      {simpNamesData?.length > 0 &&
+        simpNamesData?.map(([tileName, vas], index) => (
+          <SimpTile
+            key={`${tileName}-${index}`}
+            tileName={tileName}
+            vas={vas}
+            pageNumber={pageNumber}
+          />
+        ))}
     </div>
   );
 };

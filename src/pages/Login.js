@@ -31,10 +31,8 @@ function Login() {
   const handleClose = () => {
     setState({ ...state, open: false });
   };
-  // const handleClick = () => navigate('/login');
   const handelUsername = (text) => {
     setUsername(text)
-    // console.log("usnerame",event.target.value)
   }
 
   const handelPassword = (event) => {
@@ -53,16 +51,13 @@ function Login() {
         body: JSON.stringify({ username: username, password: password})
       }).then(res=>res.json()).then((data) => {
           setState({ open: true });
-
           localStorage.setItem('username', data.username)
-          console.log("Username in App js", data.username);
           localStorage.setItem('authToken', JSON.stringify(data.access))
           navigate('/qc');
       })
   }
   return (
     <div className="App">
-      {/* <div style={myStyle}></div> */}
       <div className="login-div">
         <img src={logo}></img>
           <div className="wel-div">
