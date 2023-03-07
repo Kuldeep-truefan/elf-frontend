@@ -16,7 +16,7 @@ export default function PopUp({ data }) {
     setAnchorEl(event.currentTarget);
   };
   const handleDownload = () => {
-    window.location.href = downloadLink;
+    window.location.href = downloadLink ;
   };
 
   const handleClose = () => {

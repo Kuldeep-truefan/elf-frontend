@@ -27,6 +27,7 @@
     "react-spinners": "^0.13.8",
     "react-transliterate": "^1.1.9",
     "react-use-websocket": "^3.0.0",
+    "react-window": "^1.8.8",
     "redux": "^4.2.0",
     "styled-components": "^5.3.6",
     "video-react": "^0.16.0",
