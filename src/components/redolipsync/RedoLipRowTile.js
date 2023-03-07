@@ -7405,6 +7405,7 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
     setOpen(open);
   };
   let UpdateRedoLipSync = async (videoId) => {
+    console.log(newNameCode);
     try {
       fetch(`${BASE_URL}/audio/updt-redo-lip-newnamecode`, {
         method: "PUT",
@@ -7475,19 +7476,18 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
           <TextField
             value={nameCode}
             id="outlined-basic"
-            disabled="True"
+            disabled
             wrap="hard"
             variant="outlined"
           />
           <AutoComplete
           options={memoizedOptions}
+          value={newNameCode}
           onChange={handleChange}
           inputValue={newNameCode}
           //  filterOptions={filterOptions}
           //   disableListWrap
           //   disablePortal
-            
-          //   options={memoizedOptions}
           //   sx={{ width: 300 }}
           //   renderInput={(params) => (
           //     <TextField {...params} label="Select Namecode" />

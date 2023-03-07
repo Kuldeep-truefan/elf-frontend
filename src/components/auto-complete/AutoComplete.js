@@ -1,5 +1,4 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -106,22 +105,6 @@ const ListboxComponent = React.forwardRef(function ListboxComponent(props, ref) 
   );
 });
 
-ListboxComponent.propTypes = {
-  children: PropTypes.node,
-};
-
-function random(length) {
-  const characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-
-  for (let i = 0; i < length; i += 1) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-
-  return result;
-}
-
 const StyledPopper = styled(Popper)({
   [`& .${autocompleteClasses.listbox}`]: {
     boxSizing: 'border-box',
@@ -139,19 +122,23 @@ const StyledPopper = styled(Popper)({
 export default function Virtualize({
     options,
     onChange,
-    inputValue
+    inputValue,
+    value
 }) {
   return (
     <Autocomplete
       id="virtualize-demo"
       sx={{ width: 300 }}
       disableListWrap
+      value={value}
       inputValue={inputValue}
-      onChange={onChange}
+      onInputChange={onChange}
       PopperComponent={StyledPopper}
       ListboxComponent={ListboxComponent}
       options={options}
-      groupBy={(option) => option[0].toUpperCase()}
+      groupBy={(option) => {
+        return option[0].toUpperCase()
+      }}
       renderInput={(params) => <TextField {...params} label="Select Namecodes" />}
       renderOption={(props, option, state) => [props, option, state.index]}
       // TODO: Post React 18 update - validate this conversion, look like a hidden bug
