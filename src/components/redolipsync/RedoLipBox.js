@@ -1,15 +1,10 @@
 import "../../App.css";
-import { Button, Chip, Typography } from "@mui/material";
+import { Button} from "@mui/material";
 import { useState } from "react";
 import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
-import RedoLipModal from "./RedoLipModal";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
 import Pagination from "@mui/material/Pagination";
-import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 
-import { useCallback } from "react";
 import RedoLipRowTile from "./RedoLipRowTile";
 import { useQuery } from "react-query";
 
@@ -70,26 +65,6 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
 
   const handleChange = (event) => {
     setNewNameCode(event.target.value);
-  };
-
-  let UpdateRedoLipSync = async (videoId) => {
-    try {
-      fetch(`${BASE_URL}/audio/updt-redo-lip-newnamecode`, {
-        method: "PUT",
-        body: JSON.stringify({
-          newNameCode: newNameCode,
-          videoId: videoId,
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {});
-    } catch (error) {
-      console.log("Error occured", error);
-    }
   };
 
   return (

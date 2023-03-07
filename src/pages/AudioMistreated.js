@@ -28,7 +28,6 @@ const AudioMistreated = ({ item,  destbucket }) => {
     onMessage: (message) => {
       const data = JSON.parse(message?.data);
       setemittedData(JSON.parse(data?.data));
-      console.log(message, "message------->>>>>");
     },
   });
 

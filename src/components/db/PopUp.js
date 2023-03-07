@@ -15,8 +15,9 @@ export default function PopUp({ data }) {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleDownload = () => {
-    window.location.href = downloadLink;
+  const handleDownload = (e) => {
+    e.preventDefault();
+    window.open(downloadLink, "_blank");
   };
 
   const handleClose = () => {
