@@ -1,24 +1,26 @@
-import * as React from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import ListSubheader from '@mui/material/ListSubheader';
-import Popper from '@mui/material/Popper';
-import { useTheme, styled } from '@mui/material/styles';
-import { VariableSizeList } from 'react-window';
-import Typography from '@mui/material/Typography';
+import * as React from "react";
+import TextField from "@mui/material/TextField";
+import Autocomplete, { autocompleteClasses } from "@mui/material/Autocomplete";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import ListSubheader from "@mui/material/ListSubheader";
+import Popper from "@mui/material/Popper";
+import { useTheme, styled } from "@mui/material/styles";
+import { VariableSizeList } from "react-window";
+import Typography from "@mui/material/Typography";
+import { Chip } from "@mui/material";
 
 const LISTBOX_PADDING = 8; // px
 
 function renderRow(props) {
   const { data, index, style } = props;
   const dataSet = data[index];
+  
   const inlineStyle = {
-    ...style,
-    top: style.top + LISTBOX_PADDING,
-  };
+      ...style,
+      top: style.top + LISTBOX_PADDING,
+    };
 
-  if (dataSet.hasOwnProperty('group')) {
+  if (dataSet.hasOwnProperty("group")) {
     return (
       <ListSubheader key={dataSet.key} component="div" style={inlineStyle}>
         {dataSet.group}
@@ -32,13 +34,13 @@ function renderRow(props) {
       {dataSet[1]}
     </Typography>
   );
-} 
+}
 
 const OuterElementContext = React.createContext({});
 
 const OuterElementType = React.forwardRef((props, ref) => {
   const outerProps = React.useContext(OuterElementContext);
-  return <div  {...props} {...outerProps} />;
+  return <div {...props} {...outerProps} />;
 });
 
 function useResetCache(data) {
@@ -52,7 +54,10 @@ function useResetCache(data) {
 }
 
 // Adapter for react-window
-const ListboxComponent = React.forwardRef(function ListboxComponent(props, ref) {
+const ListboxComponent = React.forwardRef(function ListboxComponent(
+  props,
+  ref
+) {
   const { children, ...other } = props;
   const itemData = [];
   children.forEach((item) => {
@@ -61,17 +66,16 @@ const ListboxComponent = React.forwardRef(function ListboxComponent(props, ref) 
   });
 
   const theme = useTheme();
-  const smUp = useMediaQuery(theme.breakpoints.up('sm'), {
+  const smUp = useMediaQuery(theme.breakpoints.up("sm"), {
     noSsr: true,
   });
   const itemCount = itemData.length;
   const itemSize = smUp ? 36 : 48;
 
   const getChildSize = (child) => {
-    if (child.hasOwnProperty('group')) {
+    if (child.hasOwnProperty("group")) {
       return 48;
     }
-
     return itemSize;
   };
 
@@ -107,8 +111,8 @@ const ListboxComponent = React.forwardRef(function ListboxComponent(props, ref) 
 
 const StyledPopper = styled(Popper)({
   [`& .${autocompleteClasses.listbox}`]: {
-    boxSizing: 'border-box',
-    '& ul': {
+    boxSizing: "border-box",
+    "& ul": {
       padding: 0,
       margin: 0,
     },
@@ -119,30 +123,27 @@ const StyledPopper = styled(Popper)({
 //   .map(() => random(10 + Math.ceil(Math.random() * 20)))
 //   .sort((a, b) => a.toUpperCase().localeCompare(b.toUpperCase()));
 
-export default function Virtualize({
-    options,
-    onChange,
-    inputValue,
-    value
-}) {
+export default function SelectNameCode({ options, onChange, inputValue, value }) {
   return (
     <Autocomplete
+      multiple
+      value={value}
+      onInputChange={onChange}
       id="virtualize-demo"
       sx={{ width: 300 }}
       disableListWrap
-      value={value}
       inputValue={inputValue}
-      onInputChange={onChange}
       PopperComponent={StyledPopper}
       ListboxComponent={ListboxComponent}
       options={options}
       groupBy={(option) => {
-        return option[0].toUpperCase()
+        return option[0].toUpperCase();
       }}
-      renderInput={(params) => <TextField {...params} label="Select Namecodes" />}
+      // renderInput={(params) => <TextField {...params} label="Select Namecodes" />}
       renderOption={(props, option, state) => [props, option, state.index]}
       // TODO: Post React 18 update - validate this conversion, look like a hidden bug
       renderGroup={(params) => params}
+      getOptionLabel={(option) => option}
     />
   );
 }

@@ -5,8 +5,9 @@ import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
 import RedoLipModal from "./RedoLipModal";
-import AutoComplete from '../auto-complete/AutoComplete'
-import { createFilterOptions } from "@mui/material/Autocomplete";
+import SelectNameCode from "../auto-complete/SelectNameCode";
+// import Autocomplete from '@mui/material/Autocomplete';
+import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import { useMemo } from "react";
 import { debounce } from "lodash";
 const namecodes = [
@@ -7359,8 +7360,9 @@ const namecodes = [
   "wiwa",
   "yobe",
 ];
+
 const filterOptions = createFilterOptions({
-  matchFrom: 'any',
+  matchFrom: "any",
   limit: 500,
 });
 const debouncedHandleChange = debounce((newValue, setNewNameCode) => {
@@ -7378,19 +7380,27 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
   const [open, setOpen] = useState(false);
   const [newNameCode, setNewNameCode] = useState("");
   const [inputValue, setInputValue] = useState("");
+
+  // New auto states
+  const [value, setValue] = useState([]);
+  // console.log(value.join(" ").trim(), "valuer------>>>>>>>");
+
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
     onMessage: (message) => {
       const data = JSON.parse(message?.data);
       setemittedData(JSON.parse(data?.data));
     },
   });
-  const memoizedOptions = namecodes
+  
+  // const memoizedOptions = namecodes;
 
   const handleChange = (event, newValue) => {
-    console.log(newValue, 'newValue');
-    setNewNameCode(newValue)
-    // debouncedHandleChange(newValue, setNewNameCode);
+    // setNewNameCode(newValue);
+    setValue([...newValue]);
   };
+
+  console.log(value, "setValue");
+
   const handleClickAndSendMessage = useCallback(
     (payload) =>
       sendMessage(
@@ -7410,7 +7420,7 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
       fetch(`${BASE_URL}/audio/updt-redo-lip-newnamecode`, {
         method: "PUT",
         body: JSON.stringify({
-          newNameCode: newNameCode,
+          newNameCode: value.join(" ").trim(),
           videoId: videoId,
         }),
         headers: {
@@ -7426,6 +7436,7 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
       console.log("Error occured", error);
     }
   };
+
   return (
     <div className="au-mt">
       <div className="main-tile">
@@ -7480,26 +7491,38 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
             wrap="hard"
             variant="outlined"
           />
-          <AutoComplete
-          options={memoizedOptions}
-          value={newNameCode}
-          onChange={handleChange}
-          inputValue={newNameCode}
-          //  filterOptions={filterOptions}
-          //   disableListWrap
-          //   disablePortal
-          //   sx={{ width: 300 }}
-          //   renderInput={(params) => (
-          //     <TextField {...params} label="Select Namecode" />
-          //   )}
-          />
-          {/* <TextField
-            options={namecodes}
-            id="outlined-basic"
-            label="Type Namecode"
-            variant="outlined"
+          {/* <AutoComplete
+            options={memoizedOptions}
+            value={newNameCode}
             onChange={handleChange}
+            inputValue={newNameCode}
           /> */}
+
+          <Autocomplete
+            multiple
+            // id="fixed-tags-demo"
+            value={value}
+            onChange={handleChange}
+            options={namecodes}
+            getOptionLabel={(option) => option}
+            renderTags={(tagValue, getTagProps) =>
+              tagValue.map((option, index) => (
+                <Chip
+                  label={option}
+                  style = {{background: 'transparent'}}
+                  // {...getTagProps({ index })}
+                />
+              ))
+            }
+            style={{ width: 500 }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Namecode"
+                placeholder="Type"
+              />
+            )}
+          />
         </Box>
         <Button
           onClick={() => {
@@ -7522,6 +7545,5 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
     </div>
   );
 };
-
 
 export default RedoLipRowTile;
