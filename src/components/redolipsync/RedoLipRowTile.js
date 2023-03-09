@@ -7391,15 +7391,20 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
       setemittedData(JSON.parse(data?.data));
     },
   });
-  
+
   // const memoizedOptions = namecodes;
 
   const handleChange = (event, newValue) => {
-    // setNewNameCode(newValue);
     setValue([...newValue]);
   };
+  
+  const handleKeyDown = (event) => {
+    if (event.target.value && event.key === "Enter")  {
+      setValue([...value, event.target.value]);
+    }
+  };
 
-  console.log(value, "setValue");
+  console.log(value, "Value");
 
   const handleClickAndSendMessage = useCallback(
     (payload) =>
@@ -7414,8 +7419,8 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
   const handelClick = () => {
     setOpen(open);
   };
+
   let UpdateRedoLipSync = async (videoId) => {
-    console.log(newNameCode);
     try {
       fetch(`${BASE_URL}/audio/updt-redo-lip-newnamecode`, {
         method: "PUT",
@@ -7503,6 +7508,7 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
             // id="fixed-tags-demo"
             value={value}
             onChange={handleChange}
+            onKeyDown={handleKeyDown}
             options={namecodes}
             getOptionLabel={(option) => option}
             renderTags={(tagValue, getTagProps) =>
@@ -7519,7 +7525,7 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
               <TextField
                 {...params}
                 label="Namecode"
-                placeholder="Type"
+                placeholder="Type & Enter To Add New Value"
               />
             )}
           />
