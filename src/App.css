@@ -305,7 +305,7 @@ body{
   background-size: 50px 500px;
   background-position: 0 0;
   animation: shine 1s infinite;
-  border-radius: 1.5rem;
+  border-radius: 10px;
 }
 
 .tile{
@@ -458,7 +458,7 @@ input, textarea{
     rgba(255, 255, 255, 0.5) 50%,
     rgba(255, 255, 255, 0) 80%
   ),
-  #ececec;
+  #f4f4f4;
   background-repeat: repeat-y;
   background-size: 50px 500px;
   background-position: 0 0;
@@ -479,6 +479,7 @@ input, textarea{
   margin-left: auto;
   margin-right: auto;
   position: relative;
+  padding-bottom: 20px;
 }
 .row-loader{
   height: 75px;

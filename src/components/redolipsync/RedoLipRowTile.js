@@ -59,7 +59,7 @@ const RedoLipRowTile = ({ key, tileName, comments, nameCode, pageNumber }) => {
     }
   };
   return (
-    <div className="au-mt">
+    <div className="tile">
       <div className="main-tile">
         <ColorCheckboxes
           tileName={tileName}

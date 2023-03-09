@@ -9,6 +9,7 @@ import ColorCheckboxes from "../components/CheckBoxPick.js/ColorCheckboxes";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { useCallback } from "react";
 import { useQuery } from "react-query";
+import RefreshIcon from '@mui/icons-material/Refresh';
 import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoader";
 
 const AudioMistreated = ({ item,  destbucket }) => {
@@ -89,7 +90,7 @@ const AudioMistreated = ({ item,  destbucket }) => {
       // setLoading(false); // Stop loading
   };
 
-  const { isLoading, data } = useQuery(
+  const { isLoading, data, refetch } = useQuery(
     ["FetchAudioMisTreated", pageNumber],
     () => FetchAudioMisTreated(pageNumber), {
       onSuccess: (res) => {
@@ -101,31 +102,37 @@ const AudioMistreated = ({ item,  destbucket }) => {
   const { filename: audTreData } = data || {};
 
   return (
-    <div className="amt-tiles">
-      <h1 className="heading-screens">Audio Mistreated</h1>
-      <div className="audio-refresh-btn">
-        <Button
-          onClick={() => {
-            window.location.reload(false);
-          }}
-          variant="contained"
-          disableElevation
-        >
-          GET AUDIO Mistreated
-        </Button>
-        <div className="pagination-class">
-          <Pagination
-            onChange={(e, value) => {
-              setPageNumber(value);
-            }}
-            count={pageCount}
-            page={pageNumber}
-            variant="outlined"
-          />
+    <div className="data-section">
+      <div className="section-header">
+        <div className="section-header-1">
+          <h1 className="heading-screens">Audio Mistreated</h1>
+          <div className="audio-refresh-btn">
+            <div
+              onClick={() => {
+                refetch();
+              }}
+            >
+              <RefreshIcon/>
+            </div>
+          </div>
         </div>
+        {
+          pageNumber === 1 ?
+          null
+          :
+          <div className="pagination-class">
+            <Pagination
+              onChange={(e, value) => {
+                setPageNumber(value)}}
+              count={pageCount}
+              page={pageNumber}
+              variant="outlined"
+            />
+          </div>
+        }
       </div>
       {isLoading?<DataTilesLoader/> : audTreData?.map(([tileName, comments], index) => (
-        <div key={`${tileName}-${index}`} className="au-mt">
+        <div key={`${tileName}-${index}`} className="tile">
           <div className="main-tile">
             <ColorCheckboxes
               tileName={tileName}
@@ -153,7 +160,7 @@ const AudioMistreated = ({ item,  destbucket }) => {
             </div>
             <p className="video-name-dynamic">{comments}</p>
           </div>
-          <div className="am-main-tiles">
+          <div className="main-tiles">
             <AudioMistreatedTile value={tileName} pageNumber={pageNumber} />
           </div>
         </div>

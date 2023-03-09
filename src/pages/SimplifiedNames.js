@@ -9,6 +9,9 @@ import Pagination from "@mui/material/Pagination";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { WEB_BASE_URL } from "../constants/constant";
 import { useQuery } from "react-query";
+import RefreshIcon from '@mui/icons-material/Refresh';
+import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoader";
+import NoDataFound from "../components/ExtraComponents/NoDataFound";
 
 const SimplifiedNames = () => {
   const [simpFileName, setSimpFileName] = useState([]);
@@ -32,7 +35,7 @@ const SimplifiedNames = () => {
     return data;
   };
 
-  const { isLoading, data } = useQuery(
+  const { isLoading, data, refetch } = useQuery(
     ["FetchSimplifiedNames", pageNumber],
     () => FetchSimplifiedNames(pageNumber),
     {
@@ -45,30 +48,40 @@ const SimplifiedNames = () => {
   const { filename: simpNamesData } = data || {};
 
   return (
-    <div className="sn-tiles">
-      <h1 className="heading-screens">Simplified Names</h1>
-      <div className="audio-refresh-btn">
-        <div className="pagination-class">
-          <Button
-            onClick={() => {
-              window.location.reload(false);
-            }}
-            variant="contained"
-            disableElevation
-          >
-            GET Simplified Names
-          </Button>
-          <Pagination
-            onChange={(e, value) => {
-              setPageNumber(value);
-            }}
-            count={pageCount}
-            page={pageNumber}
-            variant="outlined"
-          />
+    <div className="data-section">
+      <div className="section-header">
+        <div className="section-header-1">
+          <h1 className="heading-screens">Simplified Names</h1>
+          <div className="audio-refresh-btn">
+            <div
+              onClick={() => {
+                refetch();
+              }}
+            >
+              <RefreshIcon/>
+            </div>
+          </div>
         </div>
+        {
+          pageNumber === 1 ?
+          null
+          :
+          <div className="pagination-class">
+            <Pagination
+              onChange={(e, value) => {
+                setPageNumber(value)}}
+              count={pageCount}
+              page={pageNumber}
+              variant="outlined"
+            />
+          </div>
+        }
       </div>
-      {simpNamesData?.length > 0 &&
+      {
+        isLoading?
+        <DataTilesLoader/>
+        :
+        simpNamesData?.length > 0 ?
         simpNamesData?.map(([tileName, vas], index) => (
           <SimpTile
             key={`${tileName}-${index}`}
@@ -76,7 +89,10 @@ const SimplifiedNames = () => {
             vas={vas}
             pageNumber={pageNumber}
           />
-        ))}
+        ))
+      :
+      <NoDataFound text={'No data found...'} />
+      }
     </div>
   );
 };

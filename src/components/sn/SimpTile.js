@@ -93,7 +93,7 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
   };
 
   return (
-    <div className="au-mis">
+    <div className="tile">
       <div className="main-tile">
         <ColorCheckboxes tileName={tileName} true={true} handleClickAndSendMessage={handleClickAndSendMessage}/>
         <div className="main-tile-head">
