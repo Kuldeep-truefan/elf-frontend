@@ -31,14 +31,15 @@ const Dashboard = () => {
       direction="column"
       alignItems="left"
       padding="1%"
+      id="dashboard"
     >
       <div
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          paddingLeft: "5%",
-          paddingRight: "17%",
+          // paddingLeft: "5%",
+          // paddingRight: "17%",
         }}
       >
         <Typography variant="h4" gutterBottom>

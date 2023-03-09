@@ -100,16 +100,6 @@ const AudioMistreated = ({ item,  destbucket }) => {
 
   const { filename: audTreData } = data || {};
 
-  // useEffect(() => {
-  //   if (!destbucket) {
-  //     setIsDisabled(false);
-  //   } else if (option && status === "Rejected") setIsDisabled(false);
-  //   else if (status && status !== "Rejected") {
-  //     setIsDisabled(false);
-  //   } else {
-  //     setIsDisabled(true);
-  //   }
-  // }, [status, option, destbucket]);
   return (
     <div className="amt-tiles">
       <h1 className="heading-screens">Audio Mistreated</h1>

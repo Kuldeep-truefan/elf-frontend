@@ -11,6 +11,7 @@ import { Icon } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import Modal from '@mui/material/Modal';
 import PopUp from './PopUp';
+import DashboardLoder from '../ExtraComponents/DashboardLoder';
 
 const style = {
   position: 'absolute',
@@ -55,12 +56,13 @@ const MatTableComp = () => {
     "AV Redo (mistreated)":"AV Redo (mistreated)", "Confirm Pronunciation":"Confirm Pronunciation", "REFUNDED":"REFUNDED", "Final QC":"Final QC", "In Queue":"In Queue", "QC2":"QC2", "In Progress":"In Progress", "N2V QC2":"N2V QC2",
     "TEST":"TEST" }},
     { title: 'QC Comment', field: 'qc_comment', editable:'never' },
-    { title: 'Output Link', field: 'output_link', editable:'never' },
+    // { title: 'Output Link', field: 'output_link', editable:'never' },
     {
       title: 'Download',
+      sorting: false,
       render: rowData => (
 
-        <DownloadIcon sx={{'&:hover':{backgroundColor: '#ad6efb'}}} onClick={() => { 
+        <DownloadIcon sx={{cursor:'pointer','&:hover':{color: '#ad6efb'}}} onClick={() => { 
           let blob =   `${rowData.simplified_name}_${sheet_id_dict[rowData.celeb]}_${sheet_wish_dict[rowData.occasion]}_${rowData.video_id}`
           let subbucket = sheet_id_dict[rowData.celeb]
           setFileData({
@@ -94,7 +96,7 @@ const MatTableComp = () => {
         return data;
   };
 
-  const { isLoading } = useQuery(['FetchDetailsOnDashboard'],() => FetchDetailsOnDashboard(),
+  const { isLoading, refetch } = useQuery(['FetchDetailsOnDashboard'],() => FetchDetailsOnDashboard(),
   {
     onSuccess: (res) => {
       const {data} = res
@@ -114,7 +116,7 @@ const MatTableComp = () => {
           namecode: data[i][9],
           qc_status: data[i][10],
           qc_comment: data[i][11],
-          output_link: data[i][12],
+          // output_link: data[i][12],
         })
       }
       setRowData(temp_arr);
@@ -147,12 +149,14 @@ const MatTableComp = () => {
   let mat_tablle=null;
 
   if(rowData===null){
-    mat_tablle = <Box sx={{ display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center', }}>
-    <CircularProgress />
-  </Box>
-  }else{
+    mat_tablle = <DashboardLoder/>
+  //   mat_tablle = <Box sx={{ display: 'flex',
+  //   alignItems: 'center',
+  //   justifyContent: 'center', }}>
+  //   <DashboardLoder/>
+  // </Box>
+  }
+  else{
     mat_tablle = <div>
 
     

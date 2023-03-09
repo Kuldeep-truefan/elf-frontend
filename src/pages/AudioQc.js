@@ -20,7 +20,7 @@ const AudioQc = ({
   const accessToken = localStorage.getItem("authToken");
   const [pageNumber, setPageNumber] = useState(1);
   const [pageCount, setPageCount] = useState(1);
-  const [audioQcData, setAudioQcData] = useState({})
+  const [audioQcData, setAudioQcData] = useState([])
   // const queryClient = useQueryClient()
 
   let FetchAudioQcTiles = async (value) => {
@@ -84,7 +84,7 @@ const AudioQc = ({
           </div>
         }
       </div>
-      {isLoading?<DataTilesLoader/> : Object.keys(audioQcData).length === 0? <NoDataFound/>:audioQcData.map(([tileName, comments], index) => (
+      {isLoading?<DataTilesLoader/> : audioQcData.length === 0? <NoDataFound/>:audioQcData.map(([tileName, comments], index) => (
 
         <AudioQcRow key={`${tileName}-${index}`} item={item} emittedData={emittedData} tileName={tileName} comments={comments} index={index} pageNumber={pageNumber} changeDataStatus={FetchAudioQcTiles}/>
       )
