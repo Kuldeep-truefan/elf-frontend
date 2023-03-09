@@ -2,6 +2,9 @@
   text-align: center;
   background-color: rebeccapurple;
 }
+*{
+  font-family: var(--myFont)!important;
+}
 
 .home-div{
   display: flex;
@@ -94,13 +97,11 @@ body{
 
 .main-tile{
   min-height: 2rem;
-  border: 2.5px solid #7F377F;
   border-bottom: transparent;
-  border-top-left-radius: 1.5rem;
-  border-top-right-radius: 1.5rem;
   display: flex;
   justify-content: flex-start;
   align-items: center;   
+  border-bottom: 1px solid #ededed;
 }
 
 
@@ -216,10 +217,8 @@ body{
     justify-content: space-around;
     position: relative;
     align-items: center;
-    border: 2.5px solid #7F377F;
+    /* border: 2.5px solid #7F377F; */
     /* width: 70%; */
-    border-end-start-radius: 1.5rem;
-    border-end-end-radius: 1.5rem;
     padding-bottom: 0.5rem;
     padding-top: 0.5rem;
     padding-left: 20px;
@@ -277,14 +276,19 @@ body{
   top: 4rem;
 }
 
-.heading-screens{
+.section-header{
   display: flex;
+  justify-content: space-between;
   margin-top: 10px;
   margin-top: -50px;
-
-  justify-content: center;
+}
+.section-header-1{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.heading-screens{
   font-weight: bolder;
-  font-family: Heiti SC;
 }
 
 .video-qc-heading {
@@ -293,12 +297,40 @@ body{
   font-weight: bolder;
   margin-top: 30px;
   font-family: Heiti SC;
-  /* margin-bottom: -50px; */
 }
-
-
+.action-performing{
+  z-index: 10;
+  position: relative;
+}
+.action-performing::after{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+  background: linear-gradient(	  
+      to right,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0.5) 50%,
+      rgba(255, 255, 255, 0) 80%
+    ),
+    rgba(211, 211, 211, 0.5);
+  background-repeat: repeat-y;
+  background-size: 50px 500px;
+  background-position: 0 0;
+  animation: shine 1s infinite;
+  border-radius: 1.5rem;
+}
 .au-mis{
   margin-top: 1rem;
+  overflow: hidden;
+  transition: 0.5s all ease-in-out;
+  border-radius: 10px;
+  background: #fefefe;
+  box-shadow: 0 0 10px #ededed;
+  border: 1px solid #ededed;
 }
 
 .css-hip9hq-MuiPaper-root-MuiAppBar-root{
@@ -306,10 +338,10 @@ body{
 }
 
 .audio-refresh-btn{
-  display: flex;
-  position: relative;
-  justify-content: flex-end;
-  top: -10px;
+  background: #f1f1f1;
+  padding: 5px;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 /* .audioqc-refresh-btn{
@@ -408,13 +440,13 @@ input, textarea{
   width: 100%;
   height: 100px;
   display: block;
-  background: linear-gradient(	  
-      to right,
-      rgba(255, 255, 255, 0),
-      rgba(255, 255, 255, 0.5) 50%,
-      rgba(255, 255, 255, 0) 80%
-    ),
-    lightgray;
+  background: linear-gradient(   
+    to right,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0) 80%
+  ),
+  #ececec;
   background-repeat: repeat-y;
   background-size: 50px 500px;
   background-position: 0 0;
@@ -426,4 +458,14 @@ input, textarea{
   to {
     background-position: 100% 0, 0 0;
   }
+}
+
+/* data section */
+.data-section{
+  margin-top: 1.3rem;
+  width: 75%;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  top: 4rem;
 }
