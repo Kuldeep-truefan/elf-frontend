@@ -8,6 +8,8 @@ import * as React from "react";
 import Pagination from "@mui/material/Pagination";
 import { useMutation } from "react-query";
 import ClockLoader from "react-spinners/ClockLoader";
+import NoDataFound from '../components/ExtraComponents/NoDataFound'
+import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoader";
 
 function Qc() {
   const [link, setLink] = useState("");
@@ -18,7 +20,7 @@ function Qc() {
   const [emittedData, setemittedData] = useState();
   const [pageCount, setPageCount] = useState(1);
   const [pageNumber, setPageNumber] = useState(1);
-  const [loadbucket, setLoadbucket] = useState("");
+  const [loadbucket, setLoadbucket] = useState("qc2");
 
   const accessToken = localStorage.getItem("authToken");
   let FetchLink = async (value) => {
@@ -95,57 +97,51 @@ function Qc() {
 
   return (
     <>
-      {fetchLinkLoading && (
-        <div
-          style={{
-            position: "absolute",
-            background: "rgba(0,0,0,0.3)",
-            zIndex: 2,
-            display: "flex",
-            width: "100%",
-            height: "100%",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <ClockLoader color="#36d7b7" />
-        </div>
-      )}
-    <div className="Qc">
-      <h1 className="video-qc-heading">Video QC</h1>
-<div style={{
-  display: 'flex',
-  justifyContent: 'center',
-flexDirection: 'row'
-}}>
+    <div className="data-section"> 
+      <div className="section-header">
+          <div className="section-header-1">
+            <h1 className="heading-screens">Video QC</h1>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+            flexDirection: 'row'
+            }}>
 
-      <TileController
-        setLink={setLink}
-        setSbuck={setSbuck}
-        emittedData={emittedData}
-        setDbuck={setDbuck}
-        destbucket={destbucket}
-        setDestMove={setDestMove}
-        pageNumber={pageNumber}
-        setPageCount={setPageCount}
-        setLoadbucket={setLoadbucket}
-        fetchLinkMutate={fetchLinkMutate}
-      />
-      <div className="pagination-class">
-        <Pagination
-          onChange={(e, value) => {
-            e.preventDefault();
-            setPageNumber(value);
-            fetchLinkMutate(value);
-          }}
-          count={pageCount}
-          page={pageNumber}
-          variant="outlined"
-        />
-      </div>
-        
-</div>
-      {link?.length > 0 &&
+                  <TileController
+                    setLink={setLink}
+                    setSbuck={setSbuck}
+                    emittedData={emittedData}
+                    setDbuck={setDbuck}
+                    destbucket={destbucket}
+                    setDestMove={setDestMove}
+                    pageNumber={pageNumber}
+                    setPageCount={setPageCount}
+                    setLoadbucket={setLoadbucket}
+                    fetchLinkMutate={fetchLinkMutate}
+                  />
+                    
+            </div>
+          </div>
+          {
+            pageNumber === 1 ?
+            null
+            :
+            <div className="pagination-class">
+              <Pagination
+                onChange={(e, value) => {
+                  setPageNumber(value)}}
+                count={pageCount}
+                page={pageNumber}
+                variant="outlined"
+              />
+            </div>
+          }
+        </div>
+      {
+        fetchLinkLoading ? 
+        <DataTilesLoader/>
+        :
+        link?.length > 0 ?
         link?.map(([fileName, comments], index) => {
           return (
             <RowComponent
@@ -163,8 +159,10 @@ flexDirection: 'row'
               fetchLinkMutate={fetchLinkMutate}
               pageNumber={pageNumber}
             />
-          );
-        })}
+          )
+        }):
+        <NoDataFound text={'No data found, may you didn\'t select any option from above'}/>
+      }
     </div>
     </>
   );

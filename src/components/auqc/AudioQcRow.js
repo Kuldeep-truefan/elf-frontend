@@ -116,7 +116,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
   };
 
   return (
-    <div key={index} className={`au-mis ${updating?'action-performing':''}`}>
+    <div key={index} className={`tile ${updating?'action-performing':''}`}>
       <div className="main-tile">
         <ColorCheckboxes
           tileName={tileName}
@@ -147,7 +147,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
         </div>
         <p className="video-name-dynamic">{comments}</p>
       </div>
-      <div className="am-main-tiles">
+      <div className="main-tiles">
         <AudioQcPlayer value={tileName} />
         <AudioRecorders setRecordedAudio={setRecordedAudio} />
         <TextareaAutosize

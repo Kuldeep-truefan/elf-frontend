@@ -93,7 +93,7 @@ const RowComponent = ({
   }, [status, option, destbucket]);
 
   return (
-    <div className="tiles">
+    <div className="tile">
       <div className="main-tile">
         <div className="main-tile-head">
           <Typography
@@ -133,7 +133,6 @@ const RowComponent = ({
           <InputLabel id="select-status">Status</InputLabel>
           <Select
             labelId="select-status"
-            // id="select-status"
             value={status}
             label="Status"
             onChange={handleStatus}

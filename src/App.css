@@ -79,21 +79,6 @@ body{
   padding-right: 0.5rem;
 }
 
-.main-tiles{
-  /* position: relative;
-  left: 16%; */
-  /* top: 20%; */
-  /* margin-top: 3px; */
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  border: 2.5px solid #7F377F;
-  /* width: 70%; */
-  border-end-start-radius: 1.5rem;
-  border-end-end-radius: 1.5rem;
-  padding-bottom: 0.5rem;
-  padding-top: 0.5rem;
-}
 
 .main-tile{
   min-height: 2rem;
@@ -211,7 +196,7 @@ body{
   padding-top: 0.5rem;
 } */
 
-.am-main-tiles{
+.main-tiles{
     /* margin-top: 3px; */
     display: flex;
     justify-content: space-around;
@@ -280,7 +265,6 @@ body{
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
-  margin-top: -50px;
 }
 .section-header-1{
   display: flex;
@@ -323,7 +307,8 @@ body{
   animation: shine 1s infinite;
   border-radius: 1.5rem;
 }
-.au-mis{
+
+.tile{
   margin-top: 1rem;
   overflow: hidden;
   transition: 0.5s all ease-in-out;
@@ -366,6 +351,9 @@ body{
 }
 #dashboard thead tr th:last-child div{
   display: block;
+}
+#dashboard thead tr th:first-child span{
+  display: none;
 }
 
 #dashboard-loader{
@@ -475,7 +463,7 @@ input, textarea{
   background-size: 50px 500px;
   background-position: 0 0;
   animation: shine 1s infinite;
-  margin-bottom: 10px;
+  margin-top: 1rem;
   border-radius: 1.5rem;
 }
 @keyframes shine {	
@@ -491,7 +479,6 @@ input, textarea{
   margin-left: auto;
   margin-right: auto;
   position: relative;
-  top: 4rem;
 }
 .row-loader{
   height: 75px;

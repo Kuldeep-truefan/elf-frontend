@@ -5,6 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Button } from "@mui/material";
+import SearchIcon from '@mui/icons-material/Search';
 import { BASE_URL } from "../../constants/constant";
 import Pagination from "@mui/material/Pagination";
 import {useMutation} from 'react-query'
@@ -55,7 +56,8 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, 
             label="Load Bucket"
             onChange={handleLoadBucket}
           >
-            {loadbucketoption?.map(bucket => <MenuItem value={bucket.value}>{bucket.label}</MenuItem>)}
+            {loadbucketoption?.map((bucket,index) => <MenuItem value={bucket.value} key={index}>{bucket.label}</MenuItem>)
+            }
           </Select>
         </FormControl>
         <FormControl sx={{ m: 1, minWidth: 120}} size="small">
@@ -67,10 +69,10 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, 
            label="Load Bucket"
             onChange={handleDestBucket}
           >
-            {movebucketoption?.map(bucket => <MenuItem value={bucket.value}>{bucket.label}</MenuItem>)} 
+            {movebucketoption?.map((bucket,index) => <MenuItem key={index} value={bucket.value}>{bucket.label}</MenuItem>)} 
           </Select>
         </FormControl>
-        <Button variant="contained" href="#contained-buttons" onClick = {() => fetchLinkMutate(1)} sx={{background: '#D7B8FD', '&:hover':{backgroundColor: '#ad6efb'}}}>Refresh</Button>
+        <Button startIcon={<SearchIcon />} variant="contained" href="#contained-buttons" onClick = {() => fetchLinkMutate(1)} sx={{background: '#D7B8FD', '&:hover':{backgroundColor: '#ad6efb'}}}>Search</Button>
         </div>
 
   );
