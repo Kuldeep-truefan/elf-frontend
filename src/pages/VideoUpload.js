@@ -88,7 +88,7 @@ const VideoUpload = () => {
     // loading_button = <LinearProgress />;
   }
   else{
-    loading_button = <Box textAlign='center'><Button className="upload-button" onClick = {UploadVideoToBucket} variant="contained" disableElevation>Upload</Button></Box>;
+    loading_button = <Box textAlign='center'><Button className="upload-button" sx={{width:'100%'}} onClick = {UploadVideoToBucket} variant="contained" disableElevation>Upload</Button></Box>;
   }
   
   return (

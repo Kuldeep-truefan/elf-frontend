@@ -499,3 +499,7 @@ input, textarea{
   animation: shine 1s infinite;
   margin-bottom: 10px;
 }
+.lkjDVC{
+  padding: 50px 16px 50px 16px !important;
+  border: 2px dashed #83b7fb;
+}
