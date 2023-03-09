@@ -1,8 +1,5 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
 import { useState } from "react";
 import { BASE_URL } from "../../constants/constant";
 
@@ -15,9 +12,9 @@ export default function PopUp({ data }) {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleDownload = (e) => {
-    e.preventDefault();
-    window.open(downloadLink, "_blank");
+
+  const handleDownload = () => {
+    window.location.href = downloadLink ;
   };
 
   const handleClose = () => {

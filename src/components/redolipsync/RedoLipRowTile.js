@@ -7360,7 +7360,6 @@ const namecodes = [
   "wiwa",
   "yobe",
 ];
-
 const filterOptions = createFilterOptions({
   matchFrom: "any",
   limit: 500,
@@ -7397,14 +7396,16 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
   const handleChange = (event, newValue) => {
     setValue([...newValue]);
   };
-  
+
   const handleKeyDown = (event) => {
-    if (event.target.value && event.key === "Enter")  {
-      setValue([...value, event.target.value]);
+
+    if (event.key === "Enter" && event.target.value.length > 0 && /^\S+$/.test(inputValue)) {
+      if(event.target.value.trim()) {
+        setValue(prevValue => [...prevValue, event.target.value]);
+      }
+    event.target.value = '';
     }
   };
-
-  console.log(value, "Value");
 
   const handleClickAndSendMessage = useCallback(
     (payload) =>
@@ -7513,11 +7514,7 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
             getOptionLabel={(option) => option}
             renderTags={(tagValue, getTagProps) =>
               tagValue.map((option, index) => (
-                <Chip
-                  label={option}
-                  style = {{background: 'transparent'}}
-                  // {...getTagProps({ index })}
-                />
+                <Chip label={option} style={{ background: "transparent" }} />
               ))
             }
             style={{ width: 500 }}
