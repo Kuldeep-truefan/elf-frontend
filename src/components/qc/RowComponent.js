@@ -187,22 +187,12 @@ const RowComponent = ({
           value={remark}
           onChange={handleChange}
         />
-        <Button
+        <button
           onClick={GetQCDone}
-          variant="contained"
-          disabled={isDisabled}
-          sx={{
-            height: "2.5rem",
-            backgroundColor: "#D7B8FD",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#ad6efb",
-              color: "#fff",
-            },
-          }}
+          className={`primary-btn ${isDisabled?'disabled-btn':''}`}
         >
           Done
-        </Button>
+        </button>
       </div>
     </div>
   );

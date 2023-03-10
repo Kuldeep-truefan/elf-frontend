@@ -444,6 +444,11 @@ body{
   background-color: #1976d2;
   color: #fefefe;
 }
+.disabled-btn{
+  background-color: #c3c1c1;
+  pointer-events: none;
+  border: none;
+}
 .d-flex{
   display: flex;
   gap: 10px;
