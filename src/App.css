@@ -82,6 +82,7 @@ body{
 
 
 .main-tile{
+  padding: 0 20px;
   min-height: 2rem;
   border-bottom: transparent;
   display: flex;
@@ -200,7 +201,7 @@ body{
 .main-tiles{
     /* margin-top: 3px; */
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     position: relative;
     align-items: center;
     /* border: 2.5px solid #7F377F; */
@@ -211,6 +212,32 @@ body{
     padding-right: 20px;
 }
 
+.checkbox{
+  width:40px;
+  height:20px;
+  background-color:#e7e7e7;
+  border-radius:20px;
+  padding:3px;
+  cursor: pointer;
+}
+.checkbox-btn{
+  width:12.4px;
+  height:12.4px;
+  background-color:#252525;
+  border-radius:50%;
+  transition:0.2s all linear;
+}
+.input-checkbox:checked + label .checkbox{
+  background-color:hsl(120, 100%, 90%);
+  border: 1px solid #00ff00;
+}
+.input-checkbox:checked + label .checkbox .checkbox-btn{
+  background-color:#00ff00;
+  transform: translateX(18px)
+}
+.input-checkbox{
+  display: none;
+}
 .am-main-tile-head{
   display: flex;
   flex: 6;
@@ -392,23 +419,35 @@ body{
   display: flex;
   align-items: center;
 }
-.simp-english-input {
+.simp-english-input, .simp-hindi-textarea {
   min-width: 250px;
   padding: 10px;
-  border-radius: 14px;
-  text-align: center;
+  border-radius: 5px;
+  text-align: left;
+  outline: none;
+  border: 1px solid #ededed;
+  font-size: 14px;
+}
+.simp-english-input:focus, .simp-hindi-textarea:focus {
+  border: 1px solid #c3c1c1;
 }
 
-.simp-hindi-textarea{
-  /* display: flex; */
-  /* justify-content: center; */
-  /* resize:none; */
-  padding: 10px;
-  text-align: center;
-  border-radius: 14px;
-  min-width: 250px;
+.outlined-btn,.primary-btn{
+  color: #1976d2 ;
+  background-color: transparent ;
+  border: 1px solid #1976d2 ;
+  text-transform: unset ;
+  border-radius: 5px;
+  padding: 7px 10px;
 }
-
+.primary-btn{
+  background-color: #1976d2;
+  color: #fefefe;
+}
+.d-flex{
+  display: flex;
+  gap: 10px;
+}
 .au-mt{
   margin-bottom: 10px;
 }
@@ -460,6 +499,8 @@ body{
 
 input, textarea{
   padding: 3px 10px;
+  text-align: left;
+  border-radius: 10px;
 }
 .tiles-loading, .row-loader{
   width: 100%;

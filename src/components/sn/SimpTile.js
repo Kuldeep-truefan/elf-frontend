@@ -64,8 +64,9 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
   }[readyState];
 
   const handleEngName = (event) => {
-    setEnglishName(event.target.value);
-    console.log(event.target.value);
+    if(event.target.value.length <20){
+      setEnglishName(event.target.value);
+    }
   };
 
   let UpdateSimpNames = async (id, button_type) => {
@@ -115,57 +116,38 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
         <p className="video-name-dynamic">{vas}</p>
       </div>
       <div className="main-tiles">
-        <input onChange={handleEngName} value={englishName} className="simp-english-input" type={'text'} placeholder="english"/>
-        <ReactTransliterate
-          className="simp-hindi-textarea"
-          renderComponent={(props) => (
-            <input {...props} rows={3} cols={30} placeholder="hindi" />
-          )}
-          value={hindiName}
-          onChangeText={(text) => {
-            setHindiName(text);
-          }}
-          lang="hi"
-        />
-        <Button
-          variant="contained"
-          disableElevation
-          sx={{
-            height: "2.5rem",
-            backgroundColor: "#D7B8FD",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#ad6efb",
-              color: "#fff",
-              shadow: "0 0 30px rgba(40,40,40,.4)",
-            },
-            borderRadius: "14px",
-          }}
-          onClick={() =>
-            UpdateSimpNames(tileName.split("_")[3], "Confirm Name")
-          }
-        >
-          Confirm Name
-        </Button>
-        <Button
-          variant="contained"
-          sx={{
-            height: "2.5rem",
-            backgroundColor: "#D7B8FD",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#ad6efb",
-              color: "#fff",
-              shadow: "0 0 30px rgba(40,40,40,.4)",
-            },
-            borderRadius: "14px",
-          }}
-          onClick={() => {
-            UpdateSimpNames(tileName.split("_")[3], "Done");
-          }}
-        >
-          Done
-        </Button>
+        <div className="d-flex">
+          <input onChange={handleEngName} value={englishName} className="simp-english-input" type={'text'} placeholder="English(Max 20 characters)"/>
+          <ReactTransliterate
+            className="simp-hindi-textarea"
+            renderComponent={(props) => (
+              <input {...props} rows={3} cols={30} placeholder="Hindi" />
+            )}
+            value={hindiName}
+            onChangeText={(text) => {
+              setHindiName(text);
+            }}
+            lang="hi"
+          />
+        </div>
+        <div className="d-flex">
+          <button
+            className="outlined-btn"
+            onClick={() =>
+              UpdateSimpNames(tileName.split("_")[3], "Confirm Name")
+            }
+          >
+            Confirm name
+          </button>
+          <button
+          className="primary-btn"
+            onClick={() => {
+              UpdateSimpNames(tileName.split("_")[3], "Done");
+            }}
+          >
+            Done
+          </button>
+        </div>
       </div>
     </div>
   );
