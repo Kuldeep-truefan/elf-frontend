@@ -141,8 +141,8 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
                     (data) => data?.video_id === tileName
                   )?.[0]?.user
                 }`}
-                sx={{ ml: "5px", backgroundColor: "white" }}
-              ></Chip>
+                sx={{ ml: "15px", backgroundColor: "#bcddfe", height:'unset',padding:'1px', color:'#1976d2', border:'1px solid #1976d2' }}
+                ></Chip>
             )}
         </div>
         <p className="video-name-dynamic">{comments}</p>
@@ -160,8 +160,8 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
           onChange={handleChange}
         />
         <div style={{display:'flex',gap:'10px'}}>
-          <Button
-            variant="contained"
+          <button
+          className={`primary-btn ${isDisabled?'disable-btn':''}`}
             disabled={isDisabled}
             onClick={() => {
               UpdateQcComtStatus(
@@ -172,22 +172,11 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
                 tileName
               );
             }}
-            sx={{
-              height: "2.5rem",
-              marginRight: "1rem",
-              backgroundColor: "#D7B8FD",
-              textTransform:'none',
-              color: "white",
-              "&:hover": {
-                backgroundColor: "#ad6efb",
-                color: "#fff",
-              },
-            }}
           >
             Approve
-          </Button>
-          <Button
-            variant="contained"
+          </button>
+          <button
+          className={`primary-btn ${isDisabled?'disable-btn':''}`}
             disabled={isDisabled}
             onClick={() => {
               UpdateQcComtStatus(
@@ -202,23 +191,11 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
               //   tileName.split("_")[3].split(".")[0]
               // );
             }}
-            sx={{
-              height: "2.5rem",
-              // marginTop: ".46rem",
-              backgroundColor: "#D7B8FD",
-              color: "white",
-              textTransform:'none',
-              "&:hover": {
-                backgroundColor: "#ad6efb",
-                color: "#fff",
-              },
-            }}
           >
             Reject
-          </Button>
-          <Button
-            variant="contained"
-            disabled={isDisabled}
+          </button>
+          <button
+          className={`primary-btn ${isDisabled?'disable-btn':''}`}
             onClick={() => {
               UpdateQcComtStatus(
                 "Audio Mistreated",
@@ -232,20 +209,9 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
               //   tileName.split("_")[3].split(".")[0]
               // );
             }}
-            sx={{
-              height: "2.5rem",
-              // marginTop: ".46rem",
-              backgroundColor: "#D7B8FD",
-              textTransform:'none',
-              color: "white",
-              "&:hover": {
-                backgroundColor: "#ad6efb",
-                color: "#fff",
-              },
-            }}
           >
             Audio Mistreated
-          </Button>
+          </button>
         </div>
       </div>
     </div>
