@@ -82,7 +82,7 @@ body{
 
 
 .main-tile{
-  padding: 0 20px;
+  padding: 10px 20px;
   min-height: 2rem;
   border-bottom: transparent;
   display: flex;
@@ -204,12 +204,7 @@ body{
     justify-content: space-between;
     position: relative;
     align-items: center;
-    /* border: 2.5px solid #7F377F; */
-    /* width: 70%; */
-    padding-bottom: 0.5rem;
-    padding-top: 0.5rem;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 15px 20px;
 }
 
 .checkbox{
@@ -338,12 +333,12 @@ body{
 
 .tile{
   margin-top: 1rem;
-  overflow: hidden;
   transition: 0.5s all ease-in-out;
   border-radius: 10px;
   background: #fefefe;
   box-shadow: 0 0 10px #ededed;
   border: 1px solid #ededed;
+  padding: 10px 0;
 }
 
 .css-hip9hq-MuiPaper-root-MuiAppBar-root{
