@@ -7470,8 +7470,8 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
                     (data) => data?.video_id === tileName
                   )?.[0]?.user
                 }`}
-                sx={{ ml: "5px", backgroundColor: "white" }}
-              ></Chip>
+                sx={{ ml: "15px", backgroundColor: "#bcddfe", height:'unset',padding:'1px', color:'#1976d2', border:'1px solid #1976d2' }}
+                ></Chip>
             )}
         </div>
         <p className="video-name-dynamic">{comments}</p>
@@ -7529,7 +7529,7 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
                 />
               ))
             }
-            style={{ width: 500 }}
+            style={{ width: 500,transition:'unset' }}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -7539,23 +7539,14 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
             )}
           />
         </Box>
-        <Button
+        <button
           onClick={() => {
             UpdateRedoLipSync(tileName.split("_")[3].split(".")[0]);
           }}
-          variant="contained"
-          sx={{
-            height: "2.5rem",
-            backgroundColor: "#D7B8FD",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#ad6efb",
-              color: "#fff",
-            },
-          }}
+          className="primary-btn"
         >
           Done
-        </Button>
+        </button>
       </div>
     </div>
   );
