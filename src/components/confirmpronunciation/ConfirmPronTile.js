@@ -44,7 +44,7 @@ const ConfirmPronTile = () => {
     {
       onSuccess: (res) => {
         setPageCount(res.pagecount);
-        setAudioConfirmPro(data)
+        setAudioConfirmPro(res.filename)
       },
       onError:(error) =>{
         console.log(error)
@@ -83,10 +83,10 @@ const ConfirmPronTile = () => {
         }
       </div>
       {
-        isLoading?
+        isLoading || isFetching?
         <DataTilesLoader/>
         :
-      audioConfirmPro.length>0?audioConfirmPro.map((value, index) => (
+        audioConfirmPro.length>0?audioConfirmPro.map((value, index) => (
         <ConfirmPronRow key={`${value}-${index}`} value={value} />
       ))
     :

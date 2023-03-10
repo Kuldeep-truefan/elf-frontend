@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import AudioMistreatedTile from "../components/aumistreated/AudioMistreatedTile";
 import "../App.css";
 import { Button, Chip, Typography } from "@mui/material";
-import {  useState } from "react";
+import { useState } from "react";
 import { BASE_URL, WEB_BASE_URL } from "../constants/constant";
 import Pagination from "@mui/material/Pagination";
 import ColorCheckboxes from "../components/CheckBoxPick.js/ColorCheckboxes";
@@ -13,7 +13,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoader";
 import NoDataFound from "../components/ExtraComponents/NoDataFound";
 
-const AudioMistreated = ({ item,  destbucket }) => {
+const AudioMistreated = ({ item, destbucket }) => {
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
   const [remark, setRemark] = useState("");
@@ -74,31 +74,31 @@ const AudioMistreated = ({ item,  destbucket }) => {
   };
 
   let FetchAudioMisTreated = async (value) => {
-      const data = await fetch(`${BASE_URL}/audio/get-amt-files`, {
-        method: "POST",
-        body: JSON.stringify({
-          pageNumber: value,
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((response) => response)
+    const data = await fetch(`${BASE_URL}/audio/get-amt-files`, {
+      method: "POST",
+      body: JSON.stringify({
+        pageNumber: value,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => response)
 
-        return data;
-      // setLoading(false); // Stop loading
+    return data;
+    // setLoading(false); // Stop loading
   };
 
-  const { isLoading, data, refetch } = useQuery(
+  const { isLoading, data, refetch, isFetching } = useQuery(
     ["FetchAudioMisTreated", pageNumber],
     () => FetchAudioMisTreated(pageNumber), {
-      onSuccess: (res) => {
-        setPageCount(res.pagecount)
-        setAudTreData(res.filename)
-      }
+    onSuccess: (res) => {
+      setPageCount(res.pagecount)
+      setAudTreData(res.filename)
     }
+  }
   );
 
 
@@ -113,62 +113,63 @@ const AudioMistreated = ({ item,  destbucket }) => {
                 refetch();
               }}
             >
-              <RefreshIcon/>
+              <RefreshIcon />
             </div>
           </div>
         </div>
         {
           pageNumber === 1 ?
-          null
-          :
-          <div className="pagination-class">
-            <Pagination
-              onChange={(e, value) => {
-                setPageNumber(value)}}
-              count={pageCount}
-              page={pageNumber}
-              variant="outlined"
-            />
-          </div>
+            null
+            :
+            <div className="pagination-class">
+              <Pagination
+                onChange={(e, value) => {
+                  setPageNumber(value)
+                }}
+                count={pageCount}
+                page={pageNumber}
+                variant="outlined"
+              />
+            </div>
         }
       </div>
-      {isLoading?<DataTilesLoader/> : audTreData.length>0?audTreData.map(([tileName, comments], index) => (
-        <div key={`${tileName}-${index}`} className="tile">
-          <div className="main-tile">
-            <ColorCheckboxes
-              tileName={tileName}
-              handleClickAndSendMessage={handleClickAndSendMessage}/>
-            <div className="main-tile-head">
-              <Typography
-                className="video-name"
-                sx={{
-                  paddingLeft: "1rem",
-                }}
-              >
-                {tileName}
-              </Typography>
-              {!!emittedData &&
-              JSON.parse(emittedData)?.filter(
-                  (data) => data?.video_id === tileName
-                )?.length > 0 && (
-                  <Chip
-                    label={`In progress: ${
-                      JSON.parse(emittedData)?.filter(
+      {isLoading || isFetching ?
+        <DataTilesLoader /> : audTreData.length > 0 ? audTreData.map(([tileName, comments], index) => (
+          <div key={`${tileName}-${index}`} className="tile">
+            <div className="main-tile">
+              <ColorCheckboxes
+                tileName={tileName}
+                handleClickAndSendMessage={handleClickAndSendMessage} />
+              <div className="main-tile-head">
+                <Typography
+                  className="video-name"
+                  sx={{
+                    paddingLeft: "1rem",
+                  }}
+                >
+                  {tileName}
+                </Typography>
+                {!!emittedData &&
+                  JSON.parse(emittedData)?.filter(
+                    (data) => data?.video_id === tileName
+                  )?.length > 0 && (
+                    <Chip
+                      label={`In progress: ${JSON.parse(emittedData)?.filter(
                         (data) => data?.video_id === tileName)?.[0]?.user}`}
-                    sx={{ ml: "5px", backgroundColor: "white" }}
-                  ></Chip>
-                )}
+                      sx={{ ml: "5px", backgroundColor: "white" }}
+                    ></Chip>
+                  )}
+              </div>
+              <p className="video-name-dynamic">{comments}</p>
             </div>
-            <p className="video-name-dynamic">{comments}</p>
+            <div className="main-tiles">
+              <AudioMistreatedTile value={tileName} pageNumber={pageNumber} />
+            </div>
           </div>
-          <div className="main-tiles">
-            <AudioMistreatedTile value={tileName} pageNumber={pageNumber} />
-          </div>
-        </div>
-      ))
-    :
-    <NoDataFound/>
-    }
+        ))
+          :
+          <NoDataFound />
+      }
     </div>
   );
 };

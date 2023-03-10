@@ -18,6 +18,7 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
   const [emittedData, setemittedData] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const [pageCount, setPageCount] = useState(1);
+  const [redoTileName, setRedoTileName] = useState([])
 
   let FetchAudioRedoLipSync = async (value) => {
     // setLoading(true); // Set loading before sending API request
@@ -39,11 +40,12 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
     {
       onSuccess: (res) => {
         setPageCount(res.pagecount);
+        setRedoTileName(res.filename)
       },
     }
   );
 
-  const { filename: redoTileName, lastnamecode: nameCode } = data || {};
+  const { lastnamecode: nameCode } = data || {};
   const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/simpredocon.io/`);
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
     onMessage: (message) => {
@@ -102,11 +104,11 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
         }
       </div>
       {
-        isLoading?
+        isLoading || isFetching?
         <DataTilesLoader/>
         :
-       redoTileName?.length > 0 ?
-        redoTileName?.map(([tileName, comments, namecode], index) => (
+       redoTileName.length > 0 ?
+        redoTileName.map(([tileName, comments, namecode], index) => (
           <RedoLipRowTile
             key={`${tileName}-${index}`}
             tileName={tileName}

@@ -103,7 +103,7 @@ const AudioMispronounced = ({ item, sendFile }) => {
         }
       </div>
       {
-        isLoading?
+        isLoading || isFetching?
         <DataTilesLoader/>
         :
         misProData?.length > 0 ?

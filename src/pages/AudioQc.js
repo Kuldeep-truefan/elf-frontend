@@ -84,8 +84,13 @@ const AudioQc = ({
           </div>
         }
       </div>
-      {isLoading?<DataTilesLoader/> : audioQcData.length === 0? <NoDataFound text={'No data found...'}/>:audioQcData.map(([tileName, comments], index) => (
-
+      {isLoading || isFetching?
+      <DataTilesLoader/> 
+      :
+      audioQcData.length === 0? 
+      <NoDataFound text={'No data found...'}/>
+      :
+      audioQcData.map(([tileName, comments], index) => (
         <AudioQcRow key={`${tileName}-${index}`} item={item} emittedData={emittedData} tileName={tileName} comments={comments} index={index} pageNumber={pageNumber} changeDataStatus={FetchAudioQcTiles}/>
       )
       )

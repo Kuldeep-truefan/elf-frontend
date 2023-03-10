@@ -18,6 +18,7 @@ const SimplifiedNames = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageCount, setPageCount] = useState(1);
   const accessToken = localStorage.getItem("authToken");
+  const [simpNamesData, setSimpNamesData] = useState([])
 
   let FetchSimplifiedNames = async (value) => {
     const data = fetch(`${BASE_URL}/audio/simpnametiles`, {
@@ -35,17 +36,18 @@ const SimplifiedNames = () => {
     return data;
   };
 
-  const { isLoading, data, refetch } = useQuery(
+  const { isLoading, data, refetch, isFetching } = useQuery(
     ["FetchSimplifiedNames", pageNumber],
     () => FetchSimplifiedNames(pageNumber),
     {
       onSuccess: (res) => {
         setPageCount(res.pagecount);
+        setSimpNamesData(res.filename)
       },
     }
   );
 
-  const { filename: simpNamesData } = data || {};
+  // const { filename: simpNamesData } = data || {};
 
   return (
     <div className="data-section">
@@ -78,11 +80,11 @@ const SimplifiedNames = () => {
         }
       </div>
       {
-        isLoading?
+        isLoading || isFetching?
         <DataTilesLoader/>
         :
-        simpNamesData?.length > 0 ?
-        simpNamesData?.map(([tileName, vas], index) => (
+        simpNamesData.length > 0 ?
+        simpNamesData.map(([tileName, vas], index) => (
           <SimpTile
             key={`${tileName}-${index}`}
             tileName={tileName}
