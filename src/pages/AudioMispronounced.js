@@ -133,7 +133,7 @@ const AudioMispronounced = ({ item, sendFile }) => {
                         (data) => data?.video_id === tileName
                       )?.[0]?.user
                     }`}
-                    sx={{ ml: "5px", backgroundColor: "white" }}
+                    sx={{ ml: "15px", backgroundColor: "#bcddfe", height:'unset',padding:'1px', color:'#1976d2', border:'1px solid #1976d2' }}
                   ></Chip>
                 )}
               </div>
