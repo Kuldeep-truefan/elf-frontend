@@ -6,7 +6,6 @@ import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
 import RedoLipModal from "./RedoLipModal";
 import SelectNameCode from "../auto-complete/SelectNameCode";
-// import Autocomplete from '@mui/material/Autocomplete';
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import { useMemo } from "react";
 import { debounce } from "lodash";
@@ -7382,7 +7381,7 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
 
   // New auto states
   const [value, setValue] = useState([]);
-  // console.log(value.join(" ").trim(), "valuer------>>>>>>>");
+  console.log(value, "value)))<<<-----");
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
     onMessage: (message) => {
@@ -7398,12 +7397,14 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
   };
 
   const handleKeyDown = (event) => {
-
-    if (event.key === "Enter" && event.target.value.length > 0 && /^\S+$/.test(inputValue)) {
-      if(event.target.value.trim()) {
-        setValue(prevValue => [...prevValue, event.target.value]);
-      }
-    event.target.value = '';
+    const inputValue = event.target.value.trim();
+    if (
+      event.key === "Enter" &&
+      inputValue.length > 0 &&
+      /^\S+$/.test(inputValue)
+    ) {
+      setValue((prevValue) => [...prevValue, inputValue]);
+      event.target.value = "";
     }
   };
 
@@ -7497,10 +7498,12 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
             wrap="hard"
             variant="outlined"
           />
-          {/* <AutoComplete
-            options={memoizedOptions}
-            value={newNameCode}
+
+          {/* <SelectNameCode
+            options={namecodes}
+            value={value}
             onChange={handleChange}
+            onKeyDown={handleKeyDown}
             inputValue={newNameCode}
           /> */}
 
@@ -7511,10 +7514,19 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             options={namecodes}
+            filterOptions={(options, {inputValue}) =>
+              options.filter((option) =>
+                option.toLowerCase().startsWith(inputValue.toLowerCase())
+              )
+            }
             getOptionLabel={(option) => option}
             renderTags={(tagValue, getTagProps) =>
               tagValue.map((option, index) => (
-                <Chip label={option} style={{ background: "transparent" }} />
+                <Chip
+                  key={index}
+                  label={option}
+                  style={{ background: "transparent" }}
+                />
               ))
             }
             style={{ width: 500 }}

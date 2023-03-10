@@ -14,11 +14,11 @@ const LISTBOX_PADDING = 8; // px
 function renderRow(props) {
   const { data, index, style } = props;
   const dataSet = data[index];
-  
+
   const inlineStyle = {
-      ...style,
-      top: style.top + LISTBOX_PADDING,
-    };
+    ...style,
+    top: style.top + LISTBOX_PADDING,
+  };
 
   if (dataSet.hasOwnProperty("group")) {
     return (
@@ -119,17 +119,21 @@ const StyledPopper = styled(Popper)({
   },
 });
 
-// const OPTIONS = Array.from(new Array(10000))
-//   .map(() => random(10 + Math.ceil(Math.random() * 20)))
-//   .sort((a, b) => a.toUpperCase().localeCompare(b.toUpperCase()));
-
-export default function SelectNameCode({ options, onChange, inputValue, value }) {
+export default function SelectNameCode({
+  options,
+  onChange,
+  inputValue,
+  value,
+  onKeyDown,
+  ...props
+}) {
   return (
     <Autocomplete
-      multiple
       value={value}
+      onKeyDown={onKeyDown}
       onInputChange={onChange}
       id="virtualize-demo"
+      // renderTags={renderTags}
       sx={{ width: 300 }}
       disableListWrap
       inputValue={inputValue}
@@ -137,13 +141,33 @@ export default function SelectNameCode({ options, onChange, inputValue, value })
       ListboxComponent={ListboxComponent}
       options={options}
       groupBy={(option) => {
-        return option[0].toUpperCase();
+        return option.toUpperCase();
       }}
-      // renderInput={(params) => <TextField {...params} label="Select Namecodes" />}
+      // renderInput={(params) => (
+      //   <TextField {...params} label="Select Namecodes" />
+      // )}
       renderOption={(props, option, state) => [props, option, state.index]}
-      // TODO: Post React 18 update - validate this conversion, look like a hidden bug
       renderGroup={(params) => params}
-      getOptionLabel={(option) => option}
+      // getOptionLabel={(option) => option}
+      {...props}
+      // getOptionLabel={(option) => option}
+      renderTags={(tagValue, getTagProps) =>
+        tagValue.map((option, index) => (
+          <Chip
+            key={index}
+            label={option}
+            style={{ background: "transparent" }}
+          />
+        ))
+      }
+      style={{ width: 500 }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Namecode"
+          placeholder="Type & Enter To Add New Value"
+        />
+      )}
     />
   );
 }
