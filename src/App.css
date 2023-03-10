@@ -4,6 +4,7 @@
 }
 *{
   font-family: var(--myFont)!important;
+  transition: 0.5s all ease-in-out;
 }
 
 .home-div{
@@ -439,10 +440,22 @@ body{
 }
 
 .popup{
+  padding: 50px 20px;
+  border: 0px;
+  
+}
+.popup-btns{
   display: flex;
-  padding: 20px 10px;
   gap: 10px;
   border: 0px;
+}
+.audio-player{
+  display: flex;
+  padding: 10px 10px;
+  margin: 20px 0;
+  justify-content: space-between;
+  background: hsl(0deg 0% 95%);
+  border-radius: 7px;
 }
 
 input, textarea{

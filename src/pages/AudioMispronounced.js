@@ -108,7 +108,7 @@ const AudioMispronounced = ({ item, sendFile }) => {
         :
         misProData?.length > 0 ?
         misProData?.map(([tileName, comments], index) => (
-          <div key={`${tileName}-${index}`} className="au-mis">
+          <div key={`${tileName}-${index}`} className="tile">
             <div className="main-tile">
               <ColorCheckboxes
                 tileName={tileName}
@@ -139,7 +139,7 @@ const AudioMispronounced = ({ item, sendFile }) => {
               </div>
               <p className="video-name-dynamic">{comments}</p>
             </div>
-            <div className="am-main-tiles">
+            <div className="main-tiles">
               <AudioModal value={tileName} sendFile={sendFile} pageNumber={pageNumber} />
             </div>
           </div>

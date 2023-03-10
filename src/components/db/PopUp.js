@@ -5,10 +5,13 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { useState } from "react";
 import { BASE_URL } from "../../constants/constant";
+import AudioPlayer from '../audioPlayer/AudioPlayer';
 
 export default function PopUp({ data }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const [isFetching, setIsFetching] = useState(false)
+  const [downloadType, setDownloadType] = useState(null)
   const [downloadAvailable, setDownloadAvailable] = useState(false)
   const [downloadLink, setDownloadLink] = useState('')
 
@@ -24,6 +27,8 @@ export default function PopUp({ data }) {
   };
 
   let DownloadFiles = async (btnType) => {
+    setDownloadType(btnType)
+    setIsFetching(true)
     // console.log(data.blob, data.subBucket+'-'+btnType )
     // console.log(['raw','treated'].includes(btnType)?'cleb-audio-data':'lipsync-outputs')
     return new Promise(function (resolve, reject) {
@@ -48,8 +53,13 @@ export default function PopUp({ data }) {
           .then((response) => response.json())
           .then((json) => {
             resolve(json);
-            setDownloadLink(json.publink)   
-            setDownloadAvailable(true)
+            setDownloadLink(json.publink)  
+          })
+          .finally(()=>{
+            setTimeout(()=>{
+              setDownloadAvailable(true)
+              setIsFetching(false)
+            },1000) 
           });
       } catch {
         reject("error");
@@ -59,34 +69,45 @@ export default function PopUp({ data }) {
 
   return (
     <div className="popup">
-      <Button
-        variant="contained"
-        onClick={() => {
-          handleClose();
-          DownloadFiles("raw");
-        }}
-      >
-        Raw
-      </Button>
-      <Button
-        variant="contained"
-        onClick={() => {
-          handleClose();
-          DownloadFiles("treated");
-        }}
-      >
-        Treated
-      </Button>
-      <Button
-        variant="contained"
-        onClick={() => {
-          handleClose();
-          DownloadFiles("redo");
-        }}
-      >
-        Redo Lip
-      </Button>
-      {downloadAvailable && <a href={downloadLink} onClick={handleDownload} download>Link</a>}
+      <div className='popup-btns'>
+        <Button
+          variant="contained"
+          onClick={() => {
+            handleClose();
+            DownloadFiles("raw");
+          }}
+        >
+          Raw
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            handleClose();
+            DownloadFiles("treated");
+          }}
+        >
+          Treated
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            handleClose();
+            DownloadFiles("redo");
+          }}
+        >
+          Redo Lip
+        </Button>
+      </div>
+      {
+        isFetching?<>Fetching...</>:
+      downloadAvailable && 
+      ['raw','treated'].includes(downloadType)?
+      <div>
+        <AudioPlayer link={downloadLink} />
+      </div>:
+      null
+      // <a href={downloadLink} onClick={handleDownload} download>Link</a>
+      }
     </div>
   );
 }
