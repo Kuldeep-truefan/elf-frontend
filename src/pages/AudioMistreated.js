@@ -11,6 +11,7 @@ import { useCallback } from "react";
 import { useQuery } from "react-query";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoader";
+import NoDataFound from "../components/ExtraComponents/NoDataFound";
 
 const AudioMistreated = ({ item,  destbucket }) => {
   const [status, setStatus] = useState("");
@@ -24,6 +25,7 @@ const AudioMistreated = ({ item,  destbucket }) => {
   const [username, setUsername] = useState(localStorage.getItem("username"));
   const [pageNumber, setPageNumber] = useState(1);
   const [pageCount, setPageCount] = useState(1);
+  const [audTreData, setAudTreData] = useState([])
 
   const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/ausoket.io/`);
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
@@ -95,11 +97,11 @@ const AudioMistreated = ({ item,  destbucket }) => {
     () => FetchAudioMisTreated(pageNumber), {
       onSuccess: (res) => {
         setPageCount(res.pagecount)
+        setAudTreData(res.filename)
       }
     }
   );
 
-  const { filename: audTreData } = data || {};
 
   return (
     <div className="data-section">
@@ -131,7 +133,7 @@ const AudioMistreated = ({ item,  destbucket }) => {
           </div>
         }
       </div>
-      {isLoading?<DataTilesLoader/> : audTreData?.map(([tileName, comments], index) => (
+      {isLoading?<DataTilesLoader/> : audTreData.length>0?audTreData.map(([tileName, comments], index) => (
         <div key={`${tileName}-${index}`} className="tile">
           <div className="main-tile">
             <ColorCheckboxes
@@ -164,41 +166,10 @@ const AudioMistreated = ({ item,  destbucket }) => {
             <AudioMistreatedTile value={tileName} pageNumber={pageNumber} />
           </div>
         </div>
-      ))}
-      {/* {audTreData?.length > 0 && audTreData?.map(([tileName, comments], index) => (
-        <div key={`${tileName}-${index}`} className="au-mt">
-          <div className="main-tile">
-            <ColorCheckboxes
-              tileName={tileName}
-              handleClickAndSendMessage={handleClickAndSendMessage}/>
-            <div className="main-tile-head">
-              <Typography
-                className="video-name"
-                sx={{
-                  paddingLeft: "1rem",
-                }}
-              >
-                {tileName}
-              </Typography>
-              {!!emittedData &&
-              JSON.parse(emittedData)?.filter(
-                  (data) => data?.video_id === tileName
-                )?.length > 0 && (
-                  <Chip
-                    label={`In progress: ${
-                      JSON.parse(emittedData)?.filter(
-                        (data) => data?.video_id === tileName)?.[0]?.user}`}
-                    sx={{ ml: "5px", backgroundColor: "white" }}
-                  ></Chip>
-                )}
-            </div>
-            <p className="video-name-dynamic">{comments}</p>
-          </div>
-          <div className="am-main-tiles">
-            <AudioMistreatedTile value={tileName} pageNumber={pageNumber} />
-          </div>
-        </div>
-      ))} */}
+      ))
+    :
+    <NoDataFound/>
+    }
     </div>
   );
 };

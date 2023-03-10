@@ -1,9 +1,8 @@
 import * as React from "react";
-
 // For welcome text
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-
+import RefreshIcon from '@mui/icons-material/Refresh';
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import PopUp from "../components/db/PopUp";
@@ -20,6 +19,8 @@ const Dashboard = () => {
   const callPopUp = () => {
     setIsPopUpOpen(true);
   };
+
+  const refreshDataRef = React.useRef(null); 
 
   const closePopUp = () => {
     setIsPopUpOpen(false);
@@ -46,20 +47,17 @@ const Dashboard = () => {
           Welcome{" "}
           <span style={{ fontWeight: "bold" }}>{showname} &#128578;,</span>
         </Typography>
-        <Button
-          variant="contained"
-          sx={{
-            background: "#D7B8FD",
-            "&:hover": { backgroundColor: "#ad6efb" },
-          }}
-          onClick={() => {
-            document.location.reload(false);
-          }}
-        >
-          Refresh
-        </Button>
+        <div className="audio-refresh-btn">
+            <div
+              onClick={() => {
+                refreshDataRef.current.refetch()
+              }}
+            >
+              <RefreshIcon/>
+            </div>
+          </div>
       </div>
-      <MatTableComp openPopUp={callPopUp} />
+      <MatTableComp openPopUp={callPopUp} ref={refreshDataRef} />
       {isPopUpOpen && <PopUp onClose={closePopUp} />}
     </Stack>
   );

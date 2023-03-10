@@ -25,12 +25,13 @@ const style = {
   p: 4,
 };
 
-const MatTableComp = () => {
+const MatTableComp = React.forwardRef((props, ref) => {
 
   // Modal States 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [fetching, setFetching] = useState(false)
   const [fileData, setFileData] = useState({
     blob:'',
     subBucket:''
@@ -88,6 +89,7 @@ const MatTableComp = () => {
   const [selectedRow, setSelectedRow] = useState(null);
 
   let FetchDetailsOnDashboard = async (e) => {
+    setFetching(true)
         const data = await fetch(`${BASE_URL}/audio/data-for-dashboard`, {
         method: "GET",
         })
@@ -96,7 +98,7 @@ const MatTableComp = () => {
         return data;
   };
 
-  const { isLoading, refetch } = useQuery(['FetchDetailsOnDashboard'],() => FetchDetailsOnDashboard(),
+  const { isLoading,isFetching, refetch } = useQuery(['FetchDetailsOnDashboard'],() => FetchDetailsOnDashboard(),
   {
     onSuccess: (res) => {
       const {data} = res
@@ -120,6 +122,7 @@ const MatTableComp = () => {
         })
       }
       setRowData(temp_arr);
+      setFetching(false)
     }
   })
 
@@ -145,10 +148,13 @@ const MatTableComp = () => {
       console.log(error);
     }
   };
+  React.useImperativeHandle(ref, () => ({
+    refetch,
+  }));
 
   let mat_tablle=null;
 
-  if(rowData===null){
+  if(rowData===null || isLoading || isFetching){
     mat_tablle = <DashboardLoder/>
   //   mat_tablle = <Box sx={{ display: 'flex',
   //   alignItems: 'center',
@@ -212,5 +218,6 @@ const MatTableComp = () => {
   
   return mat_tablle;
 }
+)
 
 export default MatTableComp;
