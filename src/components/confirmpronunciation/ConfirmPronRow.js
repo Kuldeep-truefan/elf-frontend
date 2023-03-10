@@ -109,62 +109,40 @@ const ConfirmPronRow = ({ value }) => {
                     noValidate
                     autoComplete="off"
                 >
-                    <TextField
-                        sx={{
-                            width: { sm: 200, md: 300 },
-                            "& .MuiInputBase-root": {
-                                width: 250,
-                            },
-                        }}
-                        id="outlined-basic"
-                        label="English Name"
-                        variant="outlined"
-                        value={engName}
-                        onChange={handleChange}
+                    <input
+                    type="text"
+                    id="outlined-basic"
+                    label="English Name"
+                    variant="outlined"
+                    value={engName}
+                    onChange={handleChange}
+                    placeholder="English name"
                     />
                 </Box>
-                <Button
-                    variant="contained"
-                    onClick={() => {
-                        UpdateConfirmName(
-                            "Refunded",
-                            value.split("_")[3].split(".")[0]
-                        );
-                    }}
-                    sx={{
-                        height: "2.5rem",
-                        backgroundColor: "#D7B8FD",
-                        color: "white",
-                        "&:hover": {
-                            backgroundColor: "#ad6efb",
-                            color: "#fff",
-                        },
-                    }}
-                >
-                    Refunded
-                </Button>
-                <Button
-                    onClick={() => {
-                        UpdateConfirmName(
-                            "Confirm Name",
-                            value.split("_")[3].split(".")[0]
-                        );
-                    }}
-                    variant="contained"
-                    // disabled={isDisabled}
-                    sx={{
-                        height: "2.5rem",
-                        // marginTop: ".46rem",
-                        backgroundColor: "#D7B8FD",
-                        color: "white",
-                        "&:hover": {
-                            backgroundColor: "#ad6efb",
-                            color: "#fff",
-                        },
-                    }}
-                >
-                    Confirmed
-                </Button>
+                <div className="d-flex">
+                    <button
+                    className="outlined-btn"
+                        onClick={() => {
+                            UpdateConfirmName(
+                                "Refunded",
+                                value.split("_")[3].split(".")[0]
+                            );
+                        }}
+                    >
+                        Refunded
+                    </button>
+                    <button
+                    className="primary-btn"
+                        onClick={() => {
+                            UpdateConfirmName(
+                                "Confirm Name",
+                                value.split("_")[3].split(".")[0]
+                            );
+                        }}
+                    >
+                        Confirmed
+                    </button>
+                </div>
             </div>
         </div>
     )

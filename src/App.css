@@ -414,7 +414,7 @@ body{
   display: flex;
   align-items: center;
 }
-.simp-english-input, .simp-hindi-textarea {
+.simp-english-input, .simp-hindi-textarea, input[type='text'] {
   min-width: 250px;
   padding: 10px;
   border-radius: 5px;
@@ -423,7 +423,7 @@ body{
   border: 1px solid #ededed;
   font-size: 14px;
 }
-.simp-english-input:focus, .simp-hindi-textarea:focus {
+.simp-english-input:focus, .simp-hindi-textarea:focus,input[type='text']:focus  {
   border: 1px solid #c3c1c1;
 }
 
