@@ -3,10 +3,14 @@ import { Button} from "@mui/material";
 import { useState } from "react";
 import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import Pagination from "@mui/material/Pagination";
+import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
+import RefreshIcon from '@mui/icons-material/Refresh';
 import useWebSocket, { ReadyState } from "react-use-websocket";
 
 import RedoLipRowTile from "./RedoLipRowTile";
 import { useQuery } from "react-query";
+import DataTilesLoader from "../ExtraComponents/Loaders/DataTilesLoader";
+import NoDataFound from "../ExtraComponents/NoDataFound";
 
 const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
   const [newNameCode, setNewNameCode] = useState("");
@@ -29,7 +33,7 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
     }).then((response) => response.json());
     return data;
   };
-  const { isLoading, data, isFetching } = useQuery(
+  const { isLoading, data, isFetching, refetch } = useQuery(
     ["FetchAudioRedoLipSync", pageNumber],
     () => FetchAudioRedoLipSync(pageNumber),
     {
@@ -68,28 +72,40 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
   };
 
   return (
-    <div className="tiles">
-      <h1 className="heading-screens">Redo Lip Sync</h1>
-      <div className="audio-refresh-btn">
-        <div className="pagination-class">
-          <Button
-            variant="contained"
-            disableElevation
-            onClick={FetchAudioRedoLipSync}
-          >
-            Get Redo Lip Sync
-          </Button>
-          <Pagination
-            onChange={(e, value) => {
-              setPageNumber(value);
-            }}
-            count={pageCount}
-            page={pageNumber}
-            variant="outlined"
-          />
+    <div className="data-section">
+      <div className="section-header">
+        <div className="section-header-1">
+          <h1 className="heading-screens">Redo Lip Sync</h1>
+          <div className="audio-refresh-btn">
+            <div
+              onClick={() => {
+                refetch();
+              }}
+            >
+              <RefreshIcon/>
+            </div>
+          </div>
         </div>
+        {
+          pageNumber === 1 ?
+          null
+          :
+          <div className="pagination-class">
+            <Pagination
+              onChange={(e, value) => {
+                setPageNumber(value)}}
+              count={pageCount}
+              page={pageNumber}
+              variant="outlined"
+            />
+          </div>
+        }
       </div>
-      {redoTileName?.length > 0 &&
+      {
+        isLoading?
+        <DataTilesLoader/>
+        :
+       redoTileName?.length > 0 ?
         redoTileName?.map(([tileName, comments, namecode], index) => (
           <RedoLipRowTile
             key={`${tileName}-${index}`}
@@ -98,7 +114,10 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
             nameCode={namecode}
             pageNumber={pageNumber}
           />
-        ))}
+        ))
+      :
+      <NoDataFound text={'No data found...'}/>
+      }
     </div>
   );
 };

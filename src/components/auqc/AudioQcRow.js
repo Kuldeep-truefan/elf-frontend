@@ -10,7 +10,7 @@ import useWebSocket, { ReadyState } from "react-use-websocket";
 import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import { useQueryClient } from "react-query";
 
-const AudioQcRow = ({ index, comments, tileName, item, pageNumber }) => {
+const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataStatus }) => {
   const [remark, setRemark] = useState("");
   const queryClient = useQueryClient();
   const [isDisabled, setIsDisabled] = useState(false);
@@ -18,6 +18,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber }) => {
   const [emittedData, setemittedData] = useState();
   const [username, setUsername] = useState(localStorage.getItem("username"));
   const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/ausoket.io/`);
+  const [updating, setUpdating] = useState(false)
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
     onMessage: (message) => {
@@ -83,6 +84,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber }) => {
     tileName
   ) => {
     try {
+      setUpdating(true)
       await fetch(`${BASE_URL}/audio/qccommentstatus`, {
         method: "POST",
         body: JSON.stringify({
@@ -103,6 +105,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber }) => {
       // .then((response) => response.json())
       // .then((data) => setLink(data.filename))
       // setLoading(false); // Stop loading
+      changeDataStatus()
     } catch (error) {
       console.log("Error occured", error);
     }
@@ -113,7 +116,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber }) => {
   };
 
   return (
-    <div key={index} className="au-mis">
+    <div key={index} className={`tile ${updating?'action-performing':''}`}>
       <div className="main-tile">
         <ColorCheckboxes
           tileName={tileName}
@@ -144,7 +147,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber }) => {
         </div>
         <p className="video-name-dynamic">{comments}</p>
       </div>
-      <div className="am-main-tiles">
+      <div className="main-tiles">
         <AudioQcPlayer value={tileName} />
         <AudioRecorders setRecordedAudio={setRecordedAudio} />
         <TextareaAutosize
@@ -156,7 +159,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber }) => {
           value={remark}
           onChange={handleChange}
         />
-        <div>
+        <div style={{display:'flex',gap:'10px'}}>
           <Button
             variant="contained"
             disabled={isDisabled}
@@ -173,6 +176,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber }) => {
               height: "2.5rem",
               marginRight: "1rem",
               backgroundColor: "#D7B8FD",
+              textTransform:'none',
               color: "white",
               "&:hover": {
                 backgroundColor: "#ad6efb",
@@ -203,6 +207,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber }) => {
               // marginTop: ".46rem",
               backgroundColor: "#D7B8FD",
               color: "white",
+              textTransform:'none',
               "&:hover": {
                 backgroundColor: "#ad6efb",
                 color: "#fff",
@@ -210,6 +215,36 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber }) => {
             }}
           >
             Reject
+          </Button>
+          <Button
+            variant="contained"
+            disabled={isDisabled}
+            onClick={() => {
+              UpdateQcComtStatus(
+                "Audio Mistreated",
+                tileName.split("_")[3].split(".")[0],
+                remark,
+                tileName,
+                tileName
+              );
+              // UploadAudioRecored(
+              //   tileName,
+              //   tileName.split("_")[3].split(".")[0]
+              // );
+            }}
+            sx={{
+              height: "2.5rem",
+              // marginTop: ".46rem",
+              backgroundColor: "#D7B8FD",
+              textTransform:'none',
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#ad6efb",
+                color: "#fff",
+              },
+            }}
+          >
+            Audio Mistreated
           </Button>
         </div>
       </div>
