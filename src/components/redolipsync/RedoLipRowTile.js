@@ -7381,7 +7381,6 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
 
   // New auto states
   const [value, setValue] = useState([]);
-  console.log(value, "value)))<<<-----");
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
     onMessage: (message) => {
@@ -7445,7 +7444,7 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
   };
 
   return (
-    <div className="tile">
+    <div className="tile auto-complete">
       <div className="main-tile">
         <ColorCheckboxes
           tileName={tileName}
@@ -7506,7 +7505,7 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
             onKeyDown={handleKeyDown}
             inputValue={newNameCode}
           /> */}
-
+          
           <Autocomplete
             multiple
             // id="fixed-tags-demo"
@@ -7545,7 +7544,7 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
           }}
           className="primary-btn"
         >
-          Done
+          Change Now
         </button>
       </div>
     </div>

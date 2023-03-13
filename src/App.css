@@ -39,6 +39,17 @@
   width: 150px;
   margin: auto;
 }
+.auto-complete input[type='text']{
+  min-width: unset;
+  padding: 10px !important;
+  border: none;
+}
+.auto-complete input[type='text']:focus{
+  border: none;
+}
+.css-1qqsdnr-MuiAutocomplete-root .MuiOutlinedInput-root{
+  padding: 0 !important;
+}
 .w-100{
   width: 100%;
 }
