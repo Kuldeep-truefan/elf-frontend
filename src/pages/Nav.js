@@ -127,7 +127,7 @@ function Nav() {
                     handleCloseNavMenu();
                     navigate(
                       page === "Dashboard"
-                        ? "/home"
+                        ? "/dashboard"
                         : page === "QUALITY CHECK"
                         ? "/qc"
                         : page === "AUDIO MISPRONOUNCED"
