@@ -69,7 +69,7 @@ export default function RedoLipModal({item, sendMessage}) {
   return (
     <div>
       <PlayCircleRounderIcon
-        sx={{ fontSize: "3rem", marginTop: ".35rem", color:"#1976d2"}}
+        sx={{ fontSize: "3rem", marginTop: ".35rem", color:"#1976d2",cursor:'pointer'}}
         onClick={() => {handleOpen(); FetchRedoLipVideo();}}
       />
       <Modal 

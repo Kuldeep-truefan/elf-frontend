@@ -21,7 +21,6 @@ const namecodes = [
   "s",
   "un",
   "ve",
-  "a",
   "aa",
   "aaad",
   "aaav",
@@ -1151,7 +1150,6 @@ const namecodes = [
   "cyst",
   "czar",
   "côte",
-  "d",
   "d'oh",
   "d'or",
   "d'ya",
@@ -1612,7 +1610,6 @@ const namecodes = [
   "elsa",
   "else",
   "ely",
-  "em",
   "eme",
   "emil",
   "emir",
@@ -2663,7 +2660,6 @@ const namecodes = [
   "imma",
   "imp",
   "imps",
-  "in",
   "in's",
   "in't",
   "ina",
@@ -3320,7 +3316,6 @@ const namecodes = [
   "liza",
   "ljbf",
   "lkg",
-  "ll",
   "lmao",
   "lnav",
   "lo",
@@ -3464,7 +3459,6 @@ const namecodes = [
   "lyse",
   "lyta",
   "lzw",
-  "m",
   "m'am",
   "ma",
   "maar",
@@ -3814,7 +3808,6 @@ const namecodes = [
   "myra",
   "myth",
   "myxo",
-  "n",
   "na",
   "naam",
   "naas",
@@ -4672,7 +4665,6 @@ const namecodes = [
   "razz",
   "rc",
   "rd",
-  "re",
   "read",
   "reak",
   "real",
@@ -4904,7 +4896,6 @@ const namecodes = [
   "ryo",
   "ryot",
   "ryu",
-  "s",
   "sa",
   "saab",
   "sab",
@@ -5789,7 +5780,6 @@ const namecodes = [
   "um",
   "umar",
   "ump",
-  "un",
   "unau",
   "unc",
   "und",
@@ -5874,7 +5864,6 @@ const namecodes = [
   "vaux",
   "vcu",
   "vcw",
-  "ve",
   "veal",
   "veda",
   "vee",
@@ -7347,18 +7336,7 @@ const namecodes = [
   "ndom",
   "ngel",
   "obia",
-  "ogi",
-  "okpo",
-  "orlu",
-  "oron",
-  "ovie",
-  "owo",
-  "oyo",
-  "saro",
-  "tuwo",
-  "wiwa",
-  "yobe",
-];
+]
 const filterOptions = createFilterOptions({
   matchFrom: "any",
   limit: 500,
@@ -7393,6 +7371,7 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
 
   const handleChange = (event, newValue) => {
     setValue([...newValue]);
+    console.log(newValue)
   };
 
   const handleKeyDown = (event) => {
@@ -7404,6 +7383,7 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
     ) {
       setValue((prevValue) => [...prevValue, inputValue]);
       event.target.value = "";
+      console.log('enter')
     }
   };
 
@@ -7497,14 +7477,6 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
             wrap="hard"
             variant="outlined"
           />
-
-          {/* <SelectNameCode
-            options={namecodes}
-            value={value}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-            inputValue={newNameCode}
-          /> */}
           
           <Autocomplete
             multiple
@@ -7518,6 +7490,7 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
                 option.toLowerCase().startsWith(inputValue.toLowerCase())
               )
             }
+            isOptionEqualToValue={() => false}
             getOptionLabel={(option) => option}
             renderTags={(tagValue, getTagProps) =>
               tagValue.map((option, index) => (

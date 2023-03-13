@@ -42,7 +42,7 @@ const App = () => {
         <Routes>
           <Route path='/login' element={<Login/>} />
           <Route path="/" element={<PrivateRoute/>}>
-            <Route path="/home" element={<Dashboard />}/>
+            <Route path="/dashboard" element={<Dashboard />}/>
             <Route path="/qc" element={<Qc />}/>
             <Route path="/am" element={<AudioMispronounced />}/>
             <Route path="/audioqc" element={<AudioQc/>}/>
@@ -51,11 +51,10 @@ const App = () => {
             <Route path="/audiomt" element={<AudioMistreated/>}/>
             <Route path="/confpron" element={<ConfirmPronunciation/>}/>    
             <Route path="/videoupload" element={<VideoUpload/>}/>    
-
+            {/* not found */}
             <Route path="*" element={<PageNotFound/>}/>  
             <Route path="/nf" element={<PageNotFound/>}/>
           </Route>
-          <Route path="/" element={<Login />}/>
         </Routes>
     </Suspense>
       </div>
