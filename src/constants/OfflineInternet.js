@@ -3,9 +3,11 @@ import { Offline, Online } from "react-detect-offline";
 
 const OfflineInternet = () => {
   return (
-    <div className="offline-compo">
-    <Offline > You're offline right now. Check your connection.</Offline>
-    </div>
+    <Offline > 
+      <div className="offline-compo">
+        You're offline right now. Please check your connection.
+      </div>
+      </Offline>
   )
 }
 

@@ -1,6 +1,8 @@
 .App {
   text-align: center;
-  background-color: rebeccapurple;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
 }
 *{
   font-family: var(--myFont)!important;
@@ -28,12 +30,25 @@
 }
 
 .login-div{
-  background-color: white;
-  width: 50%;
-  position: absolute;
-  top: 18%;
-  left: 25%;
-  padding: 3rem 0;
+  padding: 75px 25px;
+  border: 1px solid #dedede;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #ededed;
+}
+.login-div img{
+  width: 150px;
+  margin: auto;
+}
+.w-100{
+  width: 100%;
+}
+.login-div input[type='text']:focus, .login-div input[type='password']:focus, .login-div input[type='text'], .login-div input[type='password']{
+  min-width: unset;
+  border: unset;
+}
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root{
+  top: 50% !important;
+  transform: translate(14px,-50%) !important;
 }
 .wel-div{
   align-items: left;
@@ -414,7 +429,7 @@ body{
   display: flex;
   align-items: center;
 }
-.simp-english-input, .simp-hindi-textarea, input[type='text'] {
+.simp-english-input, .simp-hindi-textarea, input[type='text'], input[type='password'] {
   min-width: 250px;
   padding: 10px;
   border-radius: 5px;
@@ -472,13 +487,17 @@ body{
 }
 
 .offline-compo{
-  display: flex;
-  justify-content: center;
-  font-family: "heiti sc";
-  color: mediumvioletred;
-  margin-top: 10px;
-  font-weight: bold;
-  font-size: 40px;
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 10px;
+  background-color: hsl(0, 100%, 95%);
+  border: 1px solid #f00;
+  text-align: center;
+  padding: 15px 25px;
+  color: #f00;
+  transition: .3s all ease-in-out;
 }
 
 .popup{
