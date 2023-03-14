@@ -7,7 +7,7 @@ const OfflineInternet = () => {
       <div className="offline-compo">
         You're offline right now. Please check your connection.
       </div>
-      </Offline>
+    </Offline>
   )
 }
 

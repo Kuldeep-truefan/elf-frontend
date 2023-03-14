@@ -61,6 +61,9 @@
   top: 50% !important;
   transform: translate(14px,-50%) !important;
 }
+.navbar-main .css-2s90m6-MuiAvatar-root{
+  border-radius: 10px !important;
+}
 .wel-div{
   align-items: left;
   width: 300;
@@ -509,6 +512,7 @@ body{
   padding: 15px 25px;
   color: #f00;
   transition: .3s all ease-in-out;
+  z-index: 999;
 }
 
 .popup{

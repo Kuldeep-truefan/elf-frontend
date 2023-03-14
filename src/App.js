@@ -37,24 +37,20 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <div>{location.pathname!=="/login"&& <Nav/>}
-      <Suspense fallback={<>Loading...</>}>
+      <Suspense fallback={null}>
         <OfflineInternet/>
         <Routes>
+          <Route path="/" element={<PrivateRoute component={Dashboard} />} />
           <Route path='/login' element={<Login/>} />
-          <Route path="/" element={<PrivateRoute/>}>
-            <Route path="/dashboard" element={<Dashboard />}/>
-            <Route path="/qc" element={<Qc />}/>
-            <Route path="/am" element={<AudioMispronounced />}/>
-            <Route path="/audioqc" element={<AudioQc/>}/>
-            <Route path="/redlip" element={<RedoLipSync/>}/>
-            <Route path="/simpname" element={<SimplifiedNames/>}/>
-            <Route path="/audiomt" element={<AudioMistreated/>}/>
-            <Route path="/confpron" element={<ConfirmPronunciation/>}/>    
-            <Route path="/videoupload" element={<VideoUpload/>}/>    
-            {/* not found */}
-            <Route path="*" element={<PageNotFound/>}/>  
-            <Route path="/nf" element={<PageNotFound/>}/>
-          </Route>
+          <Route path="/qc"  element={<PrivateRoute component={Qc} />}/>
+          <Route path="/am"  element={<PrivateRoute component={AudioMispronounced} />}/>
+          <Route path="/audioqc"  element={<PrivateRoute component={AudioQc} />}/>
+          <Route path="/redlip"  element={<PrivateRoute component={RedoLipSync} />}/>
+          <Route path="/simpname"  element={<PrivateRoute component={SimplifiedNames} />}/>
+          <Route path="/audiomt"  element={<PrivateRoute component={AudioMistreated} />}/>
+          <Route path="/confpron"  element={<PrivateRoute component={ConfirmPronunciation} />}/>    
+          <Route path="/videoupload"  element={<PrivateRoute component={VideoUpload} />}/>  
+          <Route path="*"  element={<PageNotFound />}/>
         </Routes>
     </Suspense>
       </div>
