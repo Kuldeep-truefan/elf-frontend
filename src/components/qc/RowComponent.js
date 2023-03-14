@@ -3,7 +3,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import "../../App.css";
-import { Chip, Typography } from "@mui/material";
+import { Button, Chip, Typography } from "@mui/material";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 
 import { useEffect, useState } from "react";
@@ -120,7 +120,7 @@ const RowComponent = ({
 
         <p className="video-name-dynamic">{comments}</p>
       </div>
-      <div className="main-tiles">
+      <div className="main-tiles qc-options">
         <VideoModal
           onClick={handelClick}
           sendMessage={handleClickSendMessage}
