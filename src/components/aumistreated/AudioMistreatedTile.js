@@ -150,7 +150,7 @@ const AudioMistreatedTile = (value) => {
   return (
     <>
       <PlayCircleRounderIcon
-        sx={{ fontSize: "3rem", marginTop: ".35rem", color: "#D7B8FD" }}
+        sx={{ fontSize: "3rem", marginTop: ".35rem", color: "#1976d2",cursor:'pointer'}}
         onClick={() => {
           handleOpen();
           FetchPlayVideo(value.value.replace(".wav", ".mp4"));
