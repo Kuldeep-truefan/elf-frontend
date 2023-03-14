@@ -4,9 +4,13 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { Button } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
+import { BASE_URL } from "../../constants/constant";
+import Pagination from "@mui/material/Pagination";
+import {useMutation} from 'react-query'
 
-function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, emittedData, setPageCount, setLoadbucket, fetchLinkMutate,loadbucket}) {
+function TileController({ setSbuck, setDbuck, destbucket, setDestMove, setLoadbucket, fetchLinkMutate,loadbucket}) {
   const accessToken = localStorage.getItem('authToken');
 
   // // PROD ENV BUCKETS
@@ -52,7 +56,8 @@ function TileController({ setLink, setSbuck, setDbuck, destbucket, setDestMove, 
             label="Load Bucket"
             onChange={handleLoadBucket}
           >
-            {loadbucketoption?.map((bucket,index) => <MenuItem value={bucket.value} key={index}>{bucket.label}</MenuItem>)
+            {
+              loadbucketoption?.map((bucket,index) => <MenuItem value={bucket.value} key={index}>{bucket.label}</MenuItem>)
             }
           </Select>
         </FormControl>

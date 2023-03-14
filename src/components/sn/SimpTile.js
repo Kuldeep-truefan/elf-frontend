@@ -10,10 +10,16 @@ import useWebSocket, { ReadyState } from "react-use-websocket";
 import { useCallback, useState } from "react";
 import { useQueryClient } from "react-query";
 
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import SearchIcon from '@mui/icons-material/Search';
+
 const filter = createFilterOptions();
 // https://beta.reactjs.org/reference/react-dom/components/textarea for text area customisations
 
-const SimpTile = ({ value, vas, tileName, pageNumber,videoSelected, audioSelected}) => {
+const SimpTile = ({ value, vas, tileName, pageNumber}) => {
   const [englishName, setEnglishName] = useState("");
   const [hindiName, setHindiName] = useState("");
   const queryClient = useQueryClient();
@@ -21,6 +27,10 @@ const SimpTile = ({ value, vas, tileName, pageNumber,videoSelected, audioSelecte
   const [engValue, setEngValue] = React.useState(null);
   const [emittedData, setemittedData] = useState();
   const [username, setUsername] = useState(localStorage.getItem("username"));
+  
+  const [videoSelected, setVideoSelected] = useState('G2P')
+  const [audioSelected, setAudioSelected] = useState('Normal');
+
 
   const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/simpredocon.io/`);
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
@@ -67,6 +77,13 @@ const SimpTile = ({ value, vas, tileName, pageNumber,videoSelected, audioSelecte
       setEnglishName(event.target.value);
     }
   };
+
+  function handleAudio(e){
+    setAudioSelected(e.target.value)
+  }
+  function handleVideo(e){
+    setVideoSelected(e.target.value)
+  }
 
   let UpdateSimpNames = async (id, button_type) => {
     try {
@@ -130,6 +147,31 @@ const SimpTile = ({ value, vas, tileName, pageNumber,videoSelected, audioSelecte
             }}
             lang="hi"
           />
+          {/* <FormControl sx={{ m: 1, minWidth: 133}} size="small">
+            <InputLabel id="load-buck">Video</InputLabel>
+            <Select
+              labelId="load-buck-lab"
+              id="load-buck-id"
+              value={videoSelected}
+              label="Load Bucket"
+              onChange={handleVideo}
+            >
+              {['G2P','S2S','Mapping','Textgrid'].map((bucket,index) => <MenuItem value={bucket} key={index}>{bucket}</MenuItem>)
+              }
+            </Select>
+          </FormControl>
+          <FormControl sx={{ m: 1, minWidth: 120}} size="small">
+            <InputLabel id="load-move">Audio</InputLabel>
+            <Select
+              labelId="load-move-lab"
+              id="load-move-id"
+              value={audioSelected}
+            label="Load Bucket"
+              onChange={handleAudio}
+            >
+              {['Normal','IPA'].map((bucket,index) => <MenuItem key={index} value={bucket}>{bucket}</MenuItem>)} 
+            </Select>
+          </FormControl> */}
         </div>
         <div className="d-flex">
           <button

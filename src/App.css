@@ -446,7 +446,7 @@ body{
   display: flex;
   align-items: center;
 }
-.simp-english-input, .simp-hindi-textarea, input[type='text'], input[type='password'] {
+.simp-english-input, .simp-hindi-textarea, input[type='text'], input[type='password'], textarea {
   min-width: 250px;
   padding: 10px;
   border-radius: 5px;
@@ -528,6 +528,13 @@ body{
   gap: 10px;
   border: 0px;
   margin-bottom: 10px;
+}
+.qc-options textarea{
+  height: 40px !important;
+  border-radius: 4px;
+  resize: none;
+  margin: 8px 0;
+  border-color: rgba(0, 0, 0, 0.23);
 }
 .audio-player{
   display: flex;
