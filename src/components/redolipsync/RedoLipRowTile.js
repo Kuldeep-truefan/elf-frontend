@@ -7357,6 +7357,7 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
 
   // New auto states
   const [value, setValue] = useState([]);
+  console.log(value, "value---->>>>");
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
     onMessage: (message) => {
