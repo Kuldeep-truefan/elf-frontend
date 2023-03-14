@@ -414,6 +414,9 @@ body{
   background-color: #ececec;
   padding: 10px;
 }
+#dashboard input[aria-label="Search"]{
+  border: none;
+}
 
 .css-1yo1jo6-MuiStack-root>:not(style)+:not(style){
   background-color: solid #7F377F;
@@ -524,11 +527,11 @@ body{
   display: flex;
   gap: 10px;
   border: 0px;
+  margin-bottom: 10px;
 }
 .audio-player{
   display: flex;
   padding: 10px 10px;
-  margin: 20px 0;
   justify-content: space-between;
   background: hsl(0deg 0% 95%);
   border-radius: 7px;

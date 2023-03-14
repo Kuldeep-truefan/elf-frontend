@@ -177,6 +177,7 @@ const MatTableComp = React.forwardRef((props, ref) => {
         </Box>
         </Modal>
       <MaterialTable
+    
     title="Video Production Requests"
     data={rowData}
     columns={columns}

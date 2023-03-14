@@ -1,4 +1,4 @@
-import React, {lazy, Suspense} from 'react'
+import React, { lazy, Suspense } from 'react';
 import "./index.css";
 import "./App.css";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
@@ -6,8 +6,8 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import {
   QueryClient,
   QueryClientProvider,
-} from 'react-query'
-import Nav from"./pages/Nav";
+} from 'react-query';
+import Nav from "./pages/Nav";
 
 const OfflineInternet = lazy(()=> import('./constants/OfflineInternet'));
 const PrivateRoute = lazy(()=> import("./components/PrivateRoute"));

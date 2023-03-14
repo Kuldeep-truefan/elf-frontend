@@ -3,22 +3,17 @@ import Button from '@mui/material/Button';
 import { useState } from "react";
 import { BASE_URL } from "../../constants/constant";
 import AudioPlayer from '../audioPlayer/AudioPlayer';
+import './PopUp.css';
+import VideoModal from '../videoModal/VideoModal';
 
 export default function PopUp({ data }) {
   const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
   const [isFetching, setIsFetching] = useState(false)
   const [downloadType, setDownloadType] = useState(null)
   const [downloadAvailable, setDownloadAvailable] = useState(false)
   const [downloadLink, setDownloadLink] = useState('')
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
 
-  const handleDownload = () => {
-    window.location.href = downloadLink ;
-  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -27,8 +22,6 @@ export default function PopUp({ data }) {
   let DownloadFiles = async (btnType) => {
     setDownloadType(btnType)
     setIsFetching(true)
-    // console.log(data.blob, data.subBucket+'-'+btnType )
-    // console.log(['raw','treated'].includes(btnType)?'cleb-audio-data':'lipsync-outputs')
     return new Promise(function (resolve, reject) {
       try {
         fetch(`${BASE_URL}/log/makepub`, {
@@ -39,7 +32,7 @@ export default function PopUp({ data }) {
               : data.blob + ".mp4",
               buckName: ["raw", "treated"].includes(btnType)
               ? "celeb-audio-data"
-              : "lipsync-outputs",
+              : (btnType ==="redo"?"lipsync-outputs":'approved-videos'),
               subpath: ["raw", "treated"].includes(btnType)
               ? data.subBucket + "-" + btnType
               : null,
@@ -48,17 +41,18 @@ export default function PopUp({ data }) {
             "Content-type": "application/json",
           },
         })
-          .then((response) => response.json())
-          .then((json) => {
-            resolve(json);
-            setDownloadLink(json.publink)  
-          })
-          .finally(()=>{
-            setTimeout(()=>{
-              setDownloadAvailable(true)
-              setIsFetching(false)
-            },1000) 
-          });
+        .then((response) => response.json())
+        .then((json) => {
+          resolve(json);
+          setDownloadLink(json.publink)  
+          console.log(json.publink)
+        })
+        .finally(()=>{
+          setTimeout(()=>{
+            setDownloadAvailable(true)
+            setIsFetching(false)
+          },1000) 
+        });
       } catch {
         reject("error");
       }
@@ -95,16 +89,45 @@ export default function PopUp({ data }) {
         >
           Redo Lip
         </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            handleClose();
+            DownloadFiles("Output");
+          }}
+        >
+          Output Video
+        </Button>
       </div>
       {
-        isFetching?<>Fetching...</>:
-      downloadAvailable && 
-      ['raw','treated'].includes(downloadType)?
-      <div>
-        <AudioPlayer link={downloadLink} />
-      </div>:
-      null
-      // <a href={downloadLink} onClick={handleDownload} download>Link</a>
+        isFetching?
+        <p style={{
+          marginTop:'10px'
+        }}>Fetching...</p>:
+        (
+        downloadAvailable && (
+        ['raw','treated'].includes(downloadType)?
+        ( data.blob.split("_")[0] === 'null'?
+          <p style={{
+            marginTop:'10px',
+            color:'#f00'
+          }}>Audio file not found!</p>:
+          <div>
+            <small>{downloadType.charAt(0).toUpperCase()+downloadType.slice(1) + ' audio'}</small>
+            <AudioPlayer link={downloadLink} />
+          </div>
+        ):
+        ( data.blob === 'null'?
+          <p style={{
+            marginTop:'10px',
+            color:'#f00'
+          }}>Video file not found!</p>:
+          <div>
+            <small>{downloadType.charAt(0).toUpperCase()+downloadType.slice(1) + ' video'}</small>
+            <VideoModal link={downloadLink} />
+          </div>
+        ))
+        )
       }
     </div>
   );
