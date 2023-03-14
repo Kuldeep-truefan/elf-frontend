@@ -147,7 +147,7 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
             }}
             lang="hi"
           />
-          {/* <FormControl sx={{ m: 1, minWidth: 133}} size="small">
+          <FormControl sx={{ m: 1, minWidth: 133}} size="small">
             <InputLabel id="load-buck">Video</InputLabel>
             <Select
               labelId="load-buck-lab"
@@ -171,7 +171,7 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
             >
               {['Normal','IPA'].map((bucket,index) => <MenuItem key={index} value={bucket}>{bucket}</MenuItem>)} 
             </Select>
-          </FormControl> */}
+          </FormControl>
         </div>
         <div className="d-flex">
           <button
