@@ -1,8 +1,5 @@
 import * as React from "react";
-import Radio from "@mui/material/Radio";
-import Login from "../../pages/Login";
-import { useEffect, useState, useCallback } from "react";
-import Checkbox from '@mui/material/Checkbox';
+import { useState } from "react";
 export default function ColorCheckboxes({
   tileName,
   handleClickAndSendMessage,
@@ -26,8 +23,13 @@ export default function ColorCheckboxes({
   });
 
   return (
-    <div>
-      <Checkbox 
+    <div style={
+      {
+        display:'inline-flex'
+      }
+    }>
+      <input type="checkbox" id={tileName.split("_")[3]}
+      className="input-checkbox"
         onClick={(e) => {
           // handleChange();
           if (e.target.checked != true){
@@ -38,6 +40,13 @@ export default function ColorCheckboxes({
           }
         }}
       />
+      <label htmlFor={tileName.split("_")[3]}>
+        <div className='checkbox'>
+          <div className='checkbox-btn'>
+          
+          </div>
+        </div>
+      </label>
     </div>
   );
 }

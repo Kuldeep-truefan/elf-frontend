@@ -1,12 +1,14 @@
 import "../../App.css";
-import { Button} from "@mui/material";
 import { useState } from "react";
 import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import Pagination from "@mui/material/Pagination";
+import RefreshIcon from '@mui/icons-material/Refresh';
 import useWebSocket, { ReadyState } from "react-use-websocket";
 
 import RedoLipRowTile from "./RedoLipRowTile";
 import { useQuery } from "react-query";
+import DataTilesLoader from "../ExtraComponents/Loaders/DataTilesLoader";
+import NoDataFound from "../ExtraComponents/NoDataFound";
 
 const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
   const [newNameCode, setNewNameCode] = useState("");
@@ -14,6 +16,7 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
   const [emittedData, setemittedData] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const [pageCount, setPageCount] = useState(1);
+  const [redoTileName, setRedoTileName] = useState([])
 
   let FetchAudioRedoLipSync = async (value) => {
     // setLoading(true); // Set loading before sending API request
@@ -29,17 +32,18 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
     }).then((response) => response.json());
     return data;
   };
-  const { isLoading, data, isFetching } = useQuery(
+  const { isLoading, data, isFetching, refetch } = useQuery(
     ["FetchAudioRedoLipSync", pageNumber],
     () => FetchAudioRedoLipSync(pageNumber),
     {
       onSuccess: (res) => {
         setPageCount(res.pagecount);
+        setRedoTileName(res.filename)
       },
     }
   );
 
-  const { filename: redoTileName, lastnamecode: nameCode } = data || {};
+  const { lastnamecode: nameCode } = data || {};
   const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/simpredocon.io/`);
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
     onMessage: (message) => {
@@ -68,29 +72,41 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
   };
 
   return (
-    <div className="tiles">
-      <h1 className="heading-screens">Redo Lip Sync</h1>
-      <div className="audio-refresh-btn">
-        <div className="pagination-class">
-          <Button
-            variant="contained"
-            disableElevation
-            onClick={FetchAudioRedoLipSync}
-          >
-            Get Redo Lip Sync
-          </Button>
-          <Pagination
-            onChange={(e, value) => {
-              setPageNumber(value);
-            }}
-            count={pageCount}
-            page={pageNumber}
-            variant="outlined"
-          />
+    <div className="data-section">
+      <div className="section-header">
+        <div className="section-header-1">
+          <h1 className="heading-screens">Redo Lip Sync</h1>
+          <div className="audio-refresh-btn">
+            <div
+              onClick={() => {
+                refetch();
+              }}
+            >
+              <RefreshIcon/>
+            </div>
+          </div>
         </div>
+        {
+          pageNumber === 1 ?
+          null
+          :
+          <div className="pagination-class">
+            <Pagination
+              onChange={(e, value) => {
+                setPageNumber(value)}}
+              count={pageCount}
+              page={pageNumber}
+              variant="outlined"
+            />
+          </div>
+        }
       </div>
-      {redoTileName?.length > 0 &&
-        redoTileName?.map(([tileName, comments, namecode], index) => (
+      {
+        isLoading || isFetching?
+        <DataTilesLoader/>
+        :
+       redoTileName.length > 0 ?
+        redoTileName.map(([tileName, comments, namecode], index) => (
           <RedoLipRowTile
             key={`${tileName}-${index}`}
             tileName={tileName}
@@ -98,7 +114,10 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
             nameCode={namecode}
             pageNumber={pageNumber}
           />
-        ))}
+        ))
+      :
+      <NoDataFound text={'No data found...'}/>
+      }
     </div>
   );
 };

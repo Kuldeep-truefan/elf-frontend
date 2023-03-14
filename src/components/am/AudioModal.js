@@ -1,13 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
+import React, { useState } from "react";
 import ReactAudioPlayer from "react-audio-player";
 import { BASE_URL } from "../../constants/constant";
 import { useQueryClient } from "react-query";
+import AudiotrackIcon from '@mui/icons-material/Audiotrack';
+import './am.css';
 const accessToken = localStorage.getItem("authToken");
 
 const AudioModal = ({ value, pageNumber }) => {
   const [sendFile, setSendFile] = useState(null);
+  // const fileFirstName = value.split("-")[0];
+  // const fileBucket = value.split("-")[1];
+  // console.log(fileFirstName,fileBucket)
   const fileFirstName = value.split("_")[0];
   const fileBucket = value.split("_")[1];
   const queryClient = useQueryClient()
@@ -16,6 +19,7 @@ const AudioModal = ({ value, pageNumber }) => {
   const handleFile = (event) => {
     let matchWith = `${event.target.files[0]?.name}`
     let matchWithFile = `${fileFirstName}.wav`
+    console.log(matchWith,matchWithFile)
     if(matchWith === matchWithFile){
       const audioUrl = URL.createObjectURL(event.target.files[0]);      
       setSendFile({
@@ -121,44 +125,42 @@ const AudioModal = ({ value, pageNumber }) => {
       console.log(error);
     }
   };
-  
+
   return (
-    <div>
-      <Stack
-        style={{ position: "relative" }}
-        direction="row"
-        alignItems="center"
-        spacing={2}
-      >
-        {/* <input type="file" onChange={previewFile} /> */}
-        <div style={{ width: "300px" }}>
-          {!sendFile?.url? (
-            <input id="audio" type="file" onChange={handleFile}/>
-          ):(
-            <audio src={sendFile.url} controls />
-          )}
-        </div>
+    <>
+      <div style={{ width: "300px" }}>
+        {!sendFile?.url? (
+          <>
+            <input id="audio" type="file" onChange={handleFile} />
+            {/* <div id="audio-input" onClick={()=>{
+                document.getElementById('audio').click()
+            }}>
+              <span><AudioFileIcon/></span> 
+              <span>
+                {
+                  // sendFile?sendFile.file:
+                <>Choose audio file +</>
+                }
+              </span>
+            </div> */}
+          </>
+        ):(
+          <audio src={sendFile.url} controls />
+        )}
+      </div>
+      <div className="d-flex">
+
         {!showModal.last ? (
-          <Button
+          <button
             onClick={() => {
               FetchPlayAudio("celeb-audio-data", fileFirstName && `${fileFirstName}.wav`, fileBucket && `${fileBucket}-raw`, 'last');
               setShowModal({ ...showModal, last: !showModal.last });
             }}
-            variant="contained"
-            // disabled={isDisabled}
-            sx={{
-              height: "2.5rem",
-              // marginTop: ".46rem",
-              backgroundColor: "#D7B8FD",
-              color: "white",
-              "&:hover": {
-                backgroundColor: "#ad6efb",
-                color: "#fff",
-              },
-            }}
+            className="outlined-btn"
           >
+            <AudiotrackIcon/>
             Last Audio
-          </Button>
+          </button>
         ) : (
           <ReactAudioPlayer src={lastAudioUrl} controls />
         )}
@@ -175,24 +177,16 @@ const AudioModal = ({ value, pageNumber }) => {
           </p>
         )}
         {!showModal.remark ? (
-          <Button
+          <button
             onClick={() =>{
               FetchPlayAudio("audio-remarks", value);
               setShowModal({ ...showModal, remark: !showModal.remark })
             }}
-            variant="contained"
-            sx={{
-              height: "2.5rem",
-              backgroundColor: "#D7B8FD",
-              color: "white",
-              "&:hover": {
-                backgroundColor: "#ad6efb",
-                color: "#fff",
-              },
-            }}
+            className="outlined-btn"
           >
+          <AudiotrackIcon/>
             Remarks Audio
-          </Button>
+          </button>
         ) : (
           <ReactAudioPlayer src={remarksAudioUrl} controls />
         )}
@@ -209,27 +203,18 @@ const AudioModal = ({ value, pageNumber }) => {
           </p>
         )}
         <div className="au-dn-uncracked-btns">
-        <Button
+        <button
           onClick={() => {
             if (window.confirm("Do you want to proceed?")) {
               AudioUncracked(value.split("_")[3].split(".")[0]);
             } 
           }}
-          variant="contained"
-          sx={{
-            height: "2.5rem",
-            backgroundColor: "#D7B8FD",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#ad6efb",
-              color: "#fff",
-            },
-          }}
+          className="primary-btn"
         >
           Audio Uncracked
-        </Button>
-         &nbsp;&nbsp;&nbsp;&nbsp;
-        <Button
+        </button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button
           id="donebtn"
           onClick={() => {
             UploadAudioFileMispronounced(
@@ -238,23 +223,13 @@ const AudioModal = ({ value, pageNumber }) => {
               value.split("_")[3].split(".")[0]
             );
           }}
-          variant="contained"
-          sx={{
-            height: "2.5rem",
-            // marginTop: ".46rem",
-            backgroundColor: "#D7B8FD",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#ad6efb",
-              color: "#fff",
-            },
-          }}
+          className="primary-btn"
         >
           Done
-        </Button>
-        </div>
-      </Stack>
-    </div>
+        </button>
+      </div>
+      </div>
+    </>
   );
 };
 

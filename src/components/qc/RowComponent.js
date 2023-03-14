@@ -3,7 +3,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import "../../App.css";
-import { Button, Chip, Typography } from "@mui/material";
+import { Chip, Typography } from "@mui/material";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 
 import { useEffect, useState } from "react";
@@ -93,7 +93,7 @@ const RowComponent = ({
   }, [status, option, destbucket]);
 
   return (
-    <div className="tiles">
+    <div className="tile">
       <div className="main-tile">
         <div className="main-tile-head">
           <Typography
@@ -133,7 +133,6 @@ const RowComponent = ({
           <InputLabel id="select-status">Status</InputLabel>
           <Select
             labelId="select-status"
-            // id="select-status"
             value={status}
             label="Status"
             onChange={handleStatus}
@@ -188,22 +187,12 @@ const RowComponent = ({
           value={remark}
           onChange={handleChange}
         />
-        <Button
+        <button
           onClick={GetQCDone}
-          variant="contained"
-          disabled={isDisabled}
-          sx={{
-            height: "2.5rem",
-            backgroundColor: "#D7B8FD",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#ad6efb",
-              color: "#fff",
-            },
-          }}
+          className={`primary-btn ${isDisabled?'disabled-btn':''}`}
         >
           Done
-        </Button>
+        </button>
       </div>
     </div>
   );

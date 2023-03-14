@@ -1,5 +1,5 @@
 import "../App.css";
-import { Button, Chip, Typography } from "@mui/material";
+import { Chip, Typography } from "@mui/material";
 import { useCallback, useState } from "react";
 import { BASE_URL } from "../constants/constant";
 import AudioModal from "../components/am/AudioModal";
@@ -8,6 +8,9 @@ import Pagination from "@mui/material/Pagination";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { WEB_BASE_URL } from "../constants/constant";
 import { useQuery } from "react-query";
+import RefreshIcon from '@mui/icons-material/Refresh';
+import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoader";
+import NoDataFound from "../components/ExtraComponents/NoDataFound";
 
 const AudioMispronounced = ({ item, sendFile }) => {
   const accessToken = localStorage.getItem("authToken");
@@ -22,7 +25,7 @@ const AudioMispronounced = ({ item, sendFile }) => {
       const data = JSON.parse(message?.data);
       setemittedData(JSON.parse(data?.data));
     },
-  });
+  }); 
 
   const handleClickAndSendMessage = useCallback(
     (payload) =>
@@ -60,7 +63,7 @@ const AudioMispronounced = ({ item, sendFile }) => {
     // setLoading(false); // Stop loading
   };
 
-  const { isLoading, data, isFetching } = useQuery(
+  const { isLoading, data, isFetching, refetch } = useQuery(
     ["FetchAudioMisTiles", pageNumber],
     () => FetchAudioMisTiles(pageNumber), {
       onSuccess: (res) => {
@@ -70,32 +73,42 @@ const AudioMispronounced = ({ item, sendFile }) => {
   );
   const { filename: misProData } = data || {};
   return (
-    <div className="aumis-tiles">
-      <h1 className="heading-screens">Audio Mispronounced</h1>
-      <div className="audio-refresh-btn">
-        <Button
-          onClick={() => {
-            window.location.reload(false);
-          }}
-          variant="contained"
-          disableElevation
-        >
-          GET AUDIO Mispronounced
-        </Button>
-        <div className="pagination-class">
-          <Pagination
-            onChange={(e, value) => {
-              setPageNumber(value);
-            }}
-            count={pageCount}
-            page={pageNumber}
-            variant="outlined"
-          />
+    <div className="data-section">
+      <div className="section-header">
+        <div className="section-header-1">
+          <h1 className="heading-screens">Audio Mispronounced</h1>
+          <div className="audio-refresh-btn">
+            <div
+              onClick={() => {
+                refetch();
+              }}
+            >
+              <RefreshIcon/>
+            </div>
+          </div>
         </div>
+        {
+          pageNumber === 1 ?
+          null
+          :
+          <div className="pagination-class">
+            <Pagination
+              onChange={(e, value) => {
+                setPageNumber(value)}}
+              count={pageCount}
+              page={pageNumber}
+              variant="outlined"
+            />
+          </div>
+        }
       </div>
-      {misProData?.length > 0 &&
+      {
+        isLoading || isFetching?
+        <DataTilesLoader/>
+        :
+        misProData?.length > 0 ?
         misProData?.map(([tileName, comments], index) => (
-          <div key={`${tileName}-${index}`} className="au-mis">
+          <div key={`${tileName}-${index}`} className="tile">
             <div className="main-tile">
               <ColorCheckboxes
                 tileName={tileName}
@@ -120,17 +133,20 @@ const AudioMispronounced = ({ item, sendFile }) => {
                         (data) => data?.video_id === tileName
                       )?.[0]?.user
                     }`}
-                    sx={{ ml: "5px", backgroundColor: "white" }}
+                    sx={{ ml: "15px", backgroundColor: "#bcddfe", height:'unset',padding:'1px', color:'#1976d2', border:'1px solid #1976d2' }}
                   ></Chip>
                 )}
               </div>
               <p className="video-name-dynamic">{comments}</p>
             </div>
-            <div className="am-main-tiles">
+            <div className="main-tiles">
               <AudioModal value={tileName} sendFile={sendFile} pageNumber={pageNumber} />
             </div>
           </div>
-        ))}
+        ))
+        :
+        <NoDataFound text={'No data found...'}/>
+      }
     </div>
   );
 };

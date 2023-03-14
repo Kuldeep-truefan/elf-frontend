@@ -6,16 +6,14 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import logo1 from "../assets/img/logo1.png";
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import Fade from '@mui/material/Fade';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
@@ -62,9 +60,6 @@ function Nav() {
     }
   }
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -80,14 +75,15 @@ function Nav() {
   const clearLogout = () => {
     localStorage.clear();
   };
-  const navigateToHome = () => document.location.replace("/");
   return (
     <div className="navbar-main">      
       <AppBar position="static">
         <Container maxWidth="xl">
           <div className="navbar-child">
           <Toolbar disableGutters>
-            <img src={logo1} sx={{}} />
+            <Link to='/'>
+              <img src={logo1} sx={{}} />
+            </Link>
             <Box>
               <Menu
                 id="menu-appbar"
@@ -127,7 +123,7 @@ function Nav() {
                     handleCloseNavMenu();
                     navigate(
                       page === "Dashboard"
-                        ? "/home"
+                        ? "/"
                         : page === "QUALITY CHECK"
                         ? "/qc"
                         : page === "AUDIO MISPRONOUNCED"
@@ -203,9 +199,9 @@ function Nav() {
                       handleCloseUserMenu();
                       if (setting === "Logout") {
                         clearLogout();
-                        navigateToHome();
+                        navigate('/login');
                       } else if (setting === "Dashboard") {
-                        navigate("/home");
+                        navigate("/");
                       } else if (setting === "Profile") {
                         navigate("/");
                       }

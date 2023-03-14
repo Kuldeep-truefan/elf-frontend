@@ -1,13 +1,11 @@
-import { Box, Button, Chip, TextField, Typography } from "@mui/material";
+import { Box, Chip, TextField, Typography } from "@mui/material";
 import React, { useCallback, useState } from "react";
 import { useQueryClient } from "react-query";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
 import RedoLipModal from "./RedoLipModal";
-import AutoComplete from '../auto-complete/AutoComplete'
-import { createFilterOptions } from "@mui/material/Autocomplete";
-import { useMemo } from "react";
+import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import { debounce } from "lodash";
 const namecodes = [
   "a",
@@ -21,7 +19,6 @@ const namecodes = [
   "s",
   "un",
   "ve",
-  "a",
   "aa",
   "aaad",
   "aaav",
@@ -1151,7 +1148,6 @@ const namecodes = [
   "cyst",
   "czar",
   "côte",
-  "d",
   "d'oh",
   "d'or",
   "d'ya",
@@ -1612,7 +1608,6 @@ const namecodes = [
   "elsa",
   "else",
   "ely",
-  "em",
   "eme",
   "emil",
   "emir",
@@ -2663,7 +2658,6 @@ const namecodes = [
   "imma",
   "imp",
   "imps",
-  "in",
   "in's",
   "in't",
   "ina",
@@ -3320,7 +3314,6 @@ const namecodes = [
   "liza",
   "ljbf",
   "lkg",
-  "ll",
   "lmao",
   "lnav",
   "lo",
@@ -3464,7 +3457,6 @@ const namecodes = [
   "lyse",
   "lyta",
   "lzw",
-  "m",
   "m'am",
   "ma",
   "maar",
@@ -3814,7 +3806,6 @@ const namecodes = [
   "myra",
   "myth",
   "myxo",
-  "n",
   "na",
   "naam",
   "naas",
@@ -4672,7 +4663,6 @@ const namecodes = [
   "razz",
   "rc",
   "rd",
-  "re",
   "read",
   "reak",
   "real",
@@ -4904,7 +4894,6 @@ const namecodes = [
   "ryo",
   "ryot",
   "ryu",
-  "s",
   "sa",
   "saab",
   "sab",
@@ -5789,7 +5778,6 @@ const namecodes = [
   "um",
   "umar",
   "ump",
-  "un",
   "unau",
   "unc",
   "und",
@@ -5874,7 +5862,6 @@ const namecodes = [
   "vaux",
   "vcu",
   "vcw",
-  "ve",
   "veal",
   "veda",
   "vee",
@@ -7347,20 +7334,9 @@ const namecodes = [
   "ndom",
   "ngel",
   "obia",
-  "ogi",
-  "okpo",
-  "orlu",
-  "oron",
-  "ovie",
-  "owo",
-  "oyo",
-  "saro",
-  "tuwo",
-  "wiwa",
-  "yobe",
-];
+]
 const filterOptions = createFilterOptions({
-  matchFrom: 'any',
+  matchFrom: "any",
   limit: 500,
 });
 const debouncedHandleChange = debounce((newValue, setNewNameCode) => {
@@ -7378,19 +7354,37 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
   const [open, setOpen] = useState(false);
   const [newNameCode, setNewNameCode] = useState("");
   const [inputValue, setInputValue] = useState("");
+
+  // New auto states
+  const [value, setValue] = useState([]);
+
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
     onMessage: (message) => {
       const data = JSON.parse(message?.data);
       setemittedData(JSON.parse(data?.data));
     },
   });
-  const memoizedOptions = namecodes
+
+  // const memoizedOptions = namecodes;
 
   const handleChange = (event, newValue) => {
-    console.log(newValue, 'newValue');
-    setNewNameCode(newValue)
-    // debouncedHandleChange(newValue, setNewNameCode);
+    setValue([...newValue]);
+    console.log(newValue)
   };
+
+  const handleKeyDown = (event) => {
+    const inputValue = event.target.value.trim();
+    if (
+      event.key === "Enter" &&
+      inputValue.length > 0 &&
+      /^\S+$/.test(inputValue)
+    ) {
+      setValue((prevValue) => [...prevValue, inputValue]);
+      event.target.value = "";
+      console.log('enter')
+    }
+  };
+
   const handleClickAndSendMessage = useCallback(
     (payload) =>
       sendMessage(
@@ -7404,13 +7398,13 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
   const handelClick = () => {
     setOpen(open);
   };
+
   let UpdateRedoLipSync = async (videoId) => {
-    console.log(newNameCode);
     try {
       fetch(`${BASE_URL}/audio/updt-redo-lip-newnamecode`, {
         method: "PUT",
         body: JSON.stringify({
-          newNameCode: newNameCode,
+          newNameCode: value.join(" ").trim(),
           videoId: videoId,
         }),
         headers: {
@@ -7426,8 +7420,9 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
       console.log("Error occured", error);
     }
   };
+
   return (
-    <div className="au-mt">
+    <div className="tile auto-complete">
       <div className="main-tile">
         <ColorCheckboxes
           tileName={tileName}
@@ -7452,8 +7447,8 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
                     (data) => data?.video_id === tileName
                   )?.[0]?.user
                 }`}
-                sx={{ ml: "5px", backgroundColor: "white" }}
-              ></Chip>
+                sx={{ ml: "15px", backgroundColor: "#bcddfe", height:'unset',padding:'1px', color:'#1976d2', border:'1px solid #1976d2' }}
+                ></Chip>
             )}
         </div>
         <p className="video-name-dynamic">{comments}</p>
@@ -7480,48 +7475,51 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
             wrap="hard"
             variant="outlined"
           />
-          <AutoComplete
-          options={memoizedOptions}
-          value={newNameCode}
-          onChange={handleChange}
-          inputValue={newNameCode}
-          //  filterOptions={filterOptions}
-          //   disableListWrap
-          //   disablePortal
-          //   sx={{ width: 300 }}
-          //   renderInput={(params) => (
-          //     <TextField {...params} label="Select Namecode" />
-          //   )}
-          />
-          {/* <TextField
-            options={namecodes}
-            id="outlined-basic"
-            label="Type Namecode"
-            variant="outlined"
+          
+          <Autocomplete
+            multiple
+            // id="fixed-tags-demo"
+            value={value}
             onChange={handleChange}
-          /> */}
+            onKeyDown={handleKeyDown}
+            options={namecodes}
+            filterOptions={(options, {inputValue}) =>
+              options.filter((option) =>
+                option.toLowerCase().startsWith(inputValue.toLowerCase())
+              )
+            }
+            isOptionEqualToValue={() => false}
+            getOptionLabel={(option) => option}
+            renderTags={(tagValue, getTagProps) =>
+              tagValue.map((option, index) => (
+                <Chip
+                  key={index}
+                  label={option}
+                  style={{ background: "transparent" }}
+                />
+              ))
+            }
+            style={{ width: 500,transition:'unset' }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Namecode"
+                placeholder="Type & Enter To Add New Value"
+              />
+            )}
+          />
         </Box>
-        <Button
+        <button
           onClick={() => {
             UpdateRedoLipSync(tileName.split("_")[3].split(".")[0]);
           }}
-          variant="contained"
-          sx={{
-            height: "2.5rem",
-            backgroundColor: "#D7B8FD",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#ad6efb",
-              color: "#fff",
-            },
-          }}
+          className="primary-btn"
         >
-          Done
-        </Button>
+          Change Now
+        </button>
       </div>
     </div>
   );
 };
-
 
 export default RedoLipRowTile;

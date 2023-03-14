@@ -1,0 +1,13 @@
+#audio-input{
+    max-width: 200px;
+    padding: 10px 15px;
+    border: 1px dashed #1976d2;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#audio-input span{
+    font-size: 14px;
+}
+.audio-input{
+    display: none;
+}

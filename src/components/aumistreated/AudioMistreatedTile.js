@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
+import React, { useState } from "react";
 import ReactAudioPlayer from "react-audio-player";
 import { BASE_URL } from "../../constants/constant";
 import { useQueryClient } from "react-query";
@@ -150,73 +148,58 @@ const AudioMistreatedTile = (value) => {
   };
 
   return (
-    <div>
-      <Stack
-        style={{ position: "relative", width: "100%" }}
-        direction="row"
-        alignItems="center"
-        spacing={2}
+    <>
+      <PlayCircleRounderIcon
+        sx={{ fontSize: "3rem", marginTop: ".35rem", color: "#D7B8FD" }}
+        onClick={() => {
+          handleOpen();
+          FetchPlayVideo(value.value.replace(".wav", ".mp4"));
+        }}
+      />
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
       >
-        <PlayCircleRounderIcon
-          sx={{ fontSize: "3rem", marginTop: ".35rem", color: "#D7B8FD" }}
-          onClick={() => {
-            handleOpen();
-            FetchPlayVideo(value.value.replace(".wav", ".mp4"));
-          }}
-        />
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            {puburl && (
-              <Player playsInline>
-                <BigPlayButton position="center" />
-                <source src={`${puburl}#t=.01`} type="video/mp4" />
-                <ControlBar>
-                  <PlayToggle />
-                  <PlaybackRateMenuButton rates={[5, 2, 1, 0.5, 0.1]} />
-                  <ReplayControl seconds={5} />
-                </ControlBar>
-              </Player>
-            )}
-            {loading && (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  width: "100%",
-                }}
-              >
-                Loading...
-                <ReactLoading type="balls" color="#black" />
-              </Box>
-            )}
-          </Box>
-        </Modal>
-        <div style={{ width: "300px" }}>
-          {!sendMisTreatFile?.url ? (
-            <input type="file" onChange={handleFile} />
-          ) : (
-            <audio src={sendMisTreatFile.url} controls />
+        <Box sx={style}>
+          {puburl && (
+            <Player playsInline>
+              <BigPlayButton position="center" />
+              <source src={`${puburl}#t=.01`} type="video/mp4" />
+              <ControlBar>
+                <PlayToggle />
+                <PlaybackRateMenuButton rates={[5, 2, 1, 0.5, 0.1]} />
+                <ReplayControl seconds={5} />
+              </ControlBar>
+            </Player>
           )}
-        </div>
+          {loading && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                width: "100%",
+              }}
+            >
+              Loading...
+              <ReactLoading type="balls" color="#black" />
+            </Box>
+          )}
+        </Box>
+      </Modal>
+      <div style={{ width: "300px" }}>
+        {!sendMisTreatFile?.url ? (
+          <input type="file" onChange={handleFile} />
+        ) : (
+          <audio src={sendMisTreatFile.url} controls />
+        )}
+      </div>
 
+      <div className="d-flex">
         {!showModal.raw ? (
-          <Button
-            sx={{
-              height: "2.5rem",
-              backgroundColor: "#D7B8FD",
-              color: "white",
-              "&:hover": {
-                backgroundColor: "#ad6efb",
-                color: "#fff",
-              },
-            }}
-            variant="contained"
-            component="label"
+          <button
+          className="primary-btn"
             onClick={() => {
               setShowModal({ ...showModal, raw: !showModal.raw });
               FetchRawAudioMistreated(
@@ -227,7 +210,7 @@ const AudioMistreatedTile = (value) => {
             }}
           >
             Raw Audio
-          </Button>
+          </button>
         ) : (
           <ReactAudioPlayer src={rawAudioUrl} controls />
         )}
@@ -244,18 +227,8 @@ const AudioMistreatedTile = (value) => {
           </p>
         )}
         {!showModal.treated ? (
-          <Button
-            sx={{
-              height: "2.5rem",
-              backgroundColor: "#D7B8FD",
-              color: "white",
-              "&:hover": {
-                backgroundColor: "#ad6efb",
-                color: "#fff",
-              },
-            }}
-            variant="contained"
-            component="label"
+          <button
+          className="primary-btn"
             onClick={() => {
               setShowModal({ ...showModal, treated: !showModal.treated });
               FetchRawAudioMistreated(
@@ -265,7 +238,7 @@ const AudioMistreatedTile = (value) => {
             }}
           >
             Treated Audio
-          </Button>
+          </button>
         ) : (
           <ReactAudioPlayer src={treatedAudioUrl} controls />
         )}
@@ -281,25 +254,16 @@ const AudioMistreatedTile = (value) => {
             Treated Audio
           </p>
         )}
-        <Button
-          variant="contained"
-          sx={{
-            height: "2.5rem",
-            backgroundColor: "#D7B8FD",
-            color: "white",
-            "&:hover": {
-              backgroundColor: "#ad6efb",
-              color: "#fff",
-            },
-          }}
+        <button
+        className="primary-btn"
           onClick={() => {
             UploadAudioMistreatedFile();
           }}
         >
           Done
-        </Button>
-      </Stack>
-    </div>
+        </button>
+      </div>
+    </>
   );
 };
 
