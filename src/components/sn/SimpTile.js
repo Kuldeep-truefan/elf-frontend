@@ -13,7 +13,7 @@ import { useQueryClient } from "react-query";
 const filter = createFilterOptions();
 // https://beta.reactjs.org/reference/react-dom/components/textarea for text area customisations
 
-const SimpTile = ({ value, vas, tileName, pageNumber}) => {
+const SimpTile = ({ value, vas, tileName, pageNumber,videoSelected, audioSelected}) => {
   const [englishName, setEnglishName] = useState("");
   const [hindiName, setHindiName] = useState("");
   const queryClient = useQueryClient();
@@ -77,6 +77,8 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
           hindiName: hindiName.trim(),
           videoId: id,
           button_type,
+          videoSelected:videoSelected,
+          audioSelected:audioSelected
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
