@@ -1,5 +1,3 @@
-import React, { useState } from 'react'
-
 const useAuth = () => {
     const auth = localStorage.getItem('authToken');
     console.log(auth)

@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
+import React, { useState } from "react";
 import ReactAudioPlayer from "react-audio-player";
 import { BASE_URL } from "../../constants/constant";
 import { useQueryClient } from "react-query";

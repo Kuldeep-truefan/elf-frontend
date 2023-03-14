@@ -1,13 +1,11 @@
-import { Box, Button, Chip, TextField, Typography } from "@mui/material";
+import { Box, Chip, TextField, Typography } from "@mui/material";
 import React, { useCallback, useState } from "react";
 import { useQueryClient } from "react-query";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
 import RedoLipModal from "./RedoLipModal";
-import SelectNameCode from "../auto-complete/SelectNameCode";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
-import { useMemo } from "react";
 import { debounce } from "lodash";
 const namecodes = [
   "a",

@@ -1,5 +1,5 @@
-import React from 'react'
-import { Offline, Online } from "react-detect-offline";
+import React from 'react';
+import { Offline } from "react-detect-offline";
 
 const OfflineInternet = () => {
   return (

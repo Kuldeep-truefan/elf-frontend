@@ -1,5 +1,5 @@
 import "../App.css";
-import { useEffect, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import TileController from "../components/qc/TileController";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { BASE_URL, WEB_BASE_URL } from "../constants/constant";
@@ -7,8 +7,7 @@ import RowComponent from "../components/qc/RowComponent";
 import * as React from "react";
 import Pagination from "@mui/material/Pagination";
 import { useMutation } from "react-query";
-import ClockLoader from "react-spinners/ClockLoader";
-import NoDataFound from '../components/ExtraComponents/NoDataFound'
+import NoDataFound from '../components/ExtraComponents/NoDataFound';
 import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoader";
 
 function Qc() {

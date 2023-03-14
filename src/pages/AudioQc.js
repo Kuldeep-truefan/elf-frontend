@@ -7,9 +7,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import AudioQcRow from "../components/auqc/AudioQcRow";
 import {
   useQuery,
-} from 'react-query'
-import Button from "@mui/material/Button";
-import { useQueryClient } from "react-query";
+} from 'react-query';
 import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoader";
 import NoDataFound from "../components/ExtraComponents/NoDataFound";
 

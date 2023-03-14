@@ -1,10 +1,8 @@
 import * as React from "react";
 // For welcome text
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
 import PopUp from "../components/db/PopUp";
 import { useState } from "react";
 

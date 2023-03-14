@@ -1,13 +1,10 @@
 import React from "react";
 import "../App.css";
-import { Button, Chip, Typography } from "@mui/material";
 import { useState } from "react";
 import { BASE_URL } from "../constants/constant";
 import "react-transliterate/dist/index.css";
 import SimpTile from "../components/sn/SimpTile";
 import Pagination from "@mui/material/Pagination";
-import useWebSocket, { ReadyState } from "react-use-websocket";
-import { WEB_BASE_URL } from "../constants/constant";
 import { useQuery } from "react-query";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoader";

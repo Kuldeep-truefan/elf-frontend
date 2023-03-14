@@ -1,9 +1,7 @@
 import "../../App.css";
-import { Button} from "@mui/material";
 import { useState } from "react";
 import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import Pagination from "@mui/material/Pagination";
-import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import useWebSocket, { ReadyState } from "react-use-websocket";
 

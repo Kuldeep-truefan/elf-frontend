@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import AudioMistreatedTile from "../components/aumistreated/AudioMistreatedTile";
 import "../App.css";
-import { Button, Chip, Typography } from "@mui/material";
+import { Chip, Typography } from "@mui/material";
 import { useState } from "react";
 import { BASE_URL, WEB_BASE_URL } from "../constants/constant";
 import Pagination from "@mui/material/Pagination";

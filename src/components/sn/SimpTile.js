@@ -1,12 +1,11 @@
-import { Button, Chip, Typography } from "@mui/material";
-import TextField from "@mui/material/TextField";
+import { Chip, Typography } from "@mui/material";
 import React from "react";
 import { ReactTransliterate } from "react-transliterate";
 import "react-transliterate/dist/index.css";
 import "../../App.css";
 import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
-import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
+import { createFilterOptions } from "@mui/material/Autocomplete";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { useCallback, useState } from "react";
 import { useQueryClient } from "react-query";

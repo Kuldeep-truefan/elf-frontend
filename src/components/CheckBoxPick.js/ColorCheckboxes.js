@@ -1,8 +1,5 @@
 import * as React from "react";
-import Radio from "@mui/material/Radio";
-import Login from "../../pages/Login";
-import { useEffect, useState, useCallback } from "react";
-import Checkbox from '@mui/material/Checkbox';
+import { useState } from "react";
 export default function ColorCheckboxes({
   tileName,
   handleClickAndSendMessage,

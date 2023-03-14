@@ -1,10 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
+import React, { useState } from "react";
 import ReactAudioPlayer from "react-audio-player";
 import { BASE_URL } from "../../constants/constant";
 import { useQueryClient } from "react-query";
-import AudioFileIcon from '@mui/icons-material/AudioFile';
 import AudiotrackIcon from '@mui/icons-material/Audiotrack';
 import './am.css';
 const accessToken = localStorage.getItem("authToken");
@@ -131,7 +128,6 @@ const AudioModal = ({ value, pageNumber }) => {
 
   return (
     <>
-        {/* <input type="file" onChange={previewFile} /> */}
       <div style={{ width: "300px" }}>
         {!sendFile?.url? (
           <>

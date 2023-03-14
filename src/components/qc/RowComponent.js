@@ -3,7 +3,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import "../../App.css";
-import { Button, Chip, Typography } from "@mui/material";
+import { Chip, Typography } from "@mui/material";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 
 import { useEffect, useState } from "react";

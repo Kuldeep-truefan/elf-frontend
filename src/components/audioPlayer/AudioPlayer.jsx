@@ -31,7 +31,6 @@ function AudioPlayer({ link }) {
     audio = document.getElementById("myAudio");
 
     audio.addEventListener("ended", endAudio);
-    // return audio.removeEventListener("ended", endAudio);
   });
   return (
     <div className="audio-player">
