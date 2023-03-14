@@ -1,0 +1,9 @@
+version: "1"
+services:
+  elf-frontend: 
+    build: .
+    command: npm start --port 3000
+    volumes:
+      - .:/frontend
+    ports:
+      - "3000:3000"    
