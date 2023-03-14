@@ -117,6 +117,7 @@ function Qc() {
                     setPageCount={setPageCount}
                     setLoadbucket={setLoadbucket}
                     fetchLinkMutate={fetchLinkMutate}
+                    loadbucket={loadbucket}
                   />
                     
             </div>
