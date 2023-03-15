@@ -175,7 +175,7 @@ const MatTableComp = React.forwardRef((props, ref) => {
         <Box sx={style}>
         <PopUp data={fileData}/>
         </Box>
-        </Modal>
+    </Modal>
       <MaterialTable
     
     title="Video Production Requests"
