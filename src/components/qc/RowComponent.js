@@ -30,6 +30,8 @@ const RowComponent = ({
   const [isDisabled, setIsDisabled] = useState(true);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  
+  const [updating, setUpdating] = useState(false)
   const accessToken = localStorage.getItem("authToken");
 
   const handelClick = () => {
@@ -49,6 +51,8 @@ const RowComponent = ({
   };
 
   let GetQCDone = async () => {
+    
+    setUpdating(true)
     const saveStatus = status;
     const saveOption = option;
     const saveRemark = remark;
@@ -56,7 +60,7 @@ const RowComponent = ({
     setOptions("");
     setRemark("");
     try {
-      fetch(`${BASE_URL}/log/tilestatus`, {
+      await fetch(`${BASE_URL}/log/tilestatus`, {
         method: "POST",
         body: JSON.stringify({
           sourceBucket: sbuck,
@@ -71,11 +75,12 @@ const RowComponent = ({
           Authorization: `Bearer ${accessToken}`,
         },
       })
-        .then((response) => response.json())
-        .then((data) => {
-          fetchLinkMutate(pageNumber);
-          // data.success ? setLink(remainingData) : console.log("No Data Found");
-        });
+      // .then(()=>{
+        await fetchLinkMutate('fetching',pageNumber);
+      // })
+      // .finally(()=>{
+        setUpdating(false)
+      // })
     } catch (error) {
       console.log("Error occured", error);
     }
@@ -93,7 +98,7 @@ const RowComponent = ({
   }, [status, option, destbucket]);
 
   return (
-    <div className="tile">
+    <div className={`tile ${updating?'action-performing':''}`}>
       <div className="main-tile">
         <div className="main-tile-head">
           <Typography

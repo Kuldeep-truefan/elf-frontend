@@ -58,6 +58,7 @@ const AudioQc = ({
     // audioQcData
   }
   
+  // const doneTile = (index)=>{}
 
   return (
     <>

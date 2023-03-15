@@ -6,7 +6,7 @@ import { BASE_URL, WEB_BASE_URL } from "../constants/constant";
 import RowComponent from "../components/qc/RowComponent";
 import * as React from "react";
 import Pagination from "@mui/material/Pagination";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import ClockLoader from "react-spinners/ClockLoader";
 import NoDataFound from '../components/ExtraComponents/NoDataFound'
 import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoader";
@@ -21,9 +21,13 @@ function Qc() {
   const [pageCount, setPageCount] = useState(1);
   const [pageNumber, setPageNumber] = useState(1);
   const [loadbucket, setLoadbucket] = useState("qc2");
+  const [loading, setLoading] = useState(true);
 
   const accessToken = localStorage.getItem("authToken");
-  let FetchLink = async (value) => {
+  let FetchLink = async (loadingType='loading',value) => {
+    if(loadingType === 'loading'){
+      setLoading(true)
+    }
     const data = await fetch(`${BASE_URL}/log/getlink`, {
       method: "POST",
       body: JSON.stringify({
@@ -36,21 +40,29 @@ function Qc() {
       },
     })
       .then((response) => response.json())
-      .then((response) => response);
-    return data;
+      .then((response) => response)
+      .finally(()=>{
+        setLoading(false)
+      });
+    // return data;
+    setLink(data.filename);
+    setPageCount(data.pagecount);
   };
 
-  const { mutate: fetchLinkMutate, isLoading: fetchLinkLoading } = useMutation(
-    FetchLink,
-    {
-      mutationKey: "fetchLink",
-      onSuccess: (res) => {
-        // console.log({ res });
-        setLink(res.filename);
-        setPageCount(res.pagecount);
-      },
-    }
-  );
+  // const { mutate: fetchLinkMutate, isLoading: fetchLinkLoading } = useMutation(
+  //   FetchLink,
+  //   {
+  //     mutationKey: "fetchLink",
+  //     onSuccess: (res) => {
+  //       // console.log({ res });
+  //     },
+  //   } 
+  //   );
+  // const {isLoading, data} = useQuery(['FetchLinkData', pageNumber],() => FetchLink(),
+  //   {
+  //     onSuccess: (res) => {
+  //   }
+  // })
 
   //Public API that will echo messages sent to it back to the client
   // const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/socket.io/`);
@@ -95,7 +107,7 @@ function Qc() {
   // }[readyState];
 
   useEffect(()=>{
-    fetchLinkMutate(1)
+    FetchLink()
   },[])
 
   return (
@@ -120,7 +132,7 @@ function Qc() {
                     pageNumber={pageNumber}
                     setPageCount={setPageCount}
                     setLoadbucket={setLoadbucket}
-                    fetchLinkMutate={fetchLinkMutate}
+                    fetchLinkMutate={FetchLink}
                     loadbucket={loadbucket}
                   />
                     
@@ -142,14 +154,14 @@ function Qc() {
           }
         </div>
       {
-        fetchLinkLoading ? 
+        loading ? 
         <DataTilesLoader/>
         :
         link?.length > 0 ?
         link?.map(([fileName, comments], index) => {
           return (
             <RowComponent
-              key={index}
+              key={index+fileName}
               comments={comments}
               setLink={setLink}
               // handleClickSendMessage={handleClickSendMessage}
@@ -160,7 +172,7 @@ function Qc() {
               dbuck={dbuck}
               index={index}
               link={link}
-              fetchLinkMutate={fetchLinkMutate}
+              fetchLinkMutate={FetchLink}
               pageNumber={pageNumber}
             />
           )

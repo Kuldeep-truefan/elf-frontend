@@ -73,7 +73,7 @@ function TileController({ setSbuck, setDbuck, destbucket, setDestMove, setLoadbu
             {movebucketoption?.map((bucket,index) => <MenuItem key={index} value={bucket.value}>{bucket.label}</MenuItem>)} 
           </Select>
         </FormControl>
-        <button href="#contained-buttons" onClick = {() => fetchLinkMutate(1)} className="primary-btn"><SearchIcon />Search</button>
+        <button href="#contained-buttons" onClick = {() => fetchLinkMutate()} className="primary-btn"><SearchIcon />Search</button>
         </div>
 
   );

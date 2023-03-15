@@ -15,6 +15,8 @@ const NewRequestFormModal = ({handleClose}) => {
         occasion: ''
     })
 
+    
+
     const [errMsg, setErrMsg] = useState('');
     const [isUploading, setIsUploading] = useState(false)
     const [created, setCreated] = useState(false)
