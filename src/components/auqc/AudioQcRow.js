@@ -5,7 +5,7 @@ import TextareaAutosize from "@mui/material/TextareaAutosize";
 import { useCallback, useState } from "react";
 import ColorCheckboxes from "../../components/CheckBoxPick.js/ColorCheckboxes";
 import { Chip, Typography } from "@mui/material";
-import useWebSocket, { ReadyState } from "react-use-websocket";
+// import useWebSocket, { ReadyState } from "react-use-websocket";
 import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import { useQueryClient } from "react-query";
 
@@ -14,36 +14,36 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
   const queryClient = useQueryClient();
   const [isDisabled, setIsDisabled] = useState(false);
   const [recordedAudio, setRecordedAudio] = useState();
-  const [emittedData, setemittedData] = useState();
+  // const [emittedData, setemittedData] = useState();
   const [username, setUsername] = useState(localStorage.getItem("username"));
-  const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/ausoket.io/`);
+  // const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/ausoket.io/`);
   const [updating, setUpdating] = useState(false)
 
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
-    onMessage: (message) => {
-      const data = JSON.parse(message?.data);
-      setemittedData(JSON.parse(data?.data));
-    },
-  });
+  // const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
+  //   onMessage: (message) => {
+  //     const data = JSON.parse(message?.data);
+  //     setemittedData(JSON.parse(data?.data));
+  //   },
+  // });
 
-  const handleClickAndSendMessage = useCallback(
-    (payload) =>
-      sendMessage(
-        JSON.stringify({
-          user: username,
-          ...payload,
-        })
-      ),
-    [username]
-  );
+  // const handleClickAndSendMessage = useCallback(
+  //   (payload) =>
+  //     sendMessage(
+  //       JSON.stringify({
+  //         user: username,
+  //         ...payload,
+  //       })
+  //     ),
+  //   [username]
+  // );
 
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  }[readyState];
+  // const connectionStatus = {
+  //   [ReadyState.CONNECTING]: "Connecting",
+  //   [ReadyState.OPEN]: "Open",
+  //   [ReadyState.CLOSING]: "Closing",
+  //   [ReadyState.CLOSED]: "Closed",
+  //   [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  // }[readyState];
 
   const accessToken = localStorage.getItem("authToken");
   let UploadAudioRecored = async (fullFileName, vidAuRec) => {
@@ -117,10 +117,10 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
   return (
     <div key={index} className={`tile ${updating?'action-performing':''}`}>
       <div className="main-tile">
-        <ColorCheckboxes
+        {/* <ColorCheckboxes
           tileName={tileName}
           handleClickAndSendMessage={handleClickAndSendMessage}
-        />
+        /> */}
         <div className="main-tile-head">
           <Typography
             className="video-name"
@@ -130,7 +130,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
           >
             {tileName}
           </Typography>
-          {!!emittedData &&
+          {/* {!!emittedData &&
             JSON.parse(emittedData)?.filter(
               (data) => data?.video_id === tileName
             )?.length > 0 && (
@@ -142,7 +142,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
                 }`}
                 sx={{ ml: "15px", backgroundColor: "#bcddfe", height:'unset',padding:'1px', color:'#1976d2', border:'1px solid #1976d2' }}
                 ></Chip>
-            )}
+            )} */}
         </div>
         <p className="video-name-dynamic">{comments}</p>
       </div>

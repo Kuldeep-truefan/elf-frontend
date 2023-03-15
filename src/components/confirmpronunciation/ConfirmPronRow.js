@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
+// import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import "../../App.css";
 import { Chip, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -12,38 +12,38 @@ const socketUrl = `${WEB_BASE_URL}/simpredocon.io/`;
 
 const ConfirmPronRow = ({ value }) => {
     const queryClient = useQueryClient();
-    const [emittedData, setemittedData] = useState("");
+    // const [emittedData, setemittedData] = useState("");
     const [engName, setEngName] = useState("");
     const [pageNumber, setPageNumber] = useState(1);
     const accessToken = localStorage.getItem("authToken");
-    const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
-        onMessage: (message) => {
-            const data = JSON.parse(message?.data);
-            setemittedData(JSON.parse(data?.data));
-        },
-    });
+    // const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
+    //     onMessage: (message) => {
+    //         const data = JSON.parse(message?.data);
+    //         setemittedData(JSON.parse(data?.data));
+    //     },
+    // });
 
-    const handleClickAndSendMessage = useCallback(
-        (payload) => {
-            if (payload.true) {
-                sendMessage(
-                    JSON.stringify({
-                        user: username,
-                        true: true,
-                        ...payload,
-                    })
-                );
-            } else {
-                sendMessage(
-                    JSON.stringify({
-                        user: username,
-                        ...payload,
-                    })
-                );
-            }
-        },
-        [username]
-    );
+    // const handleClickAndSendMessage = useCallback(
+    //     (payload) => {
+    //         if (payload.true) {
+    //             sendMessage(
+    //                 JSON.stringify({
+    //                     user: username,
+    //                     true: true,
+    //                     ...payload,
+    //                 })
+    //             );
+    //         } else {
+    //             sendMessage(
+    //                 JSON.stringify({
+    //                     user: username,
+    //                     ...payload,
+    //                 })
+    //             );
+    //         }
+    //     },
+    //     [username]
+    // );
 
     const handleChange = (event) => {
         setEngName(event.target.value);
@@ -72,10 +72,10 @@ const ConfirmPronRow = ({ value }) => {
     return (
         <div className="tile">
             <div className="main-tile">
-                <ColorCheckboxes
+                {/* <ColorCheckboxes
                     tileName={value}
                     handleClickAndSendMessage={handleClickAndSendMessage}
-                />
+                /> */}
                 <div className="main-tile-head">
                     <Typography
                         className="video-name"
@@ -85,7 +85,7 @@ const ConfirmPronRow = ({ value }) => {
                     >
                         {value}
                     </Typography>
-                    {emittedData &&
+                    {/* {emittedData &&
                         JSON.parse(emittedData)?.filter(
                             (data) => data?.video_id === value
                         )?.length > 0 && (
@@ -96,7 +96,7 @@ const ConfirmPronRow = ({ value }) => {
                                     }`}
                                     sx={{ ml: "15px", backgroundColor: "#bcddfe", height:'unset',padding:'1px', color:'#1976d2', border:'1px solid #1976d2' }}
                             ></Chip>
-                        )}
+                        )} */}
                 </div>
             </div>
             <div className="main-tiles">

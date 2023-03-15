@@ -7350,21 +7350,21 @@ const accessToken = localStorage.getItem("authToken");
 
 const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
   const queryClient = useQueryClient();
-  const [emittedData, setemittedData] = useState("");
+  // const [emittedData, setemittedData] = useState("");
   const [open, setOpen] = useState(false);
   const [newNameCode, setNewNameCode] = useState("");
   const [inputValue, setInputValue] = useState("");
 
   // New auto states
   const [value, setValue] = useState([]);
-  console.log(value, "value---->>>>");
+  // console.log(value, "value---->>>>");
 
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
-    onMessage: (message) => {
-      const data = JSON.parse(message?.data);
-      setemittedData(JSON.parse(data?.data));
-    },
-  });
+  // const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
+  //   onMessage: (message) => {
+  //     const data = JSON.parse(message?.data);
+  //     setemittedData(JSON.parse(data?.data));
+  //   },
+  // });
 
   // const memoizedOptions = namecodes;
 
@@ -7386,16 +7386,16 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
     }
   };
 
-  const handleClickAndSendMessage = useCallback(
-    (payload) =>
-      sendMessage(
-        JSON.stringify({
-          user: username,
-          ...payload,
-        })
-      ),
-    [username]
-  );
+  // const handleClickAndSendMessage = useCallback(
+  //   (payload) =>
+  //     sendMessage(
+  //       JSON.stringify({
+  //         user: username,
+  //         ...payload,
+  //       })
+  //     ),
+  //   [username]
+  // );
   const handelClick = () => {
     setOpen(open);
   };
@@ -7425,10 +7425,10 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
   return (
     <div className="tile auto-complete">
       <div className="main-tile">
-        <ColorCheckboxes
+        {/* <ColorCheckboxes
           tileName={tileName}
           handleClickAndSendMessage={handleClickAndSendMessage}
-        />
+        /> */}
         <div className="main-tile-head">
           <Typography
             className="video-name"
@@ -7438,7 +7438,7 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
           >
             {tileName}
           </Typography>
-          {emittedData &&
+          {/* {emittedData &&
             JSON.parse(emittedData)?.filter(
               (data) => data?.video_id === tileName
             )?.length > 0 && (
@@ -7450,7 +7450,7 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
                 }`}
                 sx={{ ml: "15px", backgroundColor: "#bcddfe", height:'unset',padding:'1px', color:'#1976d2', border:'1px solid #1976d2' }}
                 ></Chip>
-            )}
+            )} */}
         </div>
         <p className="video-name-dynamic">{comments}</p>
       </div>

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import Pagination from "@mui/material/Pagination";
 import RefreshIcon from '@mui/icons-material/Refresh';
-import useWebSocket, { ReadyState } from "react-use-websocket";
+// import useWebSocket, { ReadyState } from "react-use-websocket";
 
 import RedoLipRowTile from "./RedoLipRowTile";
 import { useQuery } from "react-query";
@@ -13,7 +13,7 @@ import NoDataFound from "../ExtraComponents/NoDataFound";
 const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
   const [newNameCode, setNewNameCode] = useState("");
   const [open, setOpen] = useState(false);
-  const [emittedData, setemittedData] = useState("");
+  // const [emittedData, setemittedData] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const [pageCount, setPageCount] = useState(1);
   const [redoTileName, setRedoTileName] = useState([])
@@ -44,21 +44,21 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
   );
 
   const { lastnamecode: nameCode } = data || {};
-  const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/simpredocon.io/`);
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
-    onMessage: (message) => {
-      const data = JSON.parse(message?.data);
-      setemittedData(JSON.parse(data?.data));
-    },
-  });
+  // const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/simpredocon.io/`);
+  // const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
+  //   onMessage: (message) => {
+  //     const data = JSON.parse(message?.data);
+  //     setemittedData(JSON.parse(data?.data));
+  //   },
+  // });
 
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  }[readyState];
+  // const connectionStatus = {
+  //   [ReadyState.CONNECTING]: "Connecting",
+  //   [ReadyState.OPEN]: "Open",
+  //   [ReadyState.CLOSING]: "Closing",
+  //   [ReadyState.CLOSED]: "Closed",
+  //   [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  // }[readyState];
 
   // const[required,setRequired]=useState(false)
   const accessToken = localStorage.getItem("authToken");

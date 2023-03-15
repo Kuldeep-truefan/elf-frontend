@@ -16,8 +16,8 @@ const RowComponent = ({
   sbuck,
   comments,
   dbuck,
-  handleClickSendMessage,
-  emittedData,
+  // handleClickSendMessage,
+  // emittedData,
   setLink,
   link,
   destbucket,
@@ -104,7 +104,7 @@ const RowComponent = ({
           >
             {item}
           </Typography>
-          {!!emittedData &&
+          {/* {!!emittedData &&
             JSON.parse(emittedData)?.filter((data) => data?.video_id === item)?.length >
               0 && (
               <Chip
@@ -115,7 +115,7 @@ const RowComponent = ({
                 }`}
                 sx={{ ml: "5px", backgroundColor: "white" }}
               />
-            )}
+            )} */}
         </div>
 
         <p className="video-name-dynamic">{comments}</p>
@@ -123,7 +123,7 @@ const RowComponent = ({
       <div className="main-tiles qc-options">
         <VideoModal
           onClick={handelClick}
-          sendMessage={handleClickSendMessage}
+          // sendMessage={handleClickSendMessage}
           open={open}
           setOpen={setOpen}
           item={item}

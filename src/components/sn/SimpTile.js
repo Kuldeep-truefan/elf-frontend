@@ -25,52 +25,52 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
   const queryClient = useQueryClient();
   const accessToken = localStorage.getItem("authToken");
   const [engValue, setEngValue] = React.useState(null);
-  const [emittedData, setemittedData] = useState();
+  // const [emittedData, setemittedData] = useState();
   const [username, setUsername] = useState(localStorage.getItem("username"));
   
   const [videoSelected, setVideoSelected] = useState('G2P')
   const [audioSelected, setAudioSelected] = useState('Normal');
 
 
-  const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/simpredocon.io/`);
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
-    onMessage: (message) => {
-      const data = JSON.parse(message?.data);
-      setemittedData(JSON.parse(data?.data));
-    },
-  });
+  // const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/simpredocon.io/`);
+  // const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
+  //   onMessage: (message) => {
+  //     const data = JSON.parse(message?.data);
+  //     setemittedData(JSON.parse(data?.data));
+  //   },
+  // });
   
-  const handleClickAndSendMessage = useCallback((payload)=>{
-    if (payload.true){
-      sendMessage(
-        JSON.stringify({
-          user: username,
-          true:true,
-          ...payload,
-        })
-      )
-    }
-    else{
-      sendMessage(
-        JSON.stringify({
-          user: username,
-          ...payload,
-        })
-      )
+  // const handleClickAndSendMessage = useCallback((payload)=>{
+  //   if (payload.true){
+  //     sendMessage(
+  //       JSON.stringify({
+  //         user: username,
+  //         true:true,
+  //         ...payload,
+  //       })
+  //     )
+  //   }
+  //   else{
+  //     sendMessage(
+  //       JSON.stringify({
+  //         user: username,
+  //         ...payload,
+  //       })
+  //     )
 
-    }
-    console.log("h`eel")
+  //   }
+  //   console.log("h`eel")
    
   
-  },[username])
+  // },[username])
 
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  }[readyState];
+  // const connectionStatus = {
+  //   [ReadyState.CONNECTING]: "Connecting",
+  //   [ReadyState.OPEN]: "Open",
+  //   [ReadyState.CLOSING]: "Closing",
+  //   [ReadyState.CLOSED]: "Closed",
+  //   [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  // }[readyState];
 
   const handleEngName = (event) => {
     if(event.target.value.length <20){
@@ -114,12 +114,12 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
   return (
     <div className="tile">
       <div className="main-tile">
-        <ColorCheckboxes tileName={tileName} true={true} handleClickAndSendMessage={handleClickAndSendMessage}/>
+        {/* <ColorCheckboxes tileName={tileName} true={true} handleClickAndSendMessage={handleClickAndSendMessage}/> */}
         <div className="main-tile-head">
           <Typography className="video-name" sx={{ paddingLeft: "1rem" }}>
             {tileName}
           </Typography>
-          {!!emittedData &&
+          {/* {!!emittedData &&
           JSON.parse(emittedData)?.filter(
             (data) => data?.video_id === tileName
             )?.length > 0 && (
@@ -129,7 +129,7 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
                   (data) => data?.video_id === tileName)?.[0]?.user}`}
                   sx={{ ml: "15px", backgroundColor: "#bcddfe", height:'unset',padding:'1px', color:'#1976d2', border:'1px solid #1976d2' }}
                   ></Chip>
-                )}
+                )} */}
         </div>
         <p className="video-name-dynamic">{vas}</p>
       </div>

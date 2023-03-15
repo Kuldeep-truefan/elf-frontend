@@ -6,7 +6,7 @@ import { useState } from "react";
 import { BASE_URL, WEB_BASE_URL } from "../constants/constant";
 import Pagination from "@mui/material/Pagination";
 import ColorCheckboxes from "../components/CheckBoxPick.js/ColorCheckboxes";
-import useWebSocket, { ReadyState } from "react-use-websocket";
+// import useWebSocket, { ReadyState } from "react-use-websocket";
 import { useCallback } from "react";
 import { useQuery } from "react-query";
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -20,39 +20,39 @@ const AudioMistreated = ({ item, destbucket }) => {
   const [audioMistreatedFile, setAudioMistreatedFile] = useState([]);
   const [isDisabled, setIsDisabled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [emittedData, setemittedData] = useState('');
+  // const [emittedData, setemittedData] = useState('');
   const accessToken = localStorage.getItem("authToken");
   const [username, setUsername] = useState(localStorage.getItem("username"));
   const [pageNumber, setPageNumber] = useState(1);
   const [pageCount, setPageCount] = useState(1);
   const [audTreData, setAudTreData] = useState([])
 
-  const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/ausoket.io/`);
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
-    onMessage: (message) => {
-      const data = JSON.parse(message?.data);
-      setemittedData(JSON.parse(data?.data));
-    },
-  });
+  // const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/ausoket.io/`);
+  // const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
+  //   onMessage: (message) => {
+  //     const data = JSON.parse(message?.data);
+  //     setemittedData(JSON.parse(data?.data));
+  //   },
+  // });
 
-  const handleClickAndSendMessage = useCallback(
-    (payload) =>
-      sendMessage(
-        JSON.stringify({
-          user: username,
-          ...payload,
-        })
-      ),
-    [username]
-  );
+  // const handleClickAndSendMessage = useCallback(
+  //   (payload) =>
+  //     sendMessage(
+  //       JSON.stringify({
+  //         user: username,
+  //         ...payload,
+  //       })
+  //     ),
+  //   [username]
+  // );
 
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  }[readyState];
+  // const connectionStatus = {
+  //   [ReadyState.CONNECTING]: "Connecting",
+  //   [ReadyState.OPEN]: "Open",
+  //   [ReadyState.CLOSING]: "Closing",
+  //   [ReadyState.CLOSED]: "Closed",
+  //   [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  // }[readyState];
 
   const handelClick = () => {
     setOpen(!open);
@@ -137,9 +137,9 @@ const AudioMistreated = ({ item, destbucket }) => {
         <DataTilesLoader /> : audTreData.length > 0 ? audTreData.map(([tileName, comments], index) => (
           <div key={`${tileName}-${index}`} className="tile">
             <div className="main-tile">
-              <ColorCheckboxes
+              {/* <ColorCheckboxes
                 tileName={tileName}
-                handleClickAndSendMessage={handleClickAndSendMessage} />
+                handleClickAndSendMessage={handleClickAndSendMessage} /> */}
               <div className="main-tile-head">
                 <Typography
                   className="video-name"
@@ -149,7 +149,7 @@ const AudioMistreated = ({ item, destbucket }) => {
                 >
                   {tileName}
                 </Typography>
-                {!!emittedData &&
+                {/* {!!emittedData &&
                   JSON.parse(emittedData)?.filter(
                     (data) => data?.video_id === tileName
                   )?.length > 0 && (
@@ -158,7 +158,7 @@ const AudioMistreated = ({ item, destbucket }) => {
                         (data) => data?.video_id === tileName)?.[0]?.user}`}
                         sx={{ ml: "15px", backgroundColor: "#bcddfe", height:'unset',padding:'1px', color:'#1976d2', border:'1px solid #1976d2' }}
                         ></Chip>
-                  )}
+                  )} */}
               </div>
               <p className="video-name-dynamic">{comments}</p>
             </div>

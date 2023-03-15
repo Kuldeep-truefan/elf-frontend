@@ -5,7 +5,7 @@ import { BASE_URL } from "../constants/constant";
 import AudioModal from "../components/am/AudioModal";
 import ColorCheckboxes from "../components/CheckBoxPick.js/ColorCheckboxes";
 import Pagination from "@mui/material/Pagination";
-import useWebSocket, { ReadyState } from "react-use-websocket";
+// import useWebSocket, { ReadyState } from "react-use-websocket";
 import { WEB_BASE_URL } from "../constants/constant";
 import { useQuery } from "react-query";
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -19,32 +19,32 @@ const AudioMispronounced = ({ item, sendFile }) => {
   const [pageCount, setPageCount] = useState(1);
   const [username, setUsername] = useState(localStorage.getItem("username"));
 
-  const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/audiomis.io/`);
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
-    onMessage: (message) => {
-      const data = JSON.parse(message?.data);
-      setemittedData(JSON.parse(data?.data));
-    },
-  }); 
+  // const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/audiomis.io/`);
+  // const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
+  //   onMessage: (message) => {
+  //     const data = JSON.parse(message?.data);
+  //     setemittedData(JSON.parse(data?.data));
+  //   },
+  // }); 
 
-  const handleClickAndSendMessage = useCallback(
-    (payload) =>
-      sendMessage(
-        JSON.stringify({
-          user: username,
-          ...payload,
-        })
-      ),
-    [username]
-  );
+  // const handleClickAndSendMessage = useCallback(
+  //   (payload) =>
+  //     sendMessage(
+  //       JSON.stringify({
+  //         user: username,
+  //         ...payload,
+  //       })
+  //     ),
+  //   [username]
+  // );
 
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  }[readyState];
+  // const connectionStatus = {
+  //   [ReadyState.CONNECTING]: "Connecting",
+  //   [ReadyState.OPEN]: "Open",
+  //   [ReadyState.CLOSING]: "Closing",
+  //   [ReadyState.CLOSED]: "Closed",
+  //   [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  // }[readyState];
 
   let FetchAudioMisTiles = async (pageNumber) => {
     const data = await fetch(`${BASE_URL}/audio/audiomis`, {
@@ -110,10 +110,11 @@ const AudioMispronounced = ({ item, sendFile }) => {
         misProData?.map(([tileName, comments], index) => (
           <div key={`${tileName}-${index}`} className="tile">
             <div className="main-tile">
-              <ColorCheckboxes
+              {/* web socket ---------- */}
+              {/* <ColorCheckboxes
                 tileName={tileName}
                 handleClickAndSendMessage={handleClickAndSendMessage}
-              />
+              /> */}
               <div className="main-tile-head">
                 <Typography
                   className="video-name"
@@ -124,7 +125,7 @@ const AudioMispronounced = ({ item, sendFile }) => {
                 >
                   {tileName}
                 </Typography>
-                {!!emittedData && JSON.parse(emittedData)?.filter(
+                {/* {!!emittedData && JSON.parse(emittedData)?.filter(
                   (data) => data?.video_id === tileName
                 )?.length > 0 && (
                   <Chip
@@ -135,7 +136,7 @@ const AudioMispronounced = ({ item, sendFile }) => {
                     }`}
                     sx={{ ml: "15px", backgroundColor: "#bcddfe", height:'unset',padding:'1px', color:'#1976d2', border:'1px solid #1976d2' }}
                   ></Chip>
-                )}
+                )} */}
               </div>
               <p className="video-name-dynamic">{comments}</p>
             </div>

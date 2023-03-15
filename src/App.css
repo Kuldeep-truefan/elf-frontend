@@ -614,9 +614,15 @@ input, textarea{
 }
 #request-modal .MuiBox-root, #new-request-form .css-1869usk-MuiFormControl-root, #new-request-form .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root, #new-request-form .css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root{
   display: block;
+  margin: 15px 8px;
 }
 
 #new-request-form .css-1u3bzj6-MuiFormControl-root-MuiTextField-root{
-  margin: 8px;
+  margin: 15px 8px;
+  display: block;
+}
+#new-request-form .primary-btn{
+  /* margin: 8px; */
+  width: 100%;
 }
 
