@@ -73,7 +73,7 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
   // }[readyState];
 
   const handleEngName = (event) => {
-    if(event.target.value.length <20){
+    if(event.target.value.length <=20){
       setEnglishName(event.target.value);
     }
   };
