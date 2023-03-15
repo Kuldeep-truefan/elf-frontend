@@ -43,19 +43,18 @@ const NewRequestFormModal = ({handleClose}) => {
         
         // if there is no error, then submit the data to DB 
         if(!handleInputErr()){
-            // fetch()
-            // .then((res)=>{
-            //     if(res.status === '200' ){
-                   
-            //     }
-            // })
-            // .catch((err)=>{
-            //     setErrMsg(err.message)
-            // })
-            setCreated(true)
-            setTimeout(()=>{
-                handleClose()
-            },1000)
+            fetch()
+            .then((res)=>{
+                if(res.status === '200' ){
+                    setCreated(true)
+                    setTimeout(()=>{
+                        handleClose()
+                    },1000)
+                }
+            })
+            .catch((err)=>{
+                setErrMsg(err.message)
+            })
 
         }
     }

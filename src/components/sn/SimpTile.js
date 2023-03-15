@@ -28,8 +28,8 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
   // const [emittedData, setemittedData] = useState();
   const [username, setUsername] = useState(localStorage.getItem("username"));
   
-  const [videoSelected, setVideoSelected] = useState('G2P')
-  const [audioSelected, setAudioSelected] = useState('Normal');
+  const [videoSelected, setVideoSelected] = useState('Mapping')
+  const [audioSelected, setAudioSelected] = useState('IPA');
 
 
   // const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/simpredocon.io/`);

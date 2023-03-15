@@ -104,7 +104,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
       // .then((response) => response.json())
       // .then((data) => setLink(data.filename))
       // setLoading(false); // Stop loading
-      changeDataStatus()
+      changeDataStatus('fetching',)
     } catch (error) {
       console.log("Error occured", error);
     }

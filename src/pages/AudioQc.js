@@ -19,9 +19,13 @@ const AudioQc = ({
   const [pageNumber, setPageNumber] = useState(1);
   const [pageCount, setPageCount] = useState(1);
   const [audioQcData, setAudioQcData] = useState([])
+  const [loading, setLoading] = useState(true)
   // const queryClient = useQueryClient()
 
-  let FetchAudioQcTiles = async (value) => {
+  let FetchAudioQcTiles = async (loadingType='loading',value) => {
+    if(loadingType === 'loading'){
+      setLoading(true)
+    }
      const data = await fetch(`${BASE_URL}/audio/audioqc`, {
         method: "POST",
         body: JSON.stringify({
@@ -32,6 +36,9 @@ const AudioQc = ({
           Authorization: `Bearer ${accessToken}`,
         },
       }).then((response) => response.json())
+      .finally(()=>{
+        setLoading(false)
+      })
         return data
   };
   
@@ -50,6 +57,7 @@ const AudioQc = ({
     console.log(index)
     // audioQcData
   }
+  
 
   return (
     <>
@@ -60,7 +68,7 @@ const AudioQc = ({
           <div className="audio-refresh-btn">
             <div
               onClick={() => {
-                refetch();
+                FetchAudioQcTiles();
               }}
             >
               <RefreshIcon/>
@@ -82,7 +90,7 @@ const AudioQc = ({
           </div>
         }
       </div>
-      {isLoading || isFetching?
+      {loading?
       <DataTilesLoader/> 
       :
       audioQcData.length === 0? 

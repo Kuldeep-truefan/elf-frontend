@@ -71,7 +71,7 @@ function Login() {
           setState({ open: true });
           localStorage.setItem('username', data.username)
           localStorage.setItem('authToken', JSON.stringify(data.access))
-          navigate('/dashboard');
+          navigate('/');
           setErrMsg('')
       })
       .catch((err)=>{
