@@ -6,7 +6,7 @@ import Select from "@mui/material/Select";
 import TextField from '@mui/material/TextField';
 
 
-const NewRequestFormModal = () => {
+const NewRequestFormModal = ({handleClose}) => {
     const [inputValue, setInputValues] = useState({
         video_id: '',
         vas: '',
@@ -15,15 +15,19 @@ const NewRequestFormModal = () => {
         occasion: ''
     })
 
-    const [errMsg, setErrMsg] = useState('')
+    const [errMsg, setErrMsg] = useState('');
+    const [isUploading, setIsUploading] = useState(false)
+    const [created, setCreated] = useState(false)
 
 
-    
+    // check for input values, either all fields are filledor not
     const handleInputErr = ()=>{
         if(!(!!inputValue.video_id && !!inputValue.vas && !!inputValue.request_name && !!inputValue.celeb && !!inputValue.occasion)){
             setErrMsg('Please enter values for all fields')
+            return true
         }else{
             setErrMsg('')
+            return false
         }
     }
 
@@ -31,19 +35,36 @@ const NewRequestFormModal = () => {
     const handleChange = (e) => {
         const { name, value } = e.target
         setInputValues({ ...inputValue, [name]: value })
-        handleInputErr()
     }
 
+    // handle form submit
     const handleSubmit  = (e)=>{
         e.preventDefault();
-        handleInputErr();
+        
+        // if there is no error, then submit the data to DB 
+        if(!handleInputErr()){
+            // fetch()
+            // .then((res)=>{
+            //     if(res.status === '200' ){
+                   
+            //     }
+            // })
+            // .catch((err)=>{
+            //     setErrMsg(err.message)
+            // })
+            setCreated(true)
+            setTimeout(()=>{
+                handleClose()
+            },1000)
+
+        }
     }
 
 
     return (
         <div className='popup'>
             <div id='new-request-form'>
-                <form >
+                <form onSubmit={(e)=>handleSubmit(e)}>
                     <h3 style={{
                         textAlign:'center'
                     }}>New Request</h3>
@@ -105,16 +126,25 @@ const NewRequestFormModal = () => {
                         <button
                         className='primary-btn'
                         >
-                            Create new request
+                            {
+                                isUploading? <>Creating...</>
+                                :
+                                <>Create new request</>
+                            }
                         </button>
+                        <div style={{
+                            color:'#f00'
+                        }}>
+                            <small ><i>{errMsg}</i></small>
+                        </div>
                     </div>
+                        {
+                            created &&
+                            <div className='success-msg'>
+                                <p>Request created successfully!</p>
+                            </div>
+                        }
 
-                    <div style={{
-                        margin:'8px',
-                        color:'#f00'
-                    }}>
-                        <small ><i>{errMsg}</i></small>
-                    </div>
                 </form>
             </div>
         </div>

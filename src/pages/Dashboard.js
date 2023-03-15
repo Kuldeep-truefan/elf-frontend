@@ -60,7 +60,7 @@ const Dashboard = () => {
       id='request-modal'
     >
       <Box sx={style}>
-      <NewRequestFormModal />
+      <NewRequestFormModal handleClose={handleRequestNewModalClose}/>
       </Box>
     </Modal>
       <div
