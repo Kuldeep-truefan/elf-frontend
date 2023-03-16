@@ -41,6 +41,7 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
   const { refetch } = useQuery(["FetchAudioRedoLipSync", pageNumber],() => FetchAudioRedoLipSync(pageNumber),
     {
       onSuccess: (res) => {
+        // setPageCount
         setPageCount(res.pagecount);
         setRedoTileName(res.filename)
       },
@@ -91,7 +92,7 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
           </div>
         </div>
         {
-          pageNumber === 1 ?
+          pageCount === 1 ?
           null
           :
           <div className="pagination-class">

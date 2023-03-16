@@ -72,7 +72,7 @@ const AudioQc = ({
           </div>
         </div>
         {
-          pageNumber === 1 ?
+          pageCount === 1 ?
           null
           :
           <div className="pagination-class">
