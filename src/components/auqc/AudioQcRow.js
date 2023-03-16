@@ -101,10 +101,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
         await UploadAudioRecored(tileName, audioId);
       }
       queryClient.invalidateQueries(["FetchAudioQcTiles", pageNumber]);
-      // .then((response) => response.json())
-      // .then((data) => setLink(data.filename))
-      // setLoading(false); // Stop loading
-      changeDataStatus('fetching',)
+      changeDataStatus('fetching')
     } catch (error) {
       console.log("Error occured", error);
     }

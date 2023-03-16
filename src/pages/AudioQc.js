@@ -21,11 +21,10 @@ const AudioQc = ({
   const [audioQcData, setAudioQcData] = useState([])
   const [loading, setLoading] = useState(true)
   // const queryClient = useQueryClient()
+  const [loadingType, setLoadingType] = useState('loading')
 
-  let FetchAudioQcTiles = async (loadingType='loading',value) => {
-    if(loadingType === 'loading'){
+  let FetchAudioQcTiles = async (myLoadingType='loading',value) => {
       setLoading(true)
-    }
      const data = await fetch(`${BASE_URL}/audio/audioqc`, {
         method: "POST",
         body: JSON.stringify({
@@ -43,22 +42,18 @@ const AudioQc = ({
   };
   
   // const [audioQcData, setAudioQcData] = useState({})
-  const {isLoading, data, isFetching, refetch} = useQuery(['FetchAudioQcTiles', pageNumber],() => FetchAudioQcTiles(pageNumber),
+  const {refetch} = useQuery(['FetchAudioQcTiles', pageNumber],() => FetchAudioQcTiles('loading',pageNumber),
   {
     onSuccess: (res) => {
       setPageCount(res.pagecount)
       setAudioQcData(res.filename)
     }
   })
-  // const audioQcData =  {}
-  // const{filename:audioQcData} = data || {}
 
-  const changeDataStatus = (index)=>{
-    console.log(index)
-    // audioQcData
-  }
+  // const changeDataStatus = (index)=>{
+  //   console.log(index)
+  // }
   
-  // const doneTile = (index)=>{}
 
   return (
     <>
@@ -69,7 +64,7 @@ const AudioQc = ({
           <div className="audio-refresh-btn">
             <div
               onClick={() => {
-                FetchAudioQcTiles();
+                refetch()
               }}
             >
               <RefreshIcon/>
@@ -91,14 +86,14 @@ const AudioQc = ({
           </div>
         }
       </div>
-      {loading?
+      {loadingType === 'loading' && loading?
       <DataTilesLoader/> 
       :
       audioQcData.length === 0? 
       <NoDataFound text={'No data found...'}/>
       :
       audioQcData.map(([tileName, comments], index) => (
-        <AudioQcRow key={`${tileName}-${index}`} item={item} emittedData={emittedData} tileName={tileName} comments={comments} index={index} pageNumber={pageNumber} changeDataStatus={FetchAudioQcTiles}/>
+        <AudioQcRow key={`${tileName}-${index}`} item={item} emittedData={emittedData} tileName={tileName} comments={comments} index={index} pageNumber={pageNumber} changeDataStatus={setLoadingType}/>
       )
       )
       }
