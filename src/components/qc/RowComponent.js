@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import VideoModal from "./VideoModal";
 import { BASE_URL } from "../../constants/constant";
+import { useQueryClient } from "react-query";
+
 
 const RowComponent = ({
   item,
@@ -21,9 +23,10 @@ const RowComponent = ({
   setLink,
   link,
   destbucket,
-  fetchLinkMutate,
+  changeDataStatus,
   pageNumber
 }) => {
+  const queryClient = useQueryClient()
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
   const [remark, setRemark] = useState("");
@@ -75,12 +78,8 @@ const RowComponent = ({
           Authorization: `Bearer ${accessToken}`,
         },
       })
-      // .then(()=>{
-        await fetchLinkMutate('fetching',pageNumber);
-      // })
-      // .finally(()=>{
-        setUpdating(false)
-      // })
+        changeDataStatus('fetching')
+        queryClient.invalidateQueries({queryKey:['FetchLinkData']})
     } catch (error) {
       console.log("Error occured", error);
     }

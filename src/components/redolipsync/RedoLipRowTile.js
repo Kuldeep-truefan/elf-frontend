@@ -7348,12 +7348,13 @@ const username = localStorage.getItem("username");
 const socketUrl = `${WEB_BASE_URL}/ausoket.io/`;
 const accessToken = localStorage.getItem("authToken");
 
-const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
+const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber, changeDataStatus }) => {
   const queryClient = useQueryClient();
   // const [emittedData, setemittedData] = useState("");
   const [open, setOpen] = useState(false);
   const [newNameCode, setNewNameCode] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const [updating, setUpdating] = useState(false)
 
   // New auto states
   const [value, setValue] = useState([]);
@@ -7402,28 +7403,33 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
 
   let UpdateRedoLipSync = async (videoId) => {
     try {
-      fetch(`${BASE_URL}/audio/updt-redo-lip-newnamecode`, {
-        method: "PUT",
-        body: JSON.stringify({
-          newNameCode: value.join(" ").trim(),
-          videoId: videoId,
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-        .then(() => {
-          queryClient.invalidateQueries(["FetchAudioRedoLipSync", pageNumber]);
-        })
-        .then((data) => {});
+      if(value.length > 0){
+          setUpdating(true)
+          fetch(`${BASE_URL}/audio/updt-redo-lip-newnamecode`, {
+            method: "PUT",
+            body: JSON.stringify({
+              newNameCode: value.join(" ").trim(),
+              videoId: videoId,
+            }),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+              Authorization: `Bearer ${accessToken}`,
+            },
+          })
+            .then(() => {
+              changeDataStatus('fetching')
+              queryClient.invalidateQueries(["FetchAudioRedoLipSync", pageNumber]);
+            })
+      }else{
+        alert('Please enter namecodes')
+      }
     } catch (error) {
       console.log("Error occured", error);
     }
   };
 
   return (
-    <div className="tile auto-complete">
+    <div className={`tile auto-complete ${updating?'action-performing':''}`}>
       <div className="main-tile">
         {/* <ColorCheckboxes
           tileName={tileName}

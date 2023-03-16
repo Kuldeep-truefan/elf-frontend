@@ -22,12 +22,12 @@ function Qc() {
   const [pageNumber, setPageNumber] = useState(1);
   const [loadbucket, setLoadbucket] = useState("qc2");
   const [loading, setLoading] = useState(true);
+  const [loadingType, setLoadingType] = useState('loading')
 
   const accessToken = localStorage.getItem("authToken");
-  let FetchLink = async (loadingType='loading',value) => {
-    if(loadingType === 'loading'){
-      setLoading(true)
-    }
+
+  let FetchLink = async (value) => {
+    setLoading(true)
     const data = await fetch(`${BASE_URL}/log/getlink`, {
       method: "POST",
       body: JSON.stringify({
@@ -41,28 +41,20 @@ function Qc() {
     })
       .then((response) => response.json())
       .then((response) => response)
-      .finally(()=>{
+      .finally(() => {
         setLoading(false)
       });
-    // return data;
-    setLink(data.filename);
-    setPageCount(data.pagecount);
+    return data;
   };
 
-  // const { mutate: fetchLinkMutate, isLoading: fetchLinkLoading } = useMutation(
-  //   FetchLink,
-  //   {
-  //     mutationKey: "fetchLink",
-  //     onSuccess: (res) => {
-  //       // console.log({ res });
-  //     },
-  //   } 
-  //   );
-  // const {isLoading, data} = useQuery(['FetchLinkData', pageNumber],() => FetchLink(),
-  //   {
-  //     onSuccess: (res) => {
-  //   }
-  // })
+  const { refetch } = useQuery(['FetchLinkData', pageNumber], () => FetchLink(pageNumber),
+    {
+      onSuccess: (res) => {
+        setLink(res.filename);
+        setPageCount(res.pagecount);
+
+      }
+    })
 
   //Public API that will echo messages sent to it back to the client
   // const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/socket.io/`);
@@ -106,80 +98,82 @@ function Qc() {
   //   [ReadyState.UNINSTANTIATED]: "Uninstantiated",
   // }[readyState];
 
-  useEffect(()=>{
-    FetchLink()
-  },[])
+  // useEffect(() => {
+  //   FetchLink()
+  // }, [])
 
   return (
     <>
-    <div className="data-section"> 
-      <div className="section-header">
+      <div className="data-section">
+        <div className="section-header">
           <div className="section-header-1">
             <h1 className="heading-screens">Video QC</h1>
             <div style={{
               display: 'flex',
               justifyContent: 'center',
-            flexDirection: 'row'
+              flexDirection: 'row'
             }}>
 
-                  <TileController
-                    setLink={setLink}
-                    setSbuck={setSbuck}
-                    emittedData={emittedData}
-                    setDbuck={setDbuck}
-                    destbucket={destbucket}
-                    setDestMove={setDestMove}
-                    pageNumber={pageNumber}
-                    setPageCount={setPageCount}
-                    setLoadbucket={setLoadbucket}
-                    fetchLinkMutate={FetchLink}
-                    loadbucket={loadbucket}
-                  />
-                    
+              <TileController
+                setLink={setLink}
+                setSbuck={setSbuck}
+                emittedData={emittedData}
+                setDbuck={setDbuck}
+                destbucket={destbucket}
+                setDestMove={setDestMove}
+                pageNumber={pageNumber}
+                setPageCount={setPageCount}
+                setLoadbucket={setLoadbucket}
+                reloadData={refetch}
+                setLoadingType = {setLoadingType}
+                loadbucket={loadbucket}
+              />
+
             </div>
           </div>
           {
             pageNumber === 1 ?
-            null
-            :
-            <div className="pagination-class">
-              <Pagination
-                onChange={(e, value) => {
-                  setPageNumber(value)}}
-                count={pageCount}
-                page={pageNumber}
-                variant="outlined"
-              />
-            </div>
+              null
+              :
+              <div className="pagination-class">
+                <Pagination
+                  onChange={(e, value) => {
+                    setPageNumber(value)
+                  }}
+                  count={pageCount}
+                  page={pageNumber}
+                  variant="outlined"
+                />
+              </div>
           }
         </div>
-      {
-        loading ? 
-        <DataTilesLoader/>
-        :
-        link?.length > 0 ?
-        link?.map(([fileName, comments], index) => {
-          return (
-            <RowComponent
-              key={index+fileName}
-              comments={comments}
-              setLink={setLink}
-              // handleClickSendMessage={handleClickSendMessage}
-              destbucket={destbucket}
-              // emittedData={emittedData}
-              item={fileName}
-              sbuck={sbuck}
-              dbuck={dbuck}
-              index={index}
-              link={link}
-              fetchLinkMutate={FetchLink}
-              pageNumber={pageNumber}
-            />
-          )
-        }):
-        <NoDataFound text={'No data found, may you didn\'t select any option from above'}/>
-      }
-    </div>
+        {
+          loadingType === 'loading' && loading ?
+            <DataTilesLoader />
+            :
+            link?.length > 0 ?
+              link?.map(([fileName, comments], index) => {
+                return (
+                  <RowComponent
+                    key={index + fileName}
+                    comments={comments}
+                    setLink={setLink}
+                    // handleClickSendMessage={handleClickSendMessage}
+                    destbucket={destbucket}
+                    // emittedData={emittedData}
+                    item={fileName}
+                    sbuck={sbuck}
+                    dbuck={dbuck}
+                    index={index}
+                    link={link}
+                    changeDataStatus={setLoadingType}
+                    pageNumber={pageNumber}
+                  />
+                )
+              }) :
+              <NoDataFound text={'No data found, may you didn\'t select any option from above'} />
+        }
+      </div>
     </>
   );
 }

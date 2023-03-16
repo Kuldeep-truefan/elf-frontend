@@ -25,7 +25,9 @@ const AudioMistreated = ({ item, destbucket }) => {
   const [username, setUsername] = useState(localStorage.getItem("username"));
   const [pageNumber, setPageNumber] = useState(1);
   const [pageCount, setPageCount] = useState(1);
-  const [audTreData, setAudTreData] = useState([])
+  const [audTreData, setAudTreData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingType, setLoadingType] = useState('loading');
 
   // const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/ausoket.io/`);
   // const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
@@ -74,6 +76,7 @@ const AudioMistreated = ({ item, destbucket }) => {
   };
 
   let FetchAudioMisTreated = async (value) => {
+    setLoading(true)
     const data = await fetch(`${BASE_URL}/audio/get-amt-files`, {
       method: "POST",
       body: JSON.stringify({
@@ -85,13 +88,16 @@ const AudioMistreated = ({ item, destbucket }) => {
       },
     })
       .then((response) => response.json())
-      .then((response) => response)
+      .finally(()=>{
+        setLoading(false)
+      })
+
 
     return data;
     // setLoading(false); // Stop loading
   };
 
-  const { isLoading, data, refetch, isFetching } = useQuery(
+  const {refetch } = useQuery(
     ["FetchAudioMisTreated", pageNumber],
     () => FetchAudioMisTreated(pageNumber), {
     onSuccess: (res) => {
@@ -101,6 +107,10 @@ const AudioMistreated = ({ item, destbucket }) => {
   }
   );
 
+  const reloadData = ()=>{
+    setLoadingType('loading')
+    refetch()
+  }
 
   return (
     <div className="data-section">
@@ -110,7 +120,7 @@ const AudioMistreated = ({ item, destbucket }) => {
           <div className="audio-refresh-btn">
             <div
               onClick={() => {
-                refetch();
+                reloadData();
               }}
             >
               <RefreshIcon />
@@ -133,39 +143,12 @@ const AudioMistreated = ({ item, destbucket }) => {
             </div>
         }
       </div>
-      {isLoading || isFetching ?
-        <DataTilesLoader /> : audTreData.length > 0 ? audTreData.map(([tileName, comments], index) => (
-          <div key={`${tileName}-${index}`} className="tile">
-            <div className="main-tile">
-              {/* <ColorCheckboxes
-                tileName={tileName}
-                handleClickAndSendMessage={handleClickAndSendMessage} /> */}
-              <div className="main-tile-head">
-                <Typography
-                  className="video-name"
-                  sx={{
-                    paddingLeft: "1rem",
-                  }}
-                >
-                  {tileName}
-                </Typography>
-                {/* {!!emittedData &&
-                  JSON.parse(emittedData)?.filter(
-                    (data) => data?.video_id === tileName
-                  )?.length > 0 && (
-                    <Chip
-                      label={`In progress: ${JSON.parse(emittedData)?.filter(
-                        (data) => data?.video_id === tileName)?.[0]?.user}`}
-                        sx={{ ml: "15px", backgroundColor: "#bcddfe", height:'unset',padding:'1px', color:'#1976d2', border:'1px solid #1976d2' }}
-                        ></Chip>
-                  )} */}
-              </div>
-              <p className="video-name-dynamic">{comments}</p>
-            </div>
-            <div className="main-tiles">
-              <AudioMistreatedTile value={tileName} pageNumber={pageNumber} />
-            </div>
-          </div>
+      { loadingType === 'loading' && loading ?
+        <DataTilesLoader /> 
+        :
+        audTreData.length > 0 ? 
+        audTreData.map(([tileName, comments], index) => (
+          <AudioMistreatedTile key={`${tileName}-${index}`} comments={comments} value={tileName} changeDataStatus={setLoadingType} pageNumber={pageNumber} />
         ))
           :
           <NoDataFound />

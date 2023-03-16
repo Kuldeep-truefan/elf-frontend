@@ -100,8 +100,8 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
       if (audioQcStatus === "Rejected") {
         await UploadAudioRecored(tileName, audioId);
       }
-      queryClient.invalidateQueries(["FetchAudioQcTiles", pageNumber]);
       changeDataStatus('fetching')
+      queryClient.invalidateQueries(["FetchAudioQcTiles", pageNumber]);
     } catch (error) {
       console.log("Error occured", error);
     }

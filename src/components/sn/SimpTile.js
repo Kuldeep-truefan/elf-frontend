@@ -19,7 +19,7 @@ import SearchIcon from '@mui/icons-material/Search';
 const filter = createFilterOptions();
 // https://beta.reactjs.org/reference/react-dom/components/textarea for text area customisations
 
-const SimpTile = ({ value, vas, tileName, pageNumber}) => {
+const SimpTile = ({ value, vas, tileName, pageNumber, changeDataStatus}) => {
   const [englishName, setEnglishName] = useState("");
   const [hindiName, setHindiName] = useState("");
   const queryClient = useQueryClient();
@@ -27,6 +27,7 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
   const [engValue, setEngValue] = React.useState(null);
   // const [emittedData, setemittedData] = useState();
   const [username, setUsername] = useState(localStorage.getItem("username"));
+  const [updating, setUpdating] = useState(false)
   
   const [videoSelected, setVideoSelected] = useState('Mapping')
   const [audioSelected, setAudioSelected] = useState('IPA');
@@ -87,32 +88,38 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
 
   let UpdateSimpNames = async (id, button_type) => {
     try {
-      fetch(`${BASE_URL}/audio/update-simplified-fields`, {
-        method: "POST",
-        body: JSON.stringify({
-          englishName: englishName.trim(),
-          hindiName: hindiName.trim(),
-          videoId: id,
-          button_type,
-          videoSelected:videoSelected,
-          audioSelected:audioSelected
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          queryClient.invalidateQueries(["FetchSimplifiedNames", pageNumber]);
-        });
+      if(button_type === 'Confirm Name' || (button_type === 'Done' && englishName && hindiName)){
+        setUpdating(true)
+        fetch(`${BASE_URL}/audio/update-simplified-fields`, {
+          method: "POST",
+          body: JSON.stringify({
+            englishName: englishName.trim(),
+            hindiName: hindiName.trim(),
+            videoId: id,
+            button_type,
+            videoSelected:videoSelected,
+            audioSelected:audioSelected
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            changeDataStatus('fetching')
+            queryClient.invalidateQueries(["FetchSimplifiedNames", pageNumber]);
+          });
+      }else{
+        alert('Please fill the names')
+      }
     } catch (error) {
       console.log("Error occured", error);
     }
   };
 
   return (
-    <div className="tile">
+    <div className={`tile ${updating?'action-performing':''}`}>
       <div className="main-tile">
         {/* <ColorCheckboxes tileName={tileName} true={true} handleClickAndSendMessage={handleClickAndSendMessage}/> */}
         <div className="main-tile-head">
@@ -135,7 +142,9 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
       </div>
       <div className="main-tiles">
         <div className="d-flex">
-          <input onChange={handleEngName} value={englishName} className="simp-english-input" type={'text'} placeholder="English(Max 20 characters)"/>
+          <div >
+            <input onChange={handleEngName} value={englishName} className="simp-english-input" type={'text'} placeholder="English(Max 20 characters)"/>
+          </div>
           <ReactTransliterate
             className="simp-hindi-textarea"
             renderComponent={(props) => (
@@ -188,7 +197,7 @@ const SimpTile = ({ value, vas, tileName, pageNumber}) => {
               UpdateSimpNames(tileName.split("_")[3], "Done");
             }}
           >
-            Done
+            Update Name
           </button>
         </div>
       </div>

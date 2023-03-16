@@ -11,13 +11,17 @@ import { useQuery } from "react-query";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoader";
 import NoDataFound from "../components/ExtraComponents/NoDataFound";
+import AudioMisTile from "../components/am/AudioMisTile";
 
 const AudioMispronounced = ({ item, sendFile }) => {
   const accessToken = localStorage.getItem("authToken");
   const [emittedData, setemittedData] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
+  const [misProData, setMisProData] = useState([])
   const [pageCount, setPageCount] = useState(1);
   const [username, setUsername] = useState(localStorage.getItem("username"));
+  const [loading, setLoading] = useState(true)
+  const [loadingType, setLoadingType] = useState('loading')
 
   // const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/audiomis.io/`);
   // const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
@@ -47,6 +51,7 @@ const AudioMispronounced = ({ item, sendFile }) => {
   // }[readyState];
 
   let FetchAudioMisTiles = async (pageNumber) => {
+    setLoading(true)
     const data = await fetch(`${BASE_URL}/audio/audiomis`, {
       method: "POST",
       body: JSON.stringify({
@@ -57,21 +62,21 @@ const AudioMispronounced = ({ item, sendFile }) => {
         Authorization: `Bearer ${accessToken}`,
       },
     })
-      .then((response) => response.json())
-      .then((response) => response);
+    .then((res)=>res.json())
+      .finally(() => {
+        setLoading(false)
+      })
     return data;
-    // setLoading(false); // Stop loading
   };
 
-  const { isLoading, data, isFetching, refetch } = useQuery(
-    ["FetchAudioMisTiles", pageNumber],
-    () => FetchAudioMisTiles(pageNumber), {
+  const { refetch } = useQuery(["FetchAudioMisTiles", pageNumber], () => FetchAudioMisTiles(pageNumber),
+    {
       onSuccess: (res) => {
+        setMisProData(res.filename)
         setPageCount(res.pagecount);
       }
     }
   );
-  const { filename: misProData } = data || {};
   return (
     <div className="data-section">
       <div className="section-header">
@@ -83,70 +88,37 @@ const AudioMispronounced = ({ item, sendFile }) => {
                 refetch();
               }}
             >
-              <RefreshIcon/>
+              <RefreshIcon />
             </div>
           </div>
         </div>
         {
           pageNumber === 1 ?
-          null
-          :
-          <div className="pagination-class">
-            <Pagination
-              onChange={(e, value) => {
-                setPageNumber(value)}}
-              count={pageCount}
-              page={pageNumber}
-              variant="outlined"
-            />
-          </div>
+            null
+            :
+            <div className="pagination-class">
+              <Pagination
+                onChange={(e, value) => {
+                  setPageNumber(value)
+                }}
+                count={pageCount}
+                page={pageNumber}
+                variant="outlined"
+              />
+            </div>
         }
       </div>
       {
-        isLoading || isFetching?
-        <DataTilesLoader/>
-        :
-        misProData?.length > 0 ?
-        misProData?.map(([tileName, comments], index) => (
-          <div key={`${tileName}-${index}`} className="tile">
-            <div className="main-tile">
-              {/* web socket ---------- */}
-              {/* <ColorCheckboxes
-                tileName={tileName}
-                handleClickAndSendMessage={handleClickAndSendMessage}
-              /> */}
-              <div className="main-tile-head">
-                <Typography
-                  className="video-name"
-                  // onChange={handleFolderName}
-                  sx={{
-                    paddingLeft: "1rem",
-                  }}
-                >
-                  {tileName}
-                </Typography>
-                {/* {!!emittedData && JSON.parse(emittedData)?.filter(
-                  (data) => data?.video_id === tileName
-                )?.length > 0 && (
-                  <Chip
-                    label={`In progress: ${
-                      JSON.parse(emittedData)?.filter(
-                        (data) => data?.video_id === tileName
-                      )?.[0]?.user
-                    }`}
-                    sx={{ ml: "15px", backgroundColor: "#bcddfe", height:'unset',padding:'1px', color:'#1976d2', border:'1px solid #1976d2' }}
-                  ></Chip>
-                )} */}
-              </div>
-              <p className="video-name-dynamic">{comments}</p>
-            </div>
-            <div className="main-tiles">
-              <AudioModal value={tileName} sendFile={sendFile} pageNumber={pageNumber} />
-            </div>
-          </div>
-        ))
-        :
-        <NoDataFound text={'No data found...'}/>
+        loadingType === 'loading' && loading ?
+          <DataTilesLoader />
+          :
+          (misProData.length > 0 ?
+            misProData.map(([tileName, comments], index) => (
+              <AudioMisTile key={`${tileName}-${index}`} tileName={tileName} comments = {comments} index={index} pageNumber={pageNumber} changeDataStatus={setLoadingType} />
+            ))
+            :
+            <NoDataFound text={'No data found...'} />
+          )
       }
     </div>
   );

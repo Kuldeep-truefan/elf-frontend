@@ -10,12 +10,13 @@ import { useQueryClient } from "react-query";
 const username = localStorage.getItem("username");
 const socketUrl = `${WEB_BASE_URL}/simpredocon.io/`;
 
-const ConfirmPronRow = ({ value }) => {
+const ConfirmPronRow = ({ value, changeDataStatus }) => {
     const queryClient = useQueryClient();
     // const [emittedData, setemittedData] = useState("");
     const [engName, setEngName] = useState("");
     const [pageNumber, setPageNumber] = useState(1);
     const accessToken = localStorage.getItem("authToken");
+    const [updating, setUpdating] = useState(false)
     // const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
     //     onMessage: (message) => {
     //         const data = JSON.parse(message?.data);
@@ -51,26 +52,32 @@ const ConfirmPronRow = ({ value }) => {
 
     let UpdateConfirmName = async (buttonPressed, vId) => {
         try {
-            fetch(`${BASE_URL}/audio/update-confirm-pronunciation`, {
-                method: "POST",
-                body: JSON.stringify({
-                    englishName: engName,
-                    buttonPressed: buttonPressed,
-                    videoId: vId,
-                }),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8",
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            }).then(() => {
-                queryClient.invalidateQueries(["FetchConfirmPronunFiles", pageNumber]);
-            });
+            if(buttonPressed ==='Refunded' || (buttonPressed === 'Confirm Name' && engName)){
+                setUpdating(true)
+                fetch(`${BASE_URL}/audio/update-confirm-pronunciation`, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        englishName: engName,
+                        buttonPressed: buttonPressed,
+                        videoId: vId,
+                    }),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8",
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }).then(() => {
+                    changeDataStatus('fetching')
+                    queryClient.invalidateQueries(["FetchConfirmPronunFiles", pageNumber]);
+                });
+            }else{
+                alert('Enter name in the name field')
+            }
         } catch (error) {
             console.log("Error occured", error);
         }
     };
     return (
-        <div className="tile">
+        <div className={`tile ${updating?'action-performing':''}`}>
             <div className="main-tile">
                 {/* <ColorCheckboxes
                     tileName={value}

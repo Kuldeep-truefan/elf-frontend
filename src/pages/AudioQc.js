@@ -20,10 +20,9 @@ const AudioQc = ({
   const [pageCount, setPageCount] = useState(1);
   const [audioQcData, setAudioQcData] = useState([])
   const [loading, setLoading] = useState(true)
-  // const queryClient = useQueryClient()
   const [loadingType, setLoadingType] = useState('loading')
 
-  let FetchAudioQcTiles = async (myLoadingType='loading',value) => {
+  let FetchAudioQcTiles = async (value) => {
       setLoading(true)
      const data = await fetch(`${BASE_URL}/audio/audioqc`, {
         method: "POST",
@@ -42,7 +41,7 @@ const AudioQc = ({
   };
   
   // const [audioQcData, setAudioQcData] = useState({})
-  const {refetch} = useQuery(['FetchAudioQcTiles', pageNumber],() => FetchAudioQcTiles('loading',pageNumber),
+  const {refetch} = useQuery(['FetchAudioQcTiles', pageNumber],() => FetchAudioQcTiles(pageNumber),
   {
     onSuccess: (res) => {
       setPageCount(res.pagecount)
@@ -50,9 +49,10 @@ const AudioQc = ({
     }
   })
 
-  // const changeDataStatus = (index)=>{
-  //   console.log(index)
-  // }
+  const refectData = ()=>{
+    setLoadingType('loading')
+    refetch()
+  }
   
 
   return (
@@ -64,7 +64,7 @@ const AudioQc = ({
           <div className="audio-refresh-btn">
             <div
               onClick={() => {
-                refetch()
+                refectData()
               }}
             >
               <RefreshIcon/>
