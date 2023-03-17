@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 export default function ColorCheckboxes({
   tileName,
-  handleClickAndSendMessage,
+  // handleClickAndSendMessage,
 }) {
   const [selectedValue, setSelectedValue] = useState("a");
   const handleChange = (event) => {
@@ -32,12 +32,14 @@ export default function ColorCheckboxes({
       className="input-checkbox"
         onClick={(e) => {
           // handleChange();
-          if (e.target.checked != true){
-            handleClickAndSendMessage({ video_id: tileName, true: true});
-          }
-          else{
-          handleClickAndSendMessage({ video_id: tileName});
-          }
+
+          // web socket --------------
+          // if (e.target.checked != true){
+          //   handleClickAndSendMessage({ video_id: tileName, true: true});
+          // }
+          // else{
+          // handleClickAndSendMessage({ video_id: tileName});
+          // }
         }}
       />
       <label htmlFor={tileName.split("_")[3]}>

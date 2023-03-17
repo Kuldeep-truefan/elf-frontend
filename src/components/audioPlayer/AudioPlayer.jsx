@@ -12,6 +12,7 @@ function AudioPlayer({ link }) {
     const downloadLink = document.createElement("a");
 
     downloadLink.href = audioUrl;
+    downloadLink.target = '_blank'
     downloadLink.download = audioFilename;
     downloadLink.click();
   }

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import Pagination from "@mui/material/Pagination";
 import RefreshIcon from '@mui/icons-material/Refresh';
-import useWebSocket, { ReadyState } from "react-use-websocket";
+// import useWebSocket, { ReadyState } from "react-use-websocket";
 
 import RedoLipRowTile from "./RedoLipRowTile";
 import { useQuery } from "react-query";
@@ -13,13 +13,15 @@ import NoDataFound from "../ExtraComponents/NoDataFound";
 const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
   const [newNameCode, setNewNameCode] = useState("");
   const [open, setOpen] = useState(false);
-  const [emittedData, setemittedData] = useState("");
+  // const [emittedData, setemittedData] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const [pageCount, setPageCount] = useState(1);
   const [redoTileName, setRedoTileName] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [loadingType, setLoadingType] = useState('loading')
 
   let FetchAudioRedoLipSync = async (value) => {
-    // setLoading(true); // Set loading before sending API request
+    setLoading(true); // Set loading before sending API request
     const data = await fetch(`${BASE_URL}/audio/get-redo-lip-files`, {
       method: "POST",
       body: JSON.stringify({
@@ -29,36 +31,38 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
         "Content-type": "application/json; charset=UTF-8",
         Authorization: `Bearer ${accessToken}`,
       },
-    }).then((response) => response.json());
+    }).then((response) => response.json())
+    .finally(()=>{
+      setLoading(false)
+    })
+    
     return data;
   };
-  const { isLoading, data, isFetching, refetch } = useQuery(
-    ["FetchAudioRedoLipSync", pageNumber],
-    () => FetchAudioRedoLipSync(pageNumber),
+  const { refetch } = useQuery(["FetchAudioRedoLipSync", pageNumber],() => FetchAudioRedoLipSync(pageNumber),
     {
       onSuccess: (res) => {
+        // setPageCount
         setPageCount(res.pagecount);
         setRedoTileName(res.filename)
       },
     }
   );
 
-  const { lastnamecode: nameCode } = data || {};
-  const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/simpredocon.io/`);
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
-    onMessage: (message) => {
-      const data = JSON.parse(message?.data);
-      setemittedData(JSON.parse(data?.data));
-    },
-  });
+  // const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/simpredocon.io/`);
+  // const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
+  //   onMessage: (message) => {
+  //     const data = JSON.parse(message?.data);
+  //     setemittedData(JSON.parse(data?.data));
+  //   },
+  // });
 
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  }[readyState];
+  // const connectionStatus = {
+  //   [ReadyState.CONNECTING]: "Connecting",
+  //   [ReadyState.OPEN]: "Open",
+  //   [ReadyState.CLOSING]: "Closing",
+  //   [ReadyState.CLOSED]: "Closed",
+  //   [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  // }[readyState];
 
   // const[required,setRequired]=useState(false)
   const accessToken = localStorage.getItem("authToken");
@@ -67,8 +71,9 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
     setOpen(open);
   };
 
-  const handleChange = (event) => {
-    setNewNameCode(event.target.value);
+  const reloadData = () => {
+    setLoadingType('loading');
+    refetch();
   };
 
   return (
@@ -79,7 +84,7 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
           <div className="audio-refresh-btn">
             <div
               onClick={() => {
-                refetch();
+                reloadData()
               }}
             >
               <RefreshIcon/>
@@ -87,7 +92,7 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
           </div>
         </div>
         {
-          pageNumber === 1 ?
+          pageCount === 1 ?
           null
           :
           <div className="pagination-class">
@@ -102,7 +107,7 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
         }
       </div>
       {
-        isLoading || isFetching?
+        loadingType === 'loading' && loading ?
         <DataTilesLoader/>
         :
        redoTileName.length > 0 ?
@@ -113,6 +118,7 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
             comments={comments}
             nameCode={namecode}
             pageNumber={pageNumber}
+            changeDataStatus={setLoadingType}
           />
         ))
       :

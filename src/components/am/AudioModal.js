@@ -6,7 +6,7 @@ import AudiotrackIcon from '@mui/icons-material/Audiotrack';
 import './am.css';
 const accessToken = localStorage.getItem("authToken");
 
-const AudioModal = ({ value, pageNumber }) => {
+const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
   const [sendFile, setSendFile] = useState(null);
   // const fileFirstName = value.split("-")[0];
   // const fileBucket = value.split("-")[1];
@@ -27,6 +27,7 @@ const AudioModal = ({ value, pageNumber }) => {
         file: event.target.files[0],
       });
     }else if (`${event.target.files[0]?.name}` !== `${fileFirstName}.wav`){
+      setSendFile(null)
       alert("Filename not matched choose the correct file")
     }
   };
@@ -75,6 +76,7 @@ const AudioModal = ({ value, pageNumber }) => {
   };
 
   let AudioUncracked = async (id) => {
+    setUpdating(true)
     try {
       fetch(`${BASE_URL}/audio/update-miscracked-field`, {
         method: "PUT",
@@ -85,7 +87,13 @@ const AudioModal = ({ value, pageNumber }) => {
           "Content-type": "application/json; charset=UTF-8",
           Authorization: `Bearer ${accessToken}`,
         },
-      });
+      })
+      .then((res)=>{
+        if(res.status === 200){
+          changeDataStatus('fetching')
+          queryClient.invalidateQueries(["FetchAudioMisTiles", pageNumber]);
+        }
+      })
     } catch (error) {
       console.log("Error occured", error);
     }
@@ -93,34 +101,41 @@ const AudioModal = ({ value, pageNumber }) => {
 
   let UploadAudioFileMispronounced = async (filename, subBuckName, vid) => {
     try {
-      let myHeaders = new Headers();
-      myHeaders.append(
-        "Cookie",
-        "csrftoken=L2ETtVsdGnxYzQ4llNrKESv7Evm5nGa5N7SWvkTt488G43CzM7AnoWHJoxr8GNSC"
-      );
+      if(!!sendFile){
+        setUpdating(true)
+        let myHeaders = new Headers();
+        myHeaders.append(
+          "Cookie",
+          "csrftoken=L2ETtVsdGnxYzQ4llNrKESv7Evm5nGa5N7SWvkTt488G43CzM7AnoWHJoxr8GNSC"
+        );
 
-      let formdata = new FormData();
-      formdata.append("audioData", sendFile.file);
-      formdata.append("fileName", `${filename}.wav`);
-      formdata.append("folderName", `${subBuckName}-raw`);
-      formdata.append("videoId", vid);
-      formdata.append("screenName", 'am');
-      
-      let requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: formdata,
-      };
-      const response = await fetch(
-        `${BASE_URL}/audio/audio_mispronounced`,
-        requestOptions
-      );
-      // if (response.status === 'success') {
-        queryClient.invalidateQueries(["FetchAudioMisTiles", pageNumber]);
-        setSendFile(null)
-      // }
-      const convertToText = await response.text();
-      return convertToText;
+        let formdata = new FormData();
+        formdata.append("audioData", sendFile.file);
+        formdata.append("fileName", `${filename}.wav`);
+        formdata.append("folderName", `${subBuckName}-raw`);
+        formdata.append("videoId", vid);
+        formdata.append("screenName", 'am');
+        
+        let requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: formdata,
+        };
+        const response = await fetch(
+          `${BASE_URL}/audio/audio_mispronounced`,
+          requestOptions
+        );
+        if (response.status === 200) {
+          changeDataStatus('fetching')
+          queryClient.invalidateQueries(["FetchAudioMisTiles", pageNumber]);
+          setSendFile(null)
+        }
+        const convertToText = await response.text();
+        return convertToText;
+      }else{
+        alert('Select file to upload')
+      }
+
     } catch (error) {
       console.log(error);
     }
@@ -225,7 +240,8 @@ const AudioModal = ({ value, pageNumber }) => {
           }}
           className="primary-btn"
         >
-          Done
+          {/* Upload  */}
+          done
         </button>
       </div>
       </div>

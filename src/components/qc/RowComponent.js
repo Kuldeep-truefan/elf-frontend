@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import VideoModal from "./VideoModal";
 import { BASE_URL } from "../../constants/constant";
+import { useQueryClient } from "react-query";
+
 
 const RowComponent = ({
   item,
@@ -21,15 +23,18 @@ const RowComponent = ({
   setLink,
   link,
   destbucket,
-  fetchLinkMutate,
+  changeDataStatus,
   pageNumber
 }) => {
+  const queryClient = useQueryClient()
   const [status, setStatus] = useState("");
   const [option, setOptions] = useState("");
   const [remark, setRemark] = useState("");
   const [isDisabled, setIsDisabled] = useState(true);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  
+  const [updating, setUpdating] = useState(false)
   const accessToken = localStorage.getItem("authToken");
 
   const handelClick = () => {
@@ -49,6 +54,8 @@ const RowComponent = ({
   };
 
   let GetQCDone = async () => {
+    
+    setUpdating(true)
     const saveStatus = status;
     const saveOption = option;
     const saveRemark = remark;
@@ -56,7 +63,7 @@ const RowComponent = ({
     setOptions("");
     setRemark("");
     try {
-      fetch(`${BASE_URL}/log/tilestatus`, {
+      await fetch(`${BASE_URL}/log/tilestatus`, {
         method: "POST",
         body: JSON.stringify({
           sourceBucket: sbuck,
@@ -71,11 +78,8 @@ const RowComponent = ({
           Authorization: `Bearer ${accessToken}`,
         },
       })
-        .then((response) => response.json())
-        .then((data) => {
-          fetchLinkMutate(pageNumber);
-          // data.success ? setLink(remainingData) : console.log("No Data Found");
-        });
+        changeDataStatus('fetching')
+        queryClient.invalidateQueries({queryKey:['FetchLinkData']})
     } catch (error) {
       console.log("Error occured", error);
     }
@@ -93,7 +97,7 @@ const RowComponent = ({
   }, [status, option, destbucket]);
 
   return (
-    <div className="tile">
+    <div className={`tile ${updating?'action-performing':''}`}>
       <div className="main-tile">
         <div className="main-tile-head">
           <Typography
@@ -113,7 +117,7 @@ const RowComponent = ({
                     (data) => data?.video_id === item
                   )?.[0]?.user
                 }`}
-                sx={{ ml: "5px", backgroundColor: "white" }}
+                sx={{ ml: "15px", backgroundColor: "#bcddfe", height:'unset',padding:'1px', color:'#1976d2', border:'1px solid #1976d2' }}
               />
             )}
         </div>

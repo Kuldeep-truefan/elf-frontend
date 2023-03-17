@@ -7348,23 +7348,24 @@ const username = localStorage.getItem("username");
 const socketUrl = `${WEB_BASE_URL}/ausoket.io/`;
 const accessToken = localStorage.getItem("authToken");
 
-const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
+const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber, changeDataStatus }) => {
   const queryClient = useQueryClient();
-  const [emittedData, setemittedData] = useState("");
+  // const [emittedData, setemittedData] = useState("");
   const [open, setOpen] = useState(false);
   const [newNameCode, setNewNameCode] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const [updating, setUpdating] = useState(false)
 
   // New auto states
   const [value, setValue] = useState([]);
-  console.log(value, "value---->>>>");
+  // console.log(value, "value---->>>>");
 
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
-    onMessage: (message) => {
-      const data = JSON.parse(message?.data);
-      setemittedData(JSON.parse(data?.data));
-    },
-  });
+  // const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
+  //   onMessage: (message) => {
+  //     const data = JSON.parse(message?.data);
+  //     setemittedData(JSON.parse(data?.data));
+  //   },
+  // });
 
   // const memoizedOptions = namecodes;
 
@@ -7386,49 +7387,54 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
     }
   };
 
-  const handleClickAndSendMessage = useCallback(
-    (payload) =>
-      sendMessage(
-        JSON.stringify({
-          user: username,
-          ...payload,
-        })
-      ),
-    [username]
-  );
+  // const handleClickAndSendMessage = useCallback(
+  //   (payload) =>
+  //     sendMessage(
+  //       JSON.stringify({
+  //         user: username,
+  //         ...payload,
+  //       })
+  //     ),
+  //   [username]
+  // );
   const handelClick = () => {
     setOpen(open);
   };
 
   let UpdateRedoLipSync = async (videoId) => {
     try {
-      fetch(`${BASE_URL}/audio/updt-redo-lip-newnamecode`, {
-        method: "PUT",
-        body: JSON.stringify({
-          newNameCode: value.join(" ").trim(),
-          videoId: videoId,
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-        .then(() => {
-          queryClient.invalidateQueries(["FetchAudioRedoLipSync", pageNumber]);
-        })
-        .then((data) => {});
+      if(value.length > 0){
+          setUpdating(true)
+          fetch(`${BASE_URL}/audio/updt-redo-lip-newnamecode`, {
+            method: "PUT",
+            body: JSON.stringify({
+              newNameCode: value.join(" ").trim(),
+              videoId: videoId,
+            }),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+              Authorization: `Bearer ${accessToken}`,
+            },
+          })
+            .then(() => {
+              changeDataStatus('fetching')
+              queryClient.invalidateQueries(["FetchAudioRedoLipSync", pageNumber]);
+            })
+      }else{
+        alert('Please enter namecodes')
+      }
     } catch (error) {
       console.log("Error occured", error);
     }
   };
 
   return (
-    <div className="tile auto-complete">
+    <div className={`tile auto-complete ${updating?'action-performing':''}`}>
       <div className="main-tile">
-        <ColorCheckboxes
+        {/* <ColorCheckboxes
           tileName={tileName}
           handleClickAndSendMessage={handleClickAndSendMessage}
-        />
+        /> */}
         <div className="main-tile-head">
           <Typography
             className="video-name"
@@ -7438,7 +7444,7 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
           >
             {tileName}
           </Typography>
-          {emittedData &&
+          {/* {emittedData &&
             JSON.parse(emittedData)?.filter(
               (data) => data?.video_id === tileName
             )?.length > 0 && (
@@ -7450,7 +7456,7 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber }) => {
                 }`}
                 sx={{ ml: "15px", backgroundColor: "#bcddfe", height:'unset',padding:'1px', color:'#1976d2', border:'1px solid #1976d2' }}
                 ></Chip>
-            )}
+            )} */}
         </div>
         <p className="video-name-dynamic">{comments}</p>
       </div>

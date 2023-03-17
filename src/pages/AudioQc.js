@@ -19,9 +19,11 @@ const AudioQc = ({
   const [pageNumber, setPageNumber] = useState(1);
   const [pageCount, setPageCount] = useState(1);
   const [audioQcData, setAudioQcData] = useState([])
-  // const queryClient = useQueryClient()
+  const [loading, setLoading] = useState(true)
+  const [loadingType, setLoadingType] = useState('loading')
 
   let FetchAudioQcTiles = async (value) => {
+      setLoading(true)
      const data = await fetch(`${BASE_URL}/audio/audioqc`, {
         method: "POST",
         body: JSON.stringify({
@@ -32,24 +34,26 @@ const AudioQc = ({
           Authorization: `Bearer ${accessToken}`,
         },
       }).then((response) => response.json())
+      .finally(()=>{
+        setLoading(false)
+      })
         return data
   };
   
   // const [audioQcData, setAudioQcData] = useState({})
-  const {isLoading, data, isFetching, refetch} = useQuery(['FetchAudioQcTiles', pageNumber],() => FetchAudioQcTiles(pageNumber),
+  const {refetch} = useQuery(['FetchAudioQcTiles', pageNumber],() => FetchAudioQcTiles(pageNumber),
   {
     onSuccess: (res) => {
       setPageCount(res.pagecount)
       setAudioQcData(res.filename)
     }
   })
-  // const audioQcData =  {}
-  // const{filename:audioQcData} = data || {}
 
-  const changeDataStatus = (index)=>{
-    console.log(index)
-    // audioQcData
+  const refectData = ()=>{
+    setLoadingType('loading')
+    refetch()
   }
+  
 
   return (
     <>
@@ -60,7 +64,7 @@ const AudioQc = ({
           <div className="audio-refresh-btn">
             <div
               onClick={() => {
-                refetch();
+                refectData()
               }}
             >
               <RefreshIcon/>
@@ -68,7 +72,7 @@ const AudioQc = ({
           </div>
         </div>
         {
-          pageNumber === 1 ?
+          pageCount === 1 ?
           null
           :
           <div className="pagination-class">
@@ -82,14 +86,14 @@ const AudioQc = ({
           </div>
         }
       </div>
-      {isLoading || isFetching?
+      {loadingType === 'loading' && loading?
       <DataTilesLoader/> 
       :
       audioQcData.length === 0? 
       <NoDataFound text={'No data found...'}/>
       :
       audioQcData.map(([tileName, comments], index) => (
-        <AudioQcRow key={`${tileName}-${index}`} item={item} emittedData={emittedData} tileName={tileName} comments={comments} index={index} pageNumber={pageNumber} changeDataStatus={FetchAudioQcTiles}/>
+        <AudioQcRow key={`${tileName}-${index}`} item={item} emittedData={emittedData} tileName={tileName} comments={comments} index={index} pageNumber={pageNumber} changeDataStatus={setLoadingType}/>
       )
       )
       }

@@ -10,7 +10,7 @@ import { BASE_URL } from "../../constants/constant";
 import Pagination from "@mui/material/Pagination";
 import {useMutation} from 'react-query'
 
-function TileController({ setSbuck, setDbuck, destbucket, setDestMove, setLoadbucket, fetchLinkMutate,loadbucket}) {
+function TileController({ pageCount,setSbuck, setDbuck, destbucket, setDestMove, setLoadbucket, reloadData,loadbucket, setLoadingType}) {
   const accessToken = localStorage.getItem('authToken');
 
   // // PROD ENV BUCKETS
@@ -43,6 +43,11 @@ function TileController({ setSbuck, setDbuck, destbucket, setDestMove, setLoadbu
     setDbuck(event.target.value)
   };
 
+  const refetchData = ()=>{
+    setLoadingType('loading')
+    reloadData()
+  }
+
 
   return (
     // <div className="tc">
@@ -73,7 +78,7 @@ function TileController({ setSbuck, setDbuck, destbucket, setDestMove, setLoadbu
             {movebucketoption?.map((bucket,index) => <MenuItem key={index} value={bucket.value}>{bucket.label}</MenuItem>)} 
           </Select>
         </FormControl>
-        <button href="#contained-buttons" onClick = {() => fetchLinkMutate(1)} className="primary-btn"><SearchIcon />Search</button>
+        <button href="#contained-buttons" onClick = {() => refetchData()} className="primary-btn"><SearchIcon />Search</button>
         </div>
 
   );

@@ -17,8 +17,12 @@ const SimplifiedNames = () => {
   const [pageCount, setPageCount] = useState(1);
   const accessToken = localStorage.getItem("authToken");
   const [simpNamesData, setSimpNamesData] = useState([])
+  const [loading, setLoading] = useState(true);
+  const [loadingType, setLoadingType] = useState('loading')
+
 
   let FetchSimplifiedNames = async (value) => {
+    setLoading('loading')
     const data = fetch(`${BASE_URL}/audio/simpnametiles`, {
       method: "POST",
       body: JSON.stringify({
@@ -30,13 +34,15 @@ const SimplifiedNames = () => {
       },
     })
       .then((response) => response.json())
-      .then((response) => response);
+      .then((response) => response)
+      .finally(()=>{
+        setLoading(false)
+      })
+      
     return data;
   };
 
-  const { isLoading, data, refetch, isFetching } = useQuery(
-    ["FetchSimplifiedNames", pageNumber],
-    () => FetchSimplifiedNames(pageNumber),
+  const {refetch } = useQuery(["FetchSimplifiedNames", pageNumber],() => FetchSimplifiedNames(pageNumber),
     {
       onSuccess: (res) => {
         setPageCount(res.pagecount);
@@ -44,6 +50,11 @@ const SimplifiedNames = () => {
       },
     }
   );
+
+  const reloadData = ()=>{
+    setLoadingType('loading')
+    refetch()
+  }
 
   
 
@@ -58,7 +69,7 @@ const SimplifiedNames = () => {
           <div className="audio-refresh-btn">
             <div
               onClick={() => {
-                refetch();
+                reloadData();
               }}
             >
               <RefreshIcon/>
@@ -66,7 +77,7 @@ const SimplifiedNames = () => {
           </div>
         </div>
         {
-          pageNumber === 1 ?
+          pageCount === 1 ?
           null
           :
           <div className="pagination-class">
@@ -81,7 +92,7 @@ const SimplifiedNames = () => {
         }
       </div>
       {
-        isLoading || isFetching?
+        loadingType === 'loading' && loading ?
         <DataTilesLoader/>
         :
         simpNamesData.length > 0 ?
@@ -91,6 +102,7 @@ const SimplifiedNames = () => {
             tileName={tileName}
             vas={vas}
             pageNumber={pageNumber}
+            changeDataStatus={setLoadingType}
           />
         ))
       :

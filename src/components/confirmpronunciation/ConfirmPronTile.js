@@ -12,14 +12,15 @@ import NoDataFound from "../ExtraComponents/NoDataFound";
 
 const ConfirmPronTile = () => {
   const queryClient = useQueryClient();
-  // const [status, setStatus] = useState("");
-  // const [option, setOptions] = useState("");
   const [audioConfirmPro, setAudioConfirmPro] = useState([])
   const [pageCount, setPageCount] = useState(1);
   const [pageNumber, setPageNumber] = useState(1);
   const accessToken = localStorage.getItem("authToken");
+  const [loading, setLoading] = useState(true)
+  const [loadingType, setLoadingType] = useState('loading')
 
   let FetchConfirmPronunFiles = async (value) => {
+    setLoading(true)
     const data = fetch(`${BASE_URL}/audio/get-confirm-files`, {
       method: "POST",
       body: JSON.stringify({
@@ -29,9 +30,18 @@ const ConfirmPronTile = () => {
         "Content-type": "application/json; charset=UTF-8",
         Authorization: `Bearer ${accessToken}`,
       },
-    }).then((response) => response.json());
+    }).then((response) => response.json())
+    .finally(()=>{
+      setLoading(false)
+    })
+    ;
     return data;
   };
+
+  const reloadData = ()=>{
+    setLoadingType('loading')
+    refetch()
+  }
 
   const { isLoading, data, isFetching, refetch } = useQuery(
     ["FetchConfirmPronunFiles", pageNumber],
@@ -55,7 +65,7 @@ const ConfirmPronTile = () => {
           <div className="audio-refresh-btn">
             <div
               onClick={() => {
-                refetch();
+                reloadData();
               }}
             >
               <RefreshIcon/>
@@ -63,7 +73,7 @@ const ConfirmPronTile = () => {
           </div>
         </div>
         {
-          pageNumber === 1 ?
+          pageCount === 1 ?
           null
           :
           <div className="pagination-class">
@@ -78,11 +88,11 @@ const ConfirmPronTile = () => {
         }
       </div>
       {
-        isLoading || isFetching?
+        loadingType === 'loading' && loading ?
         <DataTilesLoader/>
         :
         audioConfirmPro.length>0?audioConfirmPro.map((value, index) => (
-        <ConfirmPronRow key={`${value}-${index}`} value={value} />
+        <ConfirmPronRow key={`${value}-${index}`} value={value} changeDataStatus={setLoadingType} />
       ))
     :
     <NoDataFound text={'No data found...'} />

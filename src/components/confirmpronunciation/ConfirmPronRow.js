@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
+// import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import "../../App.css";
 import { Chip, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -10,40 +10,41 @@ import { useQueryClient } from "react-query";
 const username = localStorage.getItem("username");
 const socketUrl = `${WEB_BASE_URL}/simpredocon.io/`;
 
-const ConfirmPronRow = ({ value }) => {
+const ConfirmPronRow = ({ value, changeDataStatus }) => {
     const queryClient = useQueryClient();
-    const [emittedData, setemittedData] = useState("");
+    // const [emittedData, setemittedData] = useState("");
     const [engName, setEngName] = useState("");
     const [pageNumber, setPageNumber] = useState(1);
     const accessToken = localStorage.getItem("authToken");
-    const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
-        onMessage: (message) => {
-            const data = JSON.parse(message?.data);
-            setemittedData(JSON.parse(data?.data));
-        },
-    });
+    const [updating, setUpdating] = useState(false)
+    // const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
+    //     onMessage: (message) => {
+    //         const data = JSON.parse(message?.data);
+    //         setemittedData(JSON.parse(data?.data));
+    //     },
+    // });
 
-    const handleClickAndSendMessage = useCallback(
-        (payload) => {
-            if (payload.true) {
-                sendMessage(
-                    JSON.stringify({
-                        user: username,
-                        true: true,
-                        ...payload,
-                    })
-                );
-            } else {
-                sendMessage(
-                    JSON.stringify({
-                        user: username,
-                        ...payload,
-                    })
-                );
-            }
-        },
-        [username]
-    );
+    // const handleClickAndSendMessage = useCallback(
+    //     (payload) => {
+    //         if (payload.true) {
+    //             sendMessage(
+    //                 JSON.stringify({
+    //                     user: username,
+    //                     true: true,
+    //                     ...payload,
+    //                 })
+    //             );
+    //         } else {
+    //             sendMessage(
+    //                 JSON.stringify({
+    //                     user: username,
+    //                     ...payload,
+    //                 })
+    //             );
+    //         }
+    //     },
+    //     [username]
+    // );
 
     const handleChange = (event) => {
         setEngName(event.target.value);
@@ -51,31 +52,37 @@ const ConfirmPronRow = ({ value }) => {
 
     let UpdateConfirmName = async (buttonPressed, vId) => {
         try {
-            fetch(`${BASE_URL}/audio/update-confirm-pronunciation`, {
-                method: "POST",
-                body: JSON.stringify({
-                    englishName: engName,
-                    buttonPressed: buttonPressed,
-                    videoId: vId,
-                }),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8",
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            }).then(() => {
-                queryClient.invalidateQueries(["FetchConfirmPronunFiles", pageNumber]);
-            });
+            if(buttonPressed ==='Refunded' || (buttonPressed === 'Confirm Name' && engName)){
+                setUpdating(true)
+                fetch(`${BASE_URL}/audio/update-confirm-pronunciation`, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        englishName: engName,
+                        buttonPressed: buttonPressed,
+                        videoId: vId,
+                    }),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8",
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }).then(() => {
+                    changeDataStatus('fetching')
+                    queryClient.invalidateQueries(["FetchConfirmPronunFiles", pageNumber]);
+                });
+            }else{
+                alert('Enter name in the name field')
+            }
         } catch (error) {
             console.log("Error occured", error);
         }
     };
     return (
-        <div className="tile">
+        <div className={`tile ${updating?'action-performing':''}`}>
             <div className="main-tile">
-                <ColorCheckboxes
+                {/* <ColorCheckboxes
                     tileName={value}
                     handleClickAndSendMessage={handleClickAndSendMessage}
-                />
+                /> */}
                 <div className="main-tile-head">
                     <Typography
                         className="video-name"
@@ -85,7 +92,7 @@ const ConfirmPronRow = ({ value }) => {
                     >
                         {value}
                     </Typography>
-                    {emittedData &&
+                    {/* {emittedData &&
                         JSON.parse(emittedData)?.filter(
                             (data) => data?.video_id === value
                         )?.length > 0 && (
@@ -96,7 +103,7 @@ const ConfirmPronRow = ({ value }) => {
                                     }`}
                                     sx={{ ml: "15px", backgroundColor: "#bcddfe", height:'unset',padding:'1px', color:'#1976d2', border:'1px solid #1976d2' }}
                             ></Chip>
-                        )}
+                        )} */}
                 </div>
             </div>
             <div className="main-tiles">

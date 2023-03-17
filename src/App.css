@@ -547,7 +547,10 @@ body{
 input, textarea{
   padding: 3px 10px;
   text-align: left;
-  border-radius: 10px;
+  border-radius: 4px;
+}
+#new-request-form input{
+  border: none;
 }
 .tiles-loading, .row-loader{
   width: 100%;
@@ -603,4 +606,35 @@ input, textarea{
 .lkjDVC{
   padding: 50px 16px 50px 16px !important;
   border: 2px dashed #83b7fb;
+}
+
+#new-request-form label{
+   background-color: #fefefe;
+   padding: 0 5px 0 0;
+}
+#request-modal .MuiBox-root, #new-request-form .css-1869usk-MuiFormControl-root, #new-request-form .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root, #new-request-form .css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root{
+  display: block;
+  margin: 15px 8px;
+}
+
+#new-request-form .css-1u3bzj6-MuiFormControl-root-MuiTextField-root{
+  margin: 15px 8px;
+  display: block;
+}
+#new-request-form .primary-btn{
+  /* margin: 8px; */
+  width: 100%;
+}
+
+.success-msg{
+  margin: 20px 8px;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid rgb(1, 240, 1);
+  color: rgb(2, 177, 2);
+  background-color: rgb(173, 255, 173);
+  border-radius: 4px;
+}
+.success-msg p{
+  margin: 0;
 }

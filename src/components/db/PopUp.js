@@ -117,7 +117,7 @@ export default function PopUp({ data }) {
             <AudioPlayer link={downloadLink} />
           </div>
         ):
-        ( data.blob === 'null'?
+        ( data.blob.split("_")[0] === 'null' ?
           <p style={{
             marginTop:'10px',
             color:'#f00'

@@ -6,7 +6,7 @@ import { BASE_URL, WEB_BASE_URL } from "../constants/constant";
 import RowComponent from "../components/qc/RowComponent";
 import * as React from "react";
 import Pagination from "@mui/material/Pagination";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import ClockLoader from "react-spinners/ClockLoader";
 import NoDataFound from '../components/ExtraComponents/NoDataFound'
 import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoader";
@@ -21,9 +21,13 @@ function Qc() {
   const [pageCount, setPageCount] = useState(1);
   const [pageNumber, setPageNumber] = useState(1);
   const [loadbucket, setLoadbucket] = useState("qc2");
+  const [loading, setLoading] = useState(true);
+  const [loadingType, setLoadingType] = useState('loading')
 
   const accessToken = localStorage.getItem("authToken");
+
   let FetchLink = async (value) => {
+    setLoading(true)
     const data = await fetch(`${BASE_URL}/log/getlink`, {
       method: "POST",
       body: JSON.stringify({
@@ -36,26 +40,26 @@ function Qc() {
       },
     })
       .then((response) => response.json())
-      .then((response) => response);
+      .then((response) => response)
+      .finally(() => {
+        setLoading(false)
+      });
     return data;
   };
 
-  const { mutate: fetchLinkMutate, isLoading: fetchLinkLoading } = useMutation(
-    FetchLink,
+  const { refetch } = useQuery(['FetchLinkData', pageNumber], () => FetchLink(pageNumber),
     {
-      mutationKey: "fetchLink",
       onSuccess: (res) => {
-        console.log({ res });
         setLink(res.filename);
         setPageCount(res.pagecount);
-      },
-    }
-  );
+
+      }
+    })
 
   //Public API that will echo messages sent to it back to the client
   const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/socket.io/`);
 
-  // const [messageHistory, setMessageHistory] = useState([]);
+  const [messageHistory, setMessageHistory] = useState([]);
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
     onMessage: (message) => {
@@ -67,22 +71,25 @@ function Qc() {
     },
   });
 
-  // useEffect(() => {
-  //   if (lastMessage !== null) {
-  //     setMessageHistory((prev) => prev.concat(lastMessage));
-  //   }
-  // }, [lastMessage, setMessageHistory]);
+  useEffect(() => {
+    if (lastMessage !== null) {
+      setMessageHistory((prev) => prev.concat(lastMessage));
+    }
+  }, [lastMessage, setMessageHistory]);
 
   // console.log(messageHistory, 'this is message history');
 
   const handleClickSendMessage = useCallback(
-    (payload) =>
-      sendMessage(
-        JSON.stringify({
-          user: username,
-          ...payload,
-        })
-      ),
+    (payload) =>{
+
+      console.log(payload)
+        sendMessage(
+          JSON.stringify({
+            user: username,
+            ...payload,
+          })
+        )
+    },
     [username]
   );
 
@@ -94,80 +101,82 @@ function Qc() {
     [ReadyState.UNINSTANTIATED]: "Uninstantiated",
   }[readyState];
 
-  useEffect(()=>{
-    fetchLinkMutate(1)
-  },[])
+  // useEffect(() => {
+  //   FetchLink()
+  // }, [])
 
   return (
     <>
-    <div className="data-section"> 
-      <div className="section-header">
+      <div className="data-section">
+        <div className="section-header">
           <div className="section-header-1">
             <h1 className="heading-screens">Video QC</h1>
             <div style={{
               display: 'flex',
               justifyContent: 'center',
-            flexDirection: 'row'
+              flexDirection: 'row'
             }}>
 
-                  <TileController
-                    setLink={setLink}
-                    setSbuck={setSbuck}
-                    emittedData={emittedData}
-                    setDbuck={setDbuck}
-                    destbucket={destbucket}
-                    setDestMove={setDestMove}
-                    pageNumber={pageNumber}
-                    setPageCount={setPageCount}
-                    setLoadbucket={setLoadbucket}
-                    fetchLinkMutate={fetchLinkMutate}
-                    loadbucket={loadbucket}
-                  />
-                    
+              <TileController
+                setLink={setLink}
+                setSbuck={setSbuck}
+                emittedData={emittedData}
+                setDbuck={setDbuck}
+                destbucket={destbucket}
+                setDestMove={setDestMove}
+                pageNumber={pageNumber}
+                setPageCount={setPageCount}
+                setLoadbucket={setLoadbucket}
+                reloadData={refetch}
+                setLoadingType = {setLoadingType}
+                loadbucket={loadbucket}
+              />
+
             </div>
           </div>
           {
-            pageNumber === 1 ?
-            null
-            :
-            <div className="pagination-class">
-              <Pagination
-                onChange={(e, value) => {
-                  setPageNumber(value)}}
-                count={pageCount}
-                page={pageNumber}
-                variant="outlined"
-              />
-            </div>
+            pageCount === 1 ?
+              null
+              :
+              <div className="pagination-class">
+                <Pagination
+                  onChange={(e, value) => {
+                    setPageNumber(value)
+                  }}
+                  count={pageCount}
+                  page={pageNumber}
+                  variant="outlined"
+                />
+              </div>
           }
         </div>
-      {
-        fetchLinkLoading ? 
-        <DataTilesLoader/>
-        :
-        link?.length > 0 ?
-        link?.map(([fileName, comments], index) => {
-          return (
-            <RowComponent
-              key={index}
-              comments={comments}
-              setLink={setLink}
-              handleClickSendMessage={handleClickSendMessage}
-              destbucket={destbucket}
-              emittedData={emittedData}
-              item={fileName}
-              sbuck={sbuck}
-              dbuck={dbuck}
-              index={index}
-              link={link}
-              fetchLinkMutate={fetchLinkMutate}
-              pageNumber={pageNumber}
-            />
-          )
-        }):
-        <NoDataFound text={'No data found, may you didn\'t select any option from above'}/>
-      }
-    </div>
+        {
+          loadingType === 'loading' && loading ?
+            <DataTilesLoader />
+            :
+            link?.length > 0 ?
+              link?.map(([fileName, comments], index) => {
+                return (
+                  <RowComponent
+                    key={index + fileName}
+                    comments={comments}
+                    setLink={setLink}
+                    handleClickSendMessage={handleClickSendMessage}
+                    destbucket={destbucket}
+                    emittedData={emittedData}
+                    item={fileName}
+                    sbuck={sbuck}
+                    dbuck={dbuck}
+                    index={index}
+                    link={link}
+                    changeDataStatus={setLoadingType}
+                    pageNumber={pageNumber}
+                  />
+                )
+              }) :
+              <NoDataFound text={'No data found, may you didn\'t select any option from above'} />
+        }
+      </div>
     </>
   );
 }
