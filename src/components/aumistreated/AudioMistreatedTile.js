@@ -194,7 +194,7 @@ const AudioMistreatedTile = ({ comments, value, changeDataStatus, pageNumber }) 
             sx={{ fontSize: "3rem", marginTop: ".35rem", color: "#1976d2", cursor: 'pointer' }}
             onClick={() => {
               handleOpen();
-              FetchPlayVideo(value.value.replace(".wav", ".mp4"));
+              FetchPlayVideo(value.replace(".wav", ".mp4"));
             }}
           />
           <Modal
