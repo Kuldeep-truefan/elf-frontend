@@ -1,8 +1,12 @@
-const useAuth = () => {
-    const auth = localStorage.getItem('authToken');
-    console.log(auth)
+import { useEffect, useState } from "react";
 
-  return [auth?true:false]
+const useAuth = () => {
+    const [auth, setAuth] = useState(localStorage.getItem('authToken'));
+    useEffect(()=>{
+      setAuth(localStorage.getItem('authToken'))
+    },[auth])
+
+    return [auth?true:false]
 }
 
 export default useAuth
