@@ -40,7 +40,6 @@ const AudioQc = ({
         return data
   };
   
-  // const [audioQcData, setAudioQcData] = useState({})
   const {refetch} = useQuery(['FetchAudioQcTiles', pageNumber],() => FetchAudioQcTiles(pageNumber),
   {
     onSuccess: (res) => {
@@ -72,7 +71,7 @@ const AudioQc = ({
           </div>
         </div>
         {
-          pageCount === 1 ?
+          pageCount === 1 || !pageCount ?
           null
           :
           <div className="pagination-class">

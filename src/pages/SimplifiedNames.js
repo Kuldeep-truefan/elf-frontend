@@ -77,7 +77,7 @@ const SimplifiedNames = () => {
           </div>
         </div>
         {
-          pageCount === 1 ?
+          pageCount === 1 || !pageCount ?
           null
           :
           <div className="pagination-class">
