@@ -4,6 +4,7 @@ import { BASE_URL } from "../../constants/constant";
 import { useQueryClient } from "react-query";
 import { ControlBar, PlaybackRateMenuButton, ReplayControl } from "video-react";
 import PlayCircleRounderIcon from "@mui/icons-material/PlayCircleRounded";
+import "../../../node_modules/video-react/dist/video-react.css";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { BigPlayButton, Player, PlayToggle } from "video-react";
