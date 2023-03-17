@@ -70,7 +70,7 @@ const NewRequestFormModal = ({ handleClose }) => {
                         setTimeout(() => {
                             handleClose()
                         }, 1000)
-                    }else if(res.status === 409){
+                    }else{
                         setErrMsg(`Video ID ${inputValue.video_id} already present, enter correct video ID`)
                     }
                 })
