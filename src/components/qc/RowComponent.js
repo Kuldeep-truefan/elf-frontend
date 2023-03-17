@@ -59,9 +59,9 @@ const RowComponent = ({
     const saveStatus = status;
     const saveOption = option;
     const saveRemark = remark;
-    setStatus("");
-    setOptions("");
-    setRemark("");
+    // setStatus("");
+    // setOptions("");
+    // setRemark("");
     try {
       await fetch(`${BASE_URL}/log/tilestatus`, {
         method: "POST",

@@ -10,6 +10,7 @@ import {
 } from 'react-query';
 import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoader";
 import NoDataFound from "../components/ExtraComponents/NoDataFound";
+import Filter from "../components/filter/Filter";
 
 const AudioQc = ({
   item,
@@ -70,6 +71,7 @@ const AudioQc = ({
             </div>
           </div>
         </div>
+        <Filter/>
         {
           pageCount === 1 || !pageCount ?
           null

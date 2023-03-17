@@ -1,0 +1,64 @@
+#filter{
+    display: grid;
+    place-items: center;
+}
+#filter-card{
+    position: fixed;
+    height: 100vh;
+    width: 30vw;
+    background-color: #fefefe;  
+    top: 0;
+    right: -30vw; 
+    transition: 0.3s all ease-in-out;
+    -webkit-transition: 0.3s all ease-in-out;
+    -moz-transition: 0.3s all ease-in-out;
+    -o-transition: 0.3s all ease-in-out;
+    z-index: 100000;
+    box-shadow: 0 0 20px #dcdcdc;
+}
+#filter-card-wrapper{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+#filter-card.opened{
+    right: 0;
+}
+#filter .filter-btn{
+    cursor: pointer;
+    color: #1976d2;
+}
+#filter .filter-btn.close-btn{
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+#filter-card-inner{
+    padding: 80px 10px 20px 20px;
+}
+.filter-group{
+    padding: 20px 0;
+    border-top: 0.5px solid #e7e7e7;
+    border-bottom: 0.5px solid #e7e7e7;
+}
+
+.filter-options{
+    display: flex;
+    gap: 10px;
+}
+.filter-option input{
+    display: none;
+}
+.filter-option label{
+    cursor: pointer;
+    padding: 5px 10px;
+    border: 1px solid #1976d2;
+    background-color: #f2f8ff;
+    color: #1976d2;
+    border-radius: 4px;
+}
+
+.filter-option input:checked + label{
+    background-color: #1976d2;
+    color: #fefefe;
+}

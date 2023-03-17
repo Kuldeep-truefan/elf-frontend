@@ -466,6 +466,7 @@ body{
   text-transform: unset ;
   border-radius: 5px;
   padding: 7px 10px;
+  cursor: pointer;
 }
 .primary-btn{
   background-color: #1976d2;
