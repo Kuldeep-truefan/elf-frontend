@@ -245,8 +245,8 @@ const AudioMistreatedTile = ({ comments, value, changeDataStatus, pageNumber }) 
                 onClick={() => {
                   setShowModal({ ...showModal, raw: !showModal.raw });
                   FetchRawAudioMistreated(
-                    `${value.value.split("_")[0]}.wav`,
-                    `${value.value.split("_")[1]}-raw`,
+                    `${value.split("_")[0]}.wav`,
+                    `${value.split("_")[1]}-raw`,
                     "raw"
                   );
                 }}
@@ -274,8 +274,8 @@ const AudioMistreatedTile = ({ comments, value, changeDataStatus, pageNumber }) 
                 onClick={() => {
                   setShowModal({ ...showModal, treated: !showModal.treated });
                   FetchRawAudioMistreated(
-                    `${value.value.split("_")[0]}.wav`,
-                    `${value.value.split("_")[1]}-treated`
+                    `${value.split("_")[0]}.wav`,
+                    `${value.split("_")[1]}-treated`
                   );
                 }}
               >
