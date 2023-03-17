@@ -10,7 +10,7 @@ import { BASE_URL } from "../../constants/constant";
 import Pagination from "@mui/material/Pagination";
 import {useMutation} from 'react-query'
 
-function TileController({ setSbuck, setDbuck, destbucket, setDestMove, setLoadbucket, reloadData,loadbucket, setLoadingType}) {
+function TileController({ pageCount,setSbuck, setDbuck, destbucket, setDestMove, setLoadbucket, reloadData,loadbucket, setLoadingType}) {
   const accessToken = localStorage.getItem('authToken');
 
   // // PROD ENV BUCKETS

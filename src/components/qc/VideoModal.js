@@ -70,7 +70,7 @@ export default function VideoModal({ open, setOpen, item, sbuck, sendMessage}) {
       <PlayCircleRounderIcon
         sx={{ fontSize: "3rem", marginTop: ".35rem", color:"#1976d2",cursor:'pointer'}}
          onClick={() => {handleOpen(); FetchPlayVideo(); 
-          // sendMessage({video_id: item})
+          sendMessage({video_id: item});  
         }}
       />
    
