@@ -30,7 +30,7 @@ const SimpTile = ({ value, vas, tileName, pageNumber, changeDataStatus}) => {
   const [updating, setUpdating] = useState(false)
   
   const [videoSelected, setVideoSelected] = useState('G2P')
-  const [audioSelected, setAudioSelected] = useState('IPA');
+  const [audioSelected, setAudioSelected] = useState('Normal');
 
 
   // const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/simpredocon.io/`);
