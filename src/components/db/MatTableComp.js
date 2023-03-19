@@ -46,7 +46,7 @@ const MatTableComp = React.forwardRef((props, ref) => {
     { title: 'Request Name', field: 'request_name', editable:'never'},
     { title: 'Simplified Name', field: 'simplified_name', editable:'never'},
     { title: 'Hindi Name', field: 'hindi_name', editable:'never' },
-    { title: 'Celeb', field: 'celeb', lookup: {"14": 'rs', "7": 'kk', "16": 'jk', "15": 'jf', "18": 'ap', "23": 'ak', "24": 'rm', "25": 'vb'}, editable:'never'},
+    { title: 'Celeb', field: 'celeb', lookup: {"14": 'rs', "7": 'kk', "16": 'jk', "15": 'jf', "18": 'ap', "23": 'ak', "24": 'rm', "25": 'vb',"26":"yd"}, editable:'never'},
     { title: 'Occasion', field: 'occasion', editable:'never'},
     { title: 'IPA', field: 'ipa', editable: "never" },
     { title: 'Namecode', field: 'namecode', editable:"never"},
