@@ -29,7 +29,7 @@ const SimpTile = ({ value, vas, tileName, pageNumber, changeDataStatus}) => {
   const [username, setUsername] = useState(localStorage.getItem("username"));
   const [updating, setUpdating] = useState(false)
   
-  const [videoSelected, setVideoSelected] = useState('Mapping')
+  const [videoSelected, setVideoSelected] = useState('G2P')
   const [audioSelected, setAudioSelected] = useState('IPA');
 
 
