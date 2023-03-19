@@ -204,10 +204,8 @@ const MatTableComp = React.forwardRef((props, ref) => {
             );
             const index = dataUpdate.indexOf(target);
             dataUpdate[index] = newData;
-            if(oldData["qc_status"]!==newData["qc_status"]){
-              UpdateRowData(newData["qc_status"], newData["video_id"])
-              .then(setRowData([...dataUpdate]));
-            }
+            UpdateRowData(newData["qc_status"], newData["video_id"])
+            .then(setRowData([...dataUpdate]));
             resolve();
           }, 2000);
         });
