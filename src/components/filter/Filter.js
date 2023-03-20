@@ -41,6 +41,7 @@ const Filter = () => {
     }
   }
 
+  const list = ['a','b','c'];
   return (
     <div id='filter'>
       <div onClick={handleOpen} className='filter-btn' ><FilterAltIcon /></div>
@@ -75,12 +76,12 @@ const Filter = () => {
                   value={filterData.celebrity_name}
                   onChange={handleChangeCelebrity}
                   // onKeyDown={handleKeyDownCelebrity}
-                  options={['a','b','c']}
-                  filterOptions={(options, { inputValue }) =>
-                    options.filter((option) =>
-                      option.toLowerCase().startsWith(inputValue.toLowerCase())
-                    )
-                  }
+                  options={list}
+                  // filterOptions={(options, { inputValue }) =>
+                  //   options.filter((option) =>
+                  //     option.toLowerCase().startsWith(inputValue.toLowerCase())
+                  //   )
+                  // }
                   isOptionEqualToValue={() => false}
                   getOptionLabel={(option) => option}
                   // renderTags={(tagValue, getTagProps) =>
@@ -100,6 +101,21 @@ const Filter = () => {
                       {...params}
                       label="Celebrity"
                       placeholder="Type & Enter To Add New Value"
+                    />
+                  )}
+                />
+                <Autocomplete
+                  multiple
+                  id="tags-standard"
+                  options={list}
+                  getOptionLabel={(option) => option}
+                  // defaultValue={[top100Films[13]]}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="standard"
+                      label="Multiple values"
+                      placeholder="Favorites"
                     />
                   )}
                 />

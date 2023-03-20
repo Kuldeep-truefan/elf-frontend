@@ -189,8 +189,8 @@ const MatTableComp = React.forwardRef((props, ref) => {
       pageSize: 50,
       pageSizeOptions: [50],
       headerStyle: {
-        backgroundColor: '#cab6e2',
-        color: '#FFF'
+        backgroundColor: '#d1e8ff',
+        color: '#1976d2'
       }
     }}
     editable={{

@@ -312,6 +312,12 @@ body{
   position: relative;
   top: 4rem;
 }
+li.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root{
+  font-size: 0.8rem;
+}
+.css-7wvc1d-MuiTableCell-root{
+  background-color: #1976d2;
+}
 
 .section-header{
   display: flex;
@@ -370,9 +376,9 @@ body{
   padding: 10px 0;
 }
 
-.css-hip9hq-MuiPaper-root-MuiAppBar-root{
+/* .css-hip9hq-MuiPaper-root-MuiAppBar-root{
   background-color: #000 !important;
-}
+} */
 
 .audio-refresh-btn{
   background: #f1f1f1;

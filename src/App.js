@@ -48,14 +48,14 @@ const App = () => {
           <Routes>
             <Route path="/" element={<PrivateRoute component={Dashboard} />} />
             <Route path='/login' element={<Login/>} />
-            <Route path="/qc"  element={<PrivateRoute component={Qc} />}/>
-            <Route path="/am"  element={<PrivateRoute component={AudioMispronounced} />}/>
-            <Route path="/audioqc"  element={<PrivateRoute component={AudioQc} />}/>
-            <Route path="/redlip"  element={<PrivateRoute component={RedoLipSync} />}/>
-            <Route path="/simpname"  element={<PrivateRoute component={SimplifiedNames} />}/>
-            <Route path="/audiomt"  element={<PrivateRoute component={AudioMistreated} />}/>
-            <Route path="/confpron"  element={<PrivateRoute component={ConfirmPronunciation} />}/>    
-            <Route path="/videoupload"  element={<PrivateRoute component={VideoUpload} />}/>  
+            <Route path="/quality-check"  element={<PrivateRoute component={Qc} />}/>
+            <Route path="/audio-mispronounced"  element={<PrivateRoute component={AudioMispronounced} />}/>
+            <Route path="/audio-qc"  element={<PrivateRoute component={AudioQc} />}/>
+            <Route path="/redo-lip-sync"  element={<PrivateRoute component={RedoLipSync} />}/>
+            <Route path="/simplified-names"  element={<PrivateRoute component={SimplifiedNames} />}/>
+            <Route path="/audio-mistreated"  element={<PrivateRoute component={AudioMistreated} />}/>
+            <Route path="/confirm-pronounciation"  element={<PrivateRoute component={ConfirmPronunciation} />}/>    
+            <Route path="/upload-video"  element={<PrivateRoute component={VideoUpload} />}/>  
             <Route path="*"  element={<PageNotFound />}/>
           </Routes>
       </Suspense>
