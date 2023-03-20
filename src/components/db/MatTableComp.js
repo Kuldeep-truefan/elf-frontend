@@ -37,7 +37,7 @@ const MatTableComp = React.forwardRef((props, ref) => {
   'NEW_YEAR_WISH': 'ny', 'REPUBLIC_DAY': 'rd', 'REPUBLIC_DAY_V2': 'rd', 'VALENTINE_DAY': 'vd', 'LOHRI': 'ld', 'PROPOSAL':'pro',
   'INDIVIDUAL_HOLI_WISH':'ihw', 'HOLI_WISH':'hw'}
   
-  const sheet_id_dict = {14: 'rs', 7: 'kk', 16: 'jk', 15: 'jf', 18: 'ap', 23: 'ak', 24:'rm', 25:'vb'}
+  const sheet_id_dict = {14: 'rs', 7: 'kk', 16: 'jk', 15: 'jf', 18: 'ap', 23: 'ak', 24:'rm', 25:'vb', 26:'yd'}
 
   const [columns, setColumns] = useState([
     { title: 'Date', field: 'date', editable: 'never' },
@@ -46,7 +46,7 @@ const MatTableComp = React.forwardRef((props, ref) => {
     { title: 'Request Name', field: 'request_name', editable:'never'},
     { title: 'Simplified Name', field: 'simplified_name', editable:'never'},
     { title: 'Hindi Name', field: 'hindi_name', editable:'never' },
-    { title: 'Celeb', field: 'celeb', lookup: {"14": 'rs', "7": 'kk', "16": 'jk', "15": 'jf', "18": 'ap', "23": 'ak', "24": 'rm', "25": 'vb'}, editable:'never'},
+    { title: 'Celeb', field: 'celeb', lookup: {"14": 'rs', "7": 'kk', "16": 'jk', "15": 'jf', "18": 'ap', "23": 'ak', "24": 'rm', "25": 'vb',"26":"yd"}, editable:'never'},
     { title: 'Occasion', field: 'occasion', editable:'never'},
     { title: 'IPA', field: 'ipa', editable: "never" },
     { title: 'Namecode', field: 'namecode', editable:"never"},
@@ -204,10 +204,8 @@ const MatTableComp = React.forwardRef((props, ref) => {
             );
             const index = dataUpdate.indexOf(target);
             dataUpdate[index] = newData;
-            if(oldData["qc_status"]!==newData["qc_status"]){
-              UpdateRowData(newData["qc_status"], newData["video_id"])
-              .then(setRowData([...dataUpdate]));
-            }
+            UpdateRowData(newData["qc_status"], newData["video_id"])
+            .then(setRowData([...dataUpdate]));
             resolve();
           }, 2000);
         });
