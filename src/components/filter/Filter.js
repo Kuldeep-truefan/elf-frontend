@@ -79,7 +79,7 @@ const Filter = forwardRef(({data,setData},ref) => {
                 </div>
               </div>
             </div>
-            <div className='filter-group'>
+            {/* <div className='filter-group'>
               <div className='filter-label'>
                 <h6>Celebrity</h6>
               </div>
@@ -158,7 +158,7 @@ const Filter = forwardRef(({data,setData},ref) => {
                   )}
                 />
               </div>
-            </div>
+            </div> */}
 
             <button className='primary-btn filter-now-btn' ref={ref} onClick={()=>{
               handleFilterData()
