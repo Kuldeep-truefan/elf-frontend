@@ -15,6 +15,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import SearchIcon from '@mui/icons-material/Search';
+import VAS from "../ExtraComponents/VAS";
 
 const filter = createFilterOptions();
 // https://beta.reactjs.org/reference/react-dom/components/textarea for text area customisations
@@ -139,6 +140,7 @@ const SimpTile = ({ value, vas, tileName, pageNumber, changeDataStatus}) => {
                 )} */}
         </div>
         <p className="video-name-dynamic">{vas}</p>
+        <VAS vas={vas}/>
       </div>
       <div className="main-tiles">
         <div className="d-flex">

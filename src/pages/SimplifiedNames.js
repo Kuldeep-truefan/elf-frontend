@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import "../App.css";
 import { useState } from "react";
 import { BASE_URL } from "../constants/constant";
@@ -9,6 +9,7 @@ import { useQuery } from "react-query";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoader";
 import NoDataFound from "../components/ExtraComponents/NoDataFound";
+import Filter from "../components/filter/Filter";
 
 
 const SimplifiedNames = () => {
@@ -16,9 +17,13 @@ const SimplifiedNames = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageCount, setPageCount] = useState(1);
   const accessToken = localStorage.getItem("authToken");
-  const [simpNamesData, setSimpNamesData] = useState([])
+  const [simpNamesData, setSimpNamesData] = useState([]);
+  const [allData, setAllData] = useState([])
   const [loading, setLoading] = useState(true);
-  const [loadingType, setLoadingType] = useState('loading')
+  const [loadingType, setLoadingType] = useState('loading');
+
+  
+  const filterRef = useRef();
 
 
   let FetchSimplifiedNames = async (value) => {
@@ -46,6 +51,7 @@ const SimplifiedNames = () => {
     {
       onSuccess: (res) => {
         setPageCount(res.pagecount);
+        setAllData(res.filename)
         setSimpNamesData(res.filename)
       },
     }
@@ -75,6 +81,7 @@ const SimplifiedNames = () => {
               <RefreshIcon/>
             </div>
           </div>
+        <Filter data={allData}  setData={setSimpNamesData} ref={filterRef} />
         </div>
         {
           pageCount === 1 || !pageCount ?
@@ -96,7 +103,7 @@ const SimplifiedNames = () => {
         <DataTilesLoader/>
         :
         simpNamesData.length > 0 ?
-        simpNamesData.map(([tileName, vas], index) => (
+        simpNamesData.map(({simplified_name:tileName, vas}, index) => (
           <SimpTile
             key={`${tileName}-${index}`}
             tileName={tileName}

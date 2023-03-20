@@ -10,6 +10,7 @@ import Modal from "@mui/material/Modal";
 import { BigPlayButton, Player, PlayToggle } from "video-react";
 import ReactLoading from "react-loading";
 import { Typography } from "@mui/material";
+import VAS from "../ExtraComponents/VAS";
 
 const style = {
   position: "absolute",
@@ -23,7 +24,7 @@ const style = {
   p: 4,
 };
 
-const AudioMistreatedTile = ({ comments, value, changeDataStatus, pageNumber }) => {
+const AudioMistreatedTile = ({ comments, vas, value, changeDataStatus, pageNumber }) => {
   const [showModal, setShowModal] = useState({ raw: false, treated: false });
   const [loading, setLoading] = useState(false);
   const [puburl, setPuburl] = useState(false);
@@ -188,6 +189,7 @@ const AudioMistreatedTile = ({ comments, value, changeDataStatus, pageNumber }) 
                   )} */}
         </div>
         <p className="video-name-dynamic">{comments}</p>
+        <VAS vas={vas} />
       </div>
       <div className="main-tiles">
         {/* <AudioMistreatedTile value={tileName} pageNumber={pageNumber} /> */}

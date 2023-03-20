@@ -1,8 +1,9 @@
 import { Typography } from '@mui/material'
 import React, { useState } from 'react'
 import AudioModal from './AudioModal'
+import VAS from '../ExtraComponents/VAS'
 
-const AudioMisTile = ({ tileName, comments, changeDataStatus, pageNumber }) => {
+const AudioMisTile = ({ tileName, comments, vas, changeDataStatus, pageNumber }) => {
 
     const [updating, setUpdating] = useState(false)
     return (
@@ -37,6 +38,7 @@ const AudioMisTile = ({ tileName, comments, changeDataStatus, pageNumber }) => {
                 )} */}
                 </div>
                 <p className="video-name-dynamic">{comments}</p>
+                <VAS vas={vas}/>
             </div>
             <div className="main-tiles">
                 <AudioModal value={tileName} pageNumber={pageNumber} changeDataStatus={changeDataStatus}  setUpdating={setUpdating} />

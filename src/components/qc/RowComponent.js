@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import VideoModal from "./VideoModal";
 import { BASE_URL } from "../../constants/constant";
 import { useQueryClient } from "react-query";
+import VAS from "../ExtraComponents/VAS";
 
 
 const RowComponent = ({
@@ -23,6 +24,7 @@ const RowComponent = ({
   setLink,
   link,
   destbucket,
+  vas,
   changeDataStatus,
   pageNumber
 }) => {
@@ -123,6 +125,7 @@ const RowComponent = ({
         </div>
 
         <p className="video-name-dynamic">{comments}</p>
+        <VAS vas={vas}/>
       </div>
       <div className="main-tiles qc-options">
         <VideoModal

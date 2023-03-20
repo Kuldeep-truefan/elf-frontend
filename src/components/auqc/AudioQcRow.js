@@ -8,8 +8,9 @@ import { Chip, Typography } from "@mui/material";
 // import useWebSocket, { ReadyState } from "react-use-websocket";
 import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import { useQueryClient } from "react-query";
+import VAS from "../ExtraComponents/VAS";
 
-const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataStatus }) => {
+const AudioQcRow = ({ index,vas, comments, tileName, item, pageNumber, changeDataStatus }) => {
   const [remark, setRemark] = useState("");
   const queryClient = useQueryClient();
   const [isDisabled, setIsDisabled] = useState(false);
@@ -112,7 +113,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
   };
 
   return (
-    <div key={index} className={`tile ${updating?'action-performing':''}`}>
+    <div key={index} className={`tile ${updating ? 'action-performing' : ''}`}>
       <div className="main-tile">
         {/* <ColorCheckboxes
           tileName={tileName}
@@ -142,6 +143,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
             )} */}
         </div>
         <p className="video-name-dynamic">{comments}</p>
+        <VAS vas={vas} />
       </div>
       <div className="main-tiles">
         <AudioQcPlayer value={tileName} />
@@ -155,9 +157,9 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
           value={remark}
           onChange={handleChange}
         />
-        <div style={{display:'flex',gap:'10px'}}>
+        <div style={{ display: 'flex', gap: '10px' }}>
           <button
-          className={`primary-btn ${isDisabled?'disable-btn':''}`}
+            className={`primary-btn ${isDisabled ? 'disable-btn' : ''}`}
             disabled={isDisabled}
             onClick={() => {
               UpdateQcComtStatus(
@@ -172,7 +174,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
             Approve
           </button>
           <button
-          className={`primary-btn ${isDisabled?'disable-btn':''}`}
+            className={`primary-btn ${isDisabled ? 'disable-btn' : ''}`}
             disabled={isDisabled}
             onClick={() => {
               UpdateQcComtStatus(
@@ -191,7 +193,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
             Reject
           </button>
           <button
-          className={`primary-btn ${isDisabled?'disable-btn':''}`}
+            className={`primary-btn ${isDisabled ? 'disable-btn' : ''}`}
             onClick={() => {
               UpdateQcComtStatus(
                 "Audio Mistreated",

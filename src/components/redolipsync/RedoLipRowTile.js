@@ -7,6 +7,7 @@ import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
 import RedoLipModal from "./RedoLipModal";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import { debounce } from "lodash";
+import VAS from "../ExtraComponents/VAS";
 const namecodes = [
   "a",
   "d",
@@ -7348,7 +7349,7 @@ const username = localStorage.getItem("username");
 const socketUrl = `${WEB_BASE_URL}/ausoket.io/`;
 const accessToken = localStorage.getItem("authToken");
 
-const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber, changeDataStatus }) => {
+const RedoLipRowTile = ({ tileName,vas, comments, nameCode, pageNumber, changeDataStatus }) => {
   const queryClient = useQueryClient();
   // const [emittedData, setemittedData] = useState("");
   const [open, setOpen] = useState(false);
@@ -7459,6 +7460,7 @@ const RedoLipRowTile = ({ tileName, comments, nameCode, pageNumber, changeDataSt
             )} */}
         </div>
         <p className="video-name-dynamic">{comments}</p>
+        <VAS vas={vas} />
       </div>
       <div className="main-tiles">
         <RedoLipModal

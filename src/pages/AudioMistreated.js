@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import AudioMistreatedTile from "../components/aumistreated/AudioMistreatedTile";
 import "../App.css";
 import { Chip, Typography } from "@mui/material";
@@ -12,6 +12,7 @@ import { useQuery } from "react-query";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoader";
 import NoDataFound from "../components/ExtraComponents/NoDataFound";
+import Filter from "../components/filter/Filter";
 
 const AudioMistreated = ({ item, destbucket }) => {
   const [status, setStatus] = useState("");
@@ -26,8 +27,12 @@ const AudioMistreated = ({ item, destbucket }) => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageCount, setPageCount] = useState(1);
   const [audTreData, setAudTreData] = useState([]);
+  const [allData, setAllData] = useState([])
   const [loading, setLoading] = useState(true);
   const [loadingType, setLoadingType] = useState('loading');
+
+  
+  const filterRef = useRef()
 
   // const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/ausoket.io/`);
   // const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
@@ -102,6 +107,7 @@ const AudioMistreated = ({ item, destbucket }) => {
     () => FetchAudioMisTreated(pageNumber), {
     onSuccess: (res) => {
       setPageCount(res.pagecount)
+      setAllData(res.filename)
       setAudTreData(res.filename)
     }
   }
@@ -126,6 +132,8 @@ const AudioMistreated = ({ item, destbucket }) => {
               <RefreshIcon />
             </div>
           </div>
+          
+        <Filter data={allData}  setData={setAudTreData} ref={filterRef} />
         </div>
         {
           pageCount === 1 || !pageCount ?
@@ -147,11 +155,11 @@ const AudioMistreated = ({ item, destbucket }) => {
         <DataTilesLoader /> 
         :
         audTreData.length > 0 ? 
-        audTreData.map(([tileName, comments], index) => (
-          <AudioMistreatedTile key={`${tileName}-${index}`} comments={comments} value={tileName} changeDataStatus={setLoadingType} pageNumber={pageNumber} />
+        audTreData.map(({simplified_name:tileName, qc_comment:comments,vas}, index) => (
+          <AudioMistreatedTile key={`${tileName}-${index}`} vas={vas} comments={comments} value={tileName} changeDataStatus={setLoadingType} pageNumber={pageNumber} />
         ))
           :
-          <NoDataFound />
+          <NoDataFound text={'No data found...'} />
       }
     </div>
   );

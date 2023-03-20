@@ -1,5 +1,5 @@
 import "../../App.css";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import Pagination from "@mui/material/Pagination";
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -9,6 +9,7 @@ import RedoLipRowTile from "./RedoLipRowTile";
 import { useQuery } from "react-query";
 import DataTilesLoader from "../ExtraComponents/Loaders/DataTilesLoader";
 import NoDataFound from "../ExtraComponents/NoDataFound";
+import Filter from "../filter/Filter";
 
 const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
   const [newNameCode, setNewNameCode] = useState("");
@@ -16,9 +17,12 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
   // const [emittedData, setemittedData] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const [pageCount, setPageCount] = useState(1);
-  const [redoTileName, setRedoTileName] = useState([])
+  const [redoTileName, setRedoTileName] = useState([]);
+  const [allData, setAllData] = useState([])
   const [loading, setLoading] = useState(true)
-  const [loadingType, setLoadingType] = useState('loading')
+  const [loadingType, setLoadingType] = useState('loading');
+  
+  const filterRef = useRef()
 
   let FetchAudioRedoLipSync = async (value) => {
     setLoading(true); // Set loading before sending API request
@@ -43,6 +47,7 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
       onSuccess: (res) => {
         // setPageCount
         setPageCount(res.pagecount);
+        setAllData(res.filename)
         setRedoTileName(res.filename)
       },
     }
@@ -90,6 +95,8 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
               <RefreshIcon/>
             </div>
           </div>
+          
+        <Filter data={allData}  setData={setRedoTileName} ref={filterRef} />
         </div>
         {
           pageCount === 1 || !pageCount ?
@@ -111,13 +118,14 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
         <DataTilesLoader/>
         :
        redoTileName.length > 0 ?
-        redoTileName.map(([tileName, comments, namecode], index) => (
+        redoTileName.map(({simplified_name:tileName, qc_comment:comments, namecode, vas}, index) => (
           <RedoLipRowTile
             key={`${tileName}-${index}`}
             tileName={tileName}
             comments={comments}
             nameCode={namecode}
             pageNumber={pageNumber}
+            vas={vas}
             changeDataStatus={setLoadingType}
           />
         ))
