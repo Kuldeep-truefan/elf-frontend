@@ -668,6 +668,12 @@ input, textarea{
   color:#00e061;
   font-size: 10px;
 }
+.vas div:first-child{
+  border-radius: 0 0 0 10px;
+}
+.error{
+  color: #e00000;
+}
 @media(max-width:1250px){
   .data-section{
     width: 95%;

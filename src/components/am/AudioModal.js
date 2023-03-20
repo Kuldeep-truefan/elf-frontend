@@ -4,6 +4,7 @@ import { BASE_URL } from "../../constants/constant";
 import { useQueryClient } from "react-query";
 import AudiotrackIcon from '@mui/icons-material/Audiotrack';
 import './am.css';
+import AudioPlayer from "../audioPlayer/AudioPlayer";
 const accessToken = localStorage.getItem("authToken");
 
 const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
@@ -14,6 +15,7 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
   const fileFirstName = value.split("_")[0];
   const fileBucket = value.split("_")[1];
   const queryClient = useQueryClient()
+  const [uploadError, setUploadError] = useState(false)
 
   
   const handleFile = (event) => {
@@ -129,6 +131,13 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
           changeDataStatus('fetching')
           queryClient.invalidateQueries(["FetchAudioMisTiles", pageNumber]);
           setSendFile(null)
+        }else{
+          setUploadError(true)
+          setUpdating(false)
+          setTimeout(()=>{
+            setSendFile(null)
+            setUploadError(false)
+          },2000)
         }
         const convertToText = await response.text();
         return convertToText;
@@ -160,7 +169,9 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
             </div> */}
           </>
         ):(
-          <audio src={sendFile.url} controls />
+          uploadError ? <small className="error">File not uploaded</small>:
+          // <audio src={sendFile.url} controls />
+          <AudioPlayer link={sendFile.url}/>
         )}
       </div>
       <div className="d-flex">
@@ -177,7 +188,8 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
             Last Audio
           </button>
         ) : (
-          <ReactAudioPlayer src={lastAudioUrl} controls />
+          // <ReactAudioPlayer src={lastAudioUrl} controls />
+          <AudioPlayer link={lastAudioUrl} />
         )}
         {showModal.attach && (
           <p
@@ -203,7 +215,8 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
             Remarks Audio
           </button>
         ) : (
-          <ReactAudioPlayer src={remarksAudioUrl} controls />
+          // <ReactAudioPlayer src={remarksAudioUrl} controls />
+          <AudioPlayer link={remarksAudioUrl} />
         )}
         {showModal.attach && (
           <p
