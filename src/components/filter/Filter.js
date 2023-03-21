@@ -62,64 +62,66 @@ const Filter = forwardRef(({ data, setData }, ref) => {
           {/* <div onClick={handleClose} className='filter-btn close-btn' id='filter-close-btn'><CancelIcon /></div> */}
           <div id='filter-card-inner'>
             {/* <h5>Filter</h5> */}
-            <div className='filter-group'>
-              <div className='filter-options'>
-                <div className='filter-option'>
-                  <input type='checkbox' name='QUICK_DELIVERY' id='vas-qd' onChange={(e) => handleChangeVas(e)} />
-                  <label htmlFor='vas-qd' > Quick Delivery <CancelIcon className='cancel-icon' /></label>
-                </div>
-                <div className='filter-option'>
-                  <input type='checkbox' name='FULL_NAME' id='vas-fl' onChange={(e) => handleChangeVas(e)} />
-                  <label htmlFor='vas-fl' > Full Name <CancelIcon className='cancel-icon' /></label>
+            <div className='filters'>
+              <div className='filter-group'>
+                <div className='filter-options'>
+                  <div className='filter-option'>
+                    <input type='checkbox' name='QUICK_DELIVERY' id='vas-qd' onChange={(e) => handleChangeVas(e)} />
+                    <label htmlFor='vas-qd' > Quick Delivery <CancelIcon className='cancel-icon' /></label>
+                  </div>
+                  <div className='filter-option'>
+                    <input type='checkbox' name='FULL_NAME' id='vas-fl' onChange={(e) => handleChangeVas(e)} />
+                    <label htmlFor='vas-fl' > Full Name <CancelIcon className='cancel-icon' /></label>
+                  </div>
                 </div>
               </div>
-            </div>
-            {/* <div className='filter-group'>
-              <div className='filter-options'>
+              {/* <div className='filter-group'>
+                <div className='filter-options'>
+                  <Autocomplete
+                    value={filterData.celebrity_name}
+                    onChange={handleChangeCelebrity}
+                    options={celebs ? celebs : []}
+                    filterOptions={(options, { inputValue }) =>
+                      options.filter((option) =>
+                        option.toLowerCase().startsWith(inputValue.toLowerCase())
+                      )
+                    }
+                    getOptionLabel={(option) => option}
+                    style={{ width: 300, transition: 'unset' }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Celebrity"
+                        placeholder="Search celebrities"
+                      />
+                    )}
+                  />
+                </div>
+              </div>
+              <div className='filter-group'>
+                <div className='filter-options'>
                 <Autocomplete
-                  value={filterData.celebrity_name}
-                  onChange={handleChangeCelebrity}
-                  options={celebs ? celebs : []}
-                  filterOptions={(options, { inputValue }) =>
-                    options.filter((option) =>
-                      option.toLowerCase().startsWith(inputValue.toLowerCase())
-                    )
-                  }
-                  getOptionLabel={(option) => option}
-                  style={{ width: 300, transition: 'unset' }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Celebrity"
-                      placeholder="Search celebrities"
-                    />
-                  )}
-                />
-              </div>
+                    value={filterData.occasion}
+                    onChange={handleChangeOccasion}
+                    options={occasions ? occasions : []}
+                    filterOptions={(options, { inputValue }) =>
+                      options.filter((option) =>
+                        option.toLowerCase().startsWith(inputValue.toLowerCase())
+                      )
+                    }
+                    getOptionLabel={(option) => option}
+                    style={{ width: 300, transition: 'unset' }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Occasion"
+                        placeholder="Search occasions"
+                      />
+                    )}
+                  />
+                </div>
+              </div> */}
             </div>
-            <div className='filter-group'>
-              <div className='filter-options'>
-              <Autocomplete
-                  value={filterData.occasion}
-                  onChange={handleChangeOccasion}
-                  options={occasions ? occasions : []}
-                  filterOptions={(options, { inputValue }) =>
-                    options.filter((option) =>
-                      option.toLowerCase().startsWith(inputValue.toLowerCase())
-                    )
-                  }
-                  getOptionLabel={(option) => option}
-                  style={{ width: 300, transition: 'unset' }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Occasion"
-                      placeholder="Search occasions"
-                    />
-                  )}
-                />
-              </div>
-            </div> */}
 
             <button className='primary-btn filter-now-btn' onClick={() => {
               handleFilterData()
