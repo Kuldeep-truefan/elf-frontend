@@ -1,6 +1,5 @@
 import React from "react";
 import AudioQcPlayer from "./AudioQcPlayer";
-import AudioRecorders from "./AudioRecorders";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import { useCallback, useState } from "react";
 import ColorCheckboxes from "../../components/CheckBoxPick.js/ColorCheckboxes";
@@ -15,7 +14,6 @@ const AudioQcRow = ({ index,vas, comments, tileName, item, pageNumber, changeDat
   const [remark, setRemark] = useState("");
   const queryClient = useQueryClient();
   const [isDisabled, setIsDisabled] = useState(false);
-  const [recordedAudio, setRecordedAudio] = useState();
   // const [emittedData, setemittedData] = useState();
   const [username, setUsername] = useState(localStorage.getItem("username"));
   // const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/ausoket.io/`);
@@ -50,34 +48,7 @@ const AudioQcRow = ({ index,vas, comments, tileName, item, pageNumber, changeDat
   // }[readyState];
 
   const accessToken = localStorage.getItem("authToken");
-  let UploadAudioRecored = async (fullFileName, vidAuRec) => {
-    try {
-      let myHeaders = new Headers();
-      myHeaders.append(
-        "Cookie",
-        "csrftoken=L2ETtVsdGnxYzQ4llNrKESv7Evm5nGa5N7SWvkTt488G43CzM7AnoWHJoxr8GNSC"
-      );
 
-      let formdata = new FormData();
-      formdata.append("fileName", fullFileName);
-      formdata.append("file", recordedAudio);
-      formdata.append("videoId", vidAuRec);
-
-      let requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: formdata,
-      };
-      const response = await fetch(
-        `${BASE_URL}/audio/upload-rec-auqc-file`,
-        requestOptions
-      );
-      const convertToText = await response.text();
-      return convertToText;
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   let UpdateQcComtStatus = async (
     audioQcStatus,
@@ -101,9 +72,9 @@ const AudioQcRow = ({ index,vas, comments, tileName, item, pageNumber, changeDat
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      if (audioQcStatus === "Rejected") {
-        await UploadAudioRecored(tileName, audioId);
-      }
+      // if (audioQcStatus === "Rejected") {
+      //   await UploadAudioRecored(tileName, audioId);
+      // }
       if (response.status === 200) {
         triggerSuccess()
         changeDataStatus('fetching')
@@ -161,7 +132,6 @@ const AudioQcRow = ({ index,vas, comments, tileName, item, pageNumber, changeDat
       </div>
       <div className="main-tiles">
         <AudioQcPlayer value={tileName} />
-        <AudioRecorders setRecordedAudio={setRecordedAudio} />
         <TextareaAutosize
           required={true}
           className="remark-area"

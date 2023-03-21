@@ -13,13 +13,14 @@ import { BASE_URL } from "../../constants/constant";
 import { useQueryClient } from "react-query";
 import VAS from "../ExtraComponents/VAS";
 import { triggerError, triggerSuccess } from "../ExtraComponents/AlertPopups";
+import AudioRecorders from "../auqc/AudioRecorders";
 
 
 const RowComponent = ({
   item,
   sbuck,
   comments,
-  dbuck,
+  dbuck,  
   handleClickSendMessage,
   emittedData,
   setLink,
@@ -36,6 +37,8 @@ const RowComponent = ({
   const [isDisabled, setIsDisabled] = useState(true);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  
+  const [recordedAudio, setRecordedAudio] = useState(null);
   
   const [updating, setUpdating] = useState(false)
   const accessToken = localStorage.getItem("authToken");
@@ -55,6 +58,37 @@ const RowComponent = ({
   const handleChange = (event) => {
     setRemark(event.target.value);
   };
+
+  
+  let UploadAudioRecored = async (fullFileName, vidAuRec) => {
+    try {
+      let myHeaders = new Headers();
+      myHeaders.append(
+        "Cookie",
+        "csrftoken=L2ETtVsdGnxYzQ4llNrKESv7Evm5nGa5N7SWvkTt488G43CzM7AnoWHJoxr8GNSC"
+      );
+
+      let formdata = new FormData();
+      formdata.append("fileName", fullFileName);
+      formdata.append("file", recordedAudio);
+      formdata.append("videoId", vidAuRec);
+
+      let requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: formdata,
+      };
+      const response = await fetch(
+        `${BASE_URL}/audio/upload-rec-auqc-file`,
+        requestOptions
+      );
+      const convertToText = await response.text();
+      return convertToText;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   let GetQCDone = async () => {
     
@@ -83,6 +117,9 @@ const RowComponent = ({
       });
 
       if(response.status === 200){
+        if(recordedAudio){
+          await UploadAudioRecored(item, item.split("_")[3].split(".")[0])
+        }
         triggerSuccess()
         changeDataStatus('fetching')
         queryClient.invalidateQueries({queryKey:['FetchLinkData']})
@@ -137,72 +174,81 @@ const RowComponent = ({
         <VAS vas={vas}/>
       </div>
       <div className="main-tiles qc-options">
-        <VideoModal
-          onClick={handelClick}
-          sendMessage={handleClickSendMessage}
-          open={open}
-          setOpen={setOpen}
-          item={item}
-          sbuck={sbuck}
-        />
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-          <InputLabel id="select-status">Status</InputLabel>
-          <Select
-            labelId="select-status"
-            value={status}
-            label="Status"
-            onChange={handleStatus}
-          >
-            <MenuItem value={"Approved"}>Approved</MenuItem>
-            <MenuItem value={"Rejected"}>Rejected</MenuItem>
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl sx={{ m: 1, minWidth: 220 }} size="small">
-          <InputLabel id="select-options">Reason</InputLabel>
-          <Select
-            labelId="select-options"
-            value={option}
-            label="Options"
-            onChange={handleOptions}
-          >
-            <MenuItem value={"Redo Lipsync"}>Redo Lipsync</MenuItem>
-            <MenuItem value={"Audio Mistreated"}>Audio Mistreated</MenuItem>
-            <MenuItem value={"Audio Mispronounced"}>
-              Audio Mispronounced
-            </MenuItem>
-            <MenuItem value={"AV Redo"}>AV Redo</MenuItem>
-            <MenuItem value={"AV Sync Mismatch"}>AV Sync Mismatch</MenuItem>
-            <MenuItem value={"Fix hi"}>Fix hi</MenuItem>
-            <MenuItem value={"Trim Reject"}>Trim Reject</MenuItem>
-            <MenuItem value={"Add gap between A & B"}>
-              Add gap between A & B
-            </MenuItem>
-            <MenuItem value={"Reduce gap between A & B"}>
-              Reduce gap between A & B
-            </MenuItem>
-            <MenuItem value={"AV Redo (mistreated)"}>
-              AV Redo (mistreated)
-            </MenuItem>
-            <MenuItem value={"Confirm pronunciation"}>
-              Confirm pronunciation
-            </MenuItem>
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-          </Select>
-        </FormControl>
-        <TextareaAutosize
-          required={true}
-          className="remark-area"
-          aria-label="minimum height"
-          minRows={2.2}
-          placeholder="Remarks"
-          value={remark}
-          onChange={handleChange}
-        />
+
+        <div className="d-flex justify-between align-items-center">
+          <VideoModal
+            onClick={handelClick}
+            sendMessage={handleClickSendMessage}
+            open={open}
+            setOpen={setOpen}
+            item={item}
+            sbuck={sbuck}
+          />
+          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+            <InputLabel id="select-status">Status</InputLabel>
+            <Select
+              labelId="select-status"
+              value={status}
+              label="Status"
+              onChange={handleStatus}
+            >
+              <MenuItem value={"Approved"}>Approved</MenuItem>
+              <MenuItem value={"Rejected"}>Rejected</MenuItem>
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+            </Select>
+          </FormControl>
+          {
+            status === 'Rejected' &&
+            <>
+              <FormControl sx={{ m: 1, minWidth: 220 }} size="small">
+                <InputLabel id="select-options">Reason</InputLabel>
+                <Select
+                  labelId="select-options"
+                  value={option}
+                  label="Options"
+                  onChange={handleOptions}
+                >
+                  <MenuItem value={"Redo Lipsync"}>Redo Lipsync</MenuItem>
+                  <MenuItem value={"Audio Mistreated"}>Audio Mistreated</MenuItem>
+                  <MenuItem value={"Audio Mispronounced"}>
+                    Audio Mispronounced
+                  </MenuItem>
+                  <MenuItem value={"AV Redo"}>AV Redo</MenuItem>
+                  <MenuItem value={"AV Sync Mismatch"}>AV Sync Mismatch</MenuItem>
+                  <MenuItem value={"Fix hi"}>Fix hi</MenuItem>
+                  <MenuItem value={"Trim Reject"}>Trim Reject</MenuItem>
+                  <MenuItem value={"Add gap between A & B"}>
+                    Add gap between A & B
+                  </MenuItem>
+                  <MenuItem value={"Reduce gap between A & B"}>
+                    Reduce gap between A & B
+                  </MenuItem>
+                  <MenuItem value={"AV Redo (mistreated)"}>
+                    AV Redo (mistreated)
+                  </MenuItem>
+                  <MenuItem value={"Confirm pronunciation"}>
+                    Confirm pronunciation
+                  </MenuItem>
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                </Select>
+              </FormControl>
+              <TextareaAutosize
+                required={true}
+                className="remark-area"
+                aria-label="minimum height"
+                minRows={2.2}
+                placeholder="Remarks"
+                value={remark}
+                onChange={handleChange}
+              />
+              <AudioRecorders setRecordedAudio={setRecordedAudio} />
+            </>
+          }
+        </div>
         <button
           onClick={GetQCDone}
           className={`primary-btn ${isDisabled?'disabled-btn':''}`}

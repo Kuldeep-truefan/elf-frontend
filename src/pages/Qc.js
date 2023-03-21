@@ -114,7 +114,7 @@ function Qc() {
   // }, [])
 
   useEffect(()=>{
-    filterRef.current.handleFilterData()
+    filterRef.current.handleFilterData(allData)
   },[allData])
 
   return (

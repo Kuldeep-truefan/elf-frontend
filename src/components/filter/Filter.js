@@ -6,7 +6,7 @@ import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import useGetCelebsAndOccasions from '../../hooks/useGetCelebsAndOccasions';
 import { Chip, TextField } from '@mui/material';
 
-const Filter = forwardRef(({ data, setData }, ref) => {
+const Filter = forwardRef(({ data:myData, setData }, ref) => {
   const [open, setOpen] = useState(false);
   const [filterData, setFilterData] = useState({
     vas: [],
@@ -39,7 +39,7 @@ const Filter = forwardRef(({ data, setData }, ref) => {
     }
   }
 
-  const handleFilterData = () => {
+  const handleFilterData = (data=myData) => {
     const filterVas = filterData.vas
     const filteredData = data.filter((tile) => filterVas.every(val => tile.vas.split(',').map(c => c.trim()).includes(val)))
     setData(filteredData)
