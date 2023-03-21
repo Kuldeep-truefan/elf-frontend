@@ -9,6 +9,7 @@ import { Chip, Typography } from "@mui/material";
 import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import { useQueryClient } from "react-query";
 import VAS from "../ExtraComponents/VAS";
+import { triggerError, triggerSuccess } from "../ExtraComponents/AlertPopups";
 
 const AudioQcRow = ({ index,vas, comments, tileName, item, pageNumber, changeDataStatus }) => {
   const [remark, setRemark] = useState("");
@@ -19,7 +20,9 @@ const AudioQcRow = ({ index,vas, comments, tileName, item, pageNumber, changeDat
   const [username, setUsername] = useState(localStorage.getItem("username"));
   // const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/ausoket.io/`);
   const [updating, setUpdating] = useState(false)
+  
 
+  
   // const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
   //   onMessage: (message) => {
   //     const data = JSON.parse(message?.data);
@@ -85,7 +88,7 @@ const AudioQcRow = ({ index,vas, comments, tileName, item, pageNumber, changeDat
   ) => {
     try {
       setUpdating(true)
-      await fetch(`${BASE_URL}/audio/qccommentstatus`, {
+      const response = await fetch(`${BASE_URL}/audio/qccommentstatus`, {
         method: "POST",
         body: JSON.stringify({
           audioQc: audioQcStatus,
@@ -101,8 +104,17 @@ const AudioQcRow = ({ index,vas, comments, tileName, item, pageNumber, changeDat
       if (audioQcStatus === "Rejected") {
         await UploadAudioRecored(tileName, audioId);
       }
-      changeDataStatus('fetching')
-      queryClient.invalidateQueries(["FetchAudioQcTiles", pageNumber]);
+      if (response.status === 200) {
+        triggerSuccess()
+        changeDataStatus('fetching')
+        queryClient.invalidateQueries(["FetchAudioQcTiles", pageNumber]);
+      }else{
+        triggerError()
+        setUpdating(false)
+        // setTimeout(()=>{
+        //   setUploadError(false)
+        // },2000)
+      }
     } catch (error) {
       console.log("Error occured", error);
     }
@@ -111,6 +123,8 @@ const AudioQcRow = ({ index,vas, comments, tileName, item, pageNumber, changeDat
   const handleChange = (event) => {
     setRemark(event.target.value);
   };
+
+  
 
   return (
     <div key={index} className={`tile ${updating ? 'action-performing' : ''}`}>

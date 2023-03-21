@@ -7,6 +7,7 @@ import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
 import { useQueryClient } from "react-query";
 import VAS from "../ExtraComponents/VAS";
+import { triggerError, triggerSuccess } from "../ExtraComponents/AlertPopups";
 
 const username = localStorage.getItem("username");
 const socketUrl = `${WEB_BASE_URL}/simpredocon.io/`;
@@ -55,7 +56,7 @@ const ConfirmPronRow = ({ value,vas, changeDataStatus }) => {
         try {
             if (buttonPressed === 'Refunded' || (buttonPressed === 'Confirm Name' && engName)) {
                 setUpdating(true)
-                fetch(`${BASE_URL}/audio/update-confirm-pronunciation`, {
+                const response = await fetch(`${BASE_URL}/audio/update-confirm-pronunciation`, {
                     method: "POST",
                     body: JSON.stringify({
                         englishName: engName,
@@ -66,17 +67,24 @@ const ConfirmPronRow = ({ value,vas, changeDataStatus }) => {
                         "Content-type": "application/json; charset=UTF-8",
                         Authorization: `Bearer ${accessToken}`,
                     },
-                }).then(() => {
+                });
+                if(response.status === 200){
+                    triggerSuccess()
                     changeDataStatus('fetching')
                     queryClient.invalidateQueries(["FetchConfirmPronunFiles", pageNumber]);
-                });
+                }else{
+                    triggerError();
+                    setUpdating(false)
+                }
+                
             } else {
-                alert('Enter name in the name field')
+                triggerError('Enter name in the name field')
             }
         } catch (error) {
             console.log("Error occured", error);
         }
     };
+
     return (
         <div className={`tile ${updating ? 'action-performing' : ''}`}>
             <div className="main-tile">

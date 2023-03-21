@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import AudioMistreatedTile from "../components/aumistreated/AudioMistreatedTile";
 import "../App.css";
 import { Chip, Typography } from "@mui/material";
@@ -108,7 +108,7 @@ const AudioMistreated = ({ item, destbucket }) => {
     onSuccess: (res) => {
       setPageCount(res.pagecount)
       setAllData(res.filename)
-      setAudTreData(res.filename)
+      // setAudTreData(res.filename)
     }
   }
   );
@@ -117,6 +117,10 @@ const AudioMistreated = ({ item, destbucket }) => {
     setLoadingType('loading')
     refetch()
   }
+
+  useEffect(()=>{
+    filterRef.current.handleFilterData()
+  },[allData])
 
   return (
     <div className="data-section">

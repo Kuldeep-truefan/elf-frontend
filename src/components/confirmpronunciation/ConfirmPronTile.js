@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../App.css";
 
 import { BASE_URL } from "../../constants/constant";
@@ -54,7 +54,7 @@ const ConfirmPronTile = () => {
       onSuccess: (res) => {
         setPageCount(res.pagecount);
         setAllData(res.filename)
-        setAudioConfirmPro(res.filename)
+        // setAudioConfirmPro(res.filename)
       },
       onError:(error) =>{
         console.log(error)
@@ -62,6 +62,11 @@ const ConfirmPronTile = () => {
     },
     
   );
+
+  useEffect(()=>{
+    filterRef.current.handleFilterData()
+  },[allData])
+
   return (
     <div className="data-section">
       <div className="section-header">

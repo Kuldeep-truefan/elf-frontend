@@ -12,7 +12,7 @@ import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoad
 import Filter from "../components/filter/Filter";
 
 function Qc() {
-  const [link, setLink] = useState("");
+  const [link, setLink] = useState([]);
   const [allData, setAllData] = useState([])
   const [sbuck, setSbuck] = useState('qc2');
   const [dbuck, setDbuck] = useState('');
@@ -54,7 +54,7 @@ function Qc() {
   const { refetch } = useQuery(['FetchLinkData', pageNumber], () => FetchLink(pageNumber),
     {
       onSuccess: (res) => {
-        setLink(res.filename);
+        // setLink(res.filename);
         setAllData(res.filename)
         setPageCount(res.pagecount); 
 
@@ -112,6 +112,10 @@ function Qc() {
   // useEffect(() => {
   //   FetchLink()
   // }, [])
+
+  useEffect(()=>{
+    filterRef.current.handleFilterData()
+  },[allData])
 
   return (
     <>

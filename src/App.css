@@ -324,6 +324,7 @@ li.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root{
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
+  position: relative;
 }
 .section-header-1{
   display: flex;
@@ -445,7 +446,6 @@ li.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root{
   background-color: fff;
   text-align: center;
 }
-
 .MuiBox-root{
   display: flex;
   justify-content: center;
@@ -485,6 +485,9 @@ li.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root{
   background-color: #c3c1c1;
   pointer-events: none;
   border: none;
+}
+.disabled-input{
+  background-color: #e8e8e8;
 }
 .d-flex{
   display: flex;

@@ -8,6 +8,7 @@ import RedoLipModal from "./RedoLipModal";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import { debounce } from "lodash";
 import VAS from "../ExtraComponents/VAS";
+import { triggerError, triggerSuccess } from "../ExtraComponents/AlertPopups";
 const namecodes = [
   "a",
   "d",
@@ -7406,7 +7407,7 @@ const RedoLipRowTile = ({ tileName,vas, comments, nameCode, pageNumber, changeDa
     try {
       if(value.length > 0){
           setUpdating(true)
-          fetch(`${BASE_URL}/audio/updt-redo-lip-newnamecode`, {
+           const response = await fetch(`${BASE_URL}/audio/updt-redo-lip-newnamecode`, {
             method: "PUT",
             body: JSON.stringify({
               newNameCode: value.join(" ").trim(),
@@ -7417,12 +7418,16 @@ const RedoLipRowTile = ({ tileName,vas, comments, nameCode, pageNumber, changeDa
               Authorization: `Bearer ${accessToken}`,
             },
           })
-            .then(() => {
-              changeDataStatus('fetching')
-              queryClient.invalidateQueries(["FetchAudioRedoLipSync", pageNumber]);
-            })
+          if(response.status === 200){
+            triggerSuccess('Namecodes changed successfully')
+            changeDataStatus('fetching')
+            queryClient.invalidateQueries(["FetchAudioRedoLipSync", pageNumber]);
+          }else{
+            triggerError();
+            setUpdating(false)
+          }
       }else{
-        alert('Please enter namecodes')
+        triggerError('Please enter namecodes')
       }
     } catch (error) {
       console.log("Error occured", error);
@@ -7482,6 +7487,7 @@ const RedoLipRowTile = ({ tileName,vas, comments, nameCode, pageNumber, changeDa
             id="outlined-basic"
             disabled
             wrap="hard"
+            className="disabled-input"
             variant="outlined"
           />
           

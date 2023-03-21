@@ -12,6 +12,7 @@ import VideoModal from "./VideoModal";
 import { BASE_URL } from "../../constants/constant";
 import { useQueryClient } from "react-query";
 import VAS from "../ExtraComponents/VAS";
+import { triggerError, triggerSuccess } from "../ExtraComponents/AlertPopups";
 
 
 const RowComponent = ({
@@ -65,7 +66,7 @@ const RowComponent = ({
     // setOptions("");
     // setRemark("");
     try {
-      await fetch(`${BASE_URL}/log/tilestatus`, {
+      const response = await fetch(`${BASE_URL}/log/tilestatus`, {
         method: "POST",
         body: JSON.stringify({
           sourceBucket: sbuck,
@@ -79,9 +80,17 @@ const RowComponent = ({
           "Content-type": "application/json; charset=UTF-8",
           Authorization: `Bearer ${accessToken}`,
         },
-      })
+      });
+
+      if(response.status === 200){
+        triggerSuccess()
         changeDataStatus('fetching')
         queryClient.invalidateQueries({queryKey:['FetchLinkData']})
+      }else{
+        triggerError()
+        setUpdating(false)
+      }
+
     } catch (error) {
       console.log("Error occured", error);
     }

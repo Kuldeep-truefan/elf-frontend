@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import "../App.css";
 import { useState } from "react";
 import { BASE_URL } from "../constants/constant";
@@ -50,7 +50,7 @@ const AudioQc = ({
       onSuccess: (res) => {
         setPageCount(res.pagecount)
         setAllData(res.filename)
-        setAudioQcData(res.filename)
+        // setAudioQcData(res.filename)
       }
     })
 
@@ -59,6 +59,9 @@ const AudioQc = ({
     refetch()
   }
 
+  useEffect(()=>{
+    filterRef.current.handleFilterData()
+  },[allData])
 
   return (
     <>

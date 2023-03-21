@@ -1,5 +1,5 @@
 import "../../App.css";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import Pagination from "@mui/material/Pagination";
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -48,7 +48,7 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
         // setPageCount
         setPageCount(res.pagecount);
         setAllData(res.filename)
-        setRedoTileName(res.filename)
+        // setRedoTileName(res.filename)
       },
     }
   );
@@ -80,6 +80,11 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
     setLoadingType('loading');
     refetch();
   };
+
+  useEffect
+  (()=>{
+    filterRef.current.handleFilterData()
+  },[allData])
 
   return (
     <div className="data-section">

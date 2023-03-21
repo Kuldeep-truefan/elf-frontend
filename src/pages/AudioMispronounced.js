@@ -1,6 +1,6 @@
 import "../App.css";
 import { Button, Chip, Typography } from "@mui/material";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { BASE_URL } from "../constants/constant";
 import AudioModal from "../components/am/AudioModal";
 import ColorCheckboxes from "../components/CheckBoxPick.js/ColorCheckboxes";
@@ -78,12 +78,20 @@ const AudioMispronounced = ({ item, sendFile }) => {
   const { refetch } = useQuery(["FetchAudioMisTiles", pageNumber], () => FetchAudioMisTiles(pageNumber),
     {
       onSuccess: (res) => {
-        setMisProData(res.filename);
         setAllData(res.filename)
         setPageCount(res.pagecount);
       }
     }
   );
+  const reloadData = ()=>{
+    setLoadingType('loading')
+    refetch()
+  }
+
+  useEffect(()=>{
+    filterRef.current.handleFilterData()
+  },[allData])
+
   return (
     <div className="data-section">
       <div className="section-header">
@@ -92,15 +100,15 @@ const AudioMispronounced = ({ item, sendFile }) => {
           <div className="audio-refresh-btn">
             <div
               onClick={() => {
-                refetch();
-                console.log(filterRef.current)
-                filterRef && filterRef.current && filterRef.current.click()
+                reloadData();
+                // console.log(filterRef.current)
+                // filterRef && filterRef.current && filterRef.current.click()
               }}
             >
               <RefreshIcon />
             </div>
           </div>
-          <Filter data={allData} setData={setMisProData} ref={filterRef} />
+          <Filter data={allData} setData={setMisProData} ref={filterRef}  />
         </div>
         {
           pageCount === 1 || !pageCount ?

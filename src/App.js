@@ -9,6 +9,9 @@ import {
 } from 'react-query';
 import Nav from "./pages/Nav";
 import { filterReducer } from './components/filter/FilterReducer';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const OfflineInternet = lazy(()=> import('./constants/OfflineInternet'));
 const PrivateRoute = lazy(()=> import("./components/PrivateRoute"));
@@ -59,6 +62,7 @@ const App = () => {
             <Route path="*"  element={<PageNotFound />}/>
           </Routes>
       </Suspense>
+      <ToastContainer />
         </div>
       {/* </FilterContext.Provider> */}
     </QueryClientProvider>

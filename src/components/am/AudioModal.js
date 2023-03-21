@@ -5,6 +5,7 @@ import { useQueryClient } from "react-query";
 import AudiotrackIcon from '@mui/icons-material/Audiotrack';
 import './am.css';
 import AudioPlayer from "../audioPlayer/AudioPlayer";
+import { triggerError, triggerSuccess } from "../ExtraComponents/AlertPopups";
 const accessToken = localStorage.getItem("authToken");
 
 const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
@@ -15,7 +16,6 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
   const fileFirstName = value.split("_")[0];
   const fileBucket = value.split("_")[1];
   const queryClient = useQueryClient()
-  const [uploadError, setUploadError] = useState(false)
 
   
   const handleFile = (event) => {
@@ -92,8 +92,12 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
       })
       .then((res)=>{
         if(res.status === 200){
+          triggerSuccess('Audio Marked Uncracked')
           changeDataStatus('fetching')
           queryClient.invalidateQueries(["FetchAudioMisTiles", pageNumber]);
+        }else{
+          setUpdating(false)
+          triggerError()
         }
       })
     } catch (error) {
@@ -128,16 +132,14 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
           requestOptions
         );
         if (response.status === 200) {
+          triggerSuccess('File Uploaded Successfully')
           changeDataStatus('fetching')
           queryClient.invalidateQueries(["FetchAudioMisTiles", pageNumber]);
           setSendFile(null)
         }else{
-          setUploadError(true)
           setUpdating(false)
-          setTimeout(()=>{
-            setSendFile(null)
-            setUploadError(false)
-          },2000)
+          triggerError('File not uploaded')
+          setSendFile(null)
         }
         const convertToText = await response.text();
         return convertToText;
@@ -169,7 +171,6 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
             </div> */}
           </>
         ):(
-          uploadError ? <small className="error">File not uploaded</small>:
           // <audio src={sendFile.url} controls />
           <AudioPlayer link={sendFile.url}/>
         )}
@@ -214,7 +215,7 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
           <AudiotrackIcon/>
             Remarks Audio
           </button>
-        ) : (
+        ) : ( 
           // <ReactAudioPlayer src={remarksAudioUrl} controls />
           <AudioPlayer link={remarksAudioUrl} />
         )}

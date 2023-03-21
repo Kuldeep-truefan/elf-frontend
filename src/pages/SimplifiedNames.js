@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import "../App.css";
 import { useState } from "react";
 import { BASE_URL } from "../constants/constant";
@@ -52,7 +52,7 @@ const SimplifiedNames = () => {
       onSuccess: (res) => {
         setPageCount(res.pagecount);
         setAllData(res.filename)
-        setSimpNamesData(res.filename)
+        // setSimpNamesData(res.filename)
       },
     }
   );
@@ -62,6 +62,9 @@ const SimplifiedNames = () => {
     refetch()
   }
 
+  useEffect(()=>{
+    filterRef.current.handleFilterData()
+  },[allData])
   
 
   // const { filename: simpNamesData } = data || {};

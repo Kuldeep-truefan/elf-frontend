@@ -3,12 +3,14 @@
     place-items: center;
 }
 #filter-card{
-    position: fixed;
-    height: 100vh;
-    width: 30vw;
-    background-color: #fefefe;  
-    top: 0;
-    right: -30vw; 
+    display: none;
+    position: absolute;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #fefefe;
+    top: 100%;
+    right: 0;
     transition: 0.3s all ease-in-out;
     -webkit-transition: 0.3s all ease-in-out;
     -moz-transition: 0.3s all ease-in-out;
@@ -21,9 +23,9 @@
     width: 100%;
     height: 100%;
 }
-#filter-card-wrapper .css-1qqsdnr-MuiAutocomplete-root .MuiOutlinedInput-root{
+/* #filter-card-wrapper .css-1qqsdnr-MuiAutocomplete-root .MuiOutlinedInput-root{
     padding: 10px 35px 10px 5px !important;
-}
+} */
 #filter-card-wrapper .css-1qqsdnr-MuiAutocomplete-root .MuiOutlinedInput-root input{
     border: none;
 }
@@ -31,15 +33,11 @@
     color: #fefefe;
 }
 #filter-card.opened{
-    right: 0;
+    display: block;
 }
 #filter .filter-btn{
     cursor: pointer;
     color: #1976d2;
-}
-.primary-btn.filter-now-btn{
-    width: 100%;
-    margin-top: 20px;
 }
 #filter .filter-btn.close-btn{
     position: absolute;
@@ -47,12 +45,10 @@
     left: 20px;
 }
 #filter-card-inner{
-    padding: 80px 10px 20px 20px;
-}
-.filter-group{
-    padding: 20px 0;
-    border-top: 0.5px solid #e7e7e7;
-    border-bottom: 0.5px solid #e7e7e7;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    /* justify-content: space-between; */
 }
 
 .filter-options{
