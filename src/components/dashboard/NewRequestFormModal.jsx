@@ -8,7 +8,7 @@ import { BASE_URL } from '../../constants/constant';
 import useGetCelebsAndOccasions from '../../hooks/useGetCelebsAndOccasions';
 
 
-const NewRequestFormModal = ({ handleClose }) => {
+const NewRequestFormModal = () => {
     const [inputValue, setInputValues] = useState({
         video_id: '',
         vas: '',
@@ -67,9 +67,9 @@ const NewRequestFormModal = ({ handleClose }) => {
                 .then((res) => {
                     if (res.status === 200) {
                         setCreated(true)
-                        setTimeout(() => {
-                            handleClose()
-                        }, 1000)
+                        // setTimeout(() => {
+                        //     handleClose()
+                        // }, 1000)
                     }else{
                         setErrMsg(`Video ID ${inputValue.video_id} already present, enter correct video ID`)
                     }
