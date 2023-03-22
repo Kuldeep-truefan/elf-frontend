@@ -70,6 +70,13 @@ const NewRequestFormModal = () => {
                         // setTimeout(() => {
                         //     handleClose()
                         // }, 1000)
+                        setInputValues({
+                            video_id: '',
+                            vas: '',
+                            request_name: '',
+                            celeb: '',
+                            occasion: ''
+                        })
                     }else{
                         setErrMsg(`Video ID ${inputValue.video_id} already present, enter correct video ID`)
                     }
