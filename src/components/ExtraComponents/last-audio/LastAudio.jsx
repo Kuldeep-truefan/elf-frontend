@@ -6,8 +6,9 @@ import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 import Loader from '../Loaders/Loader';
 import { BASE_URL } from '../../../constants/constant';
 import { triggerError } from '../AlertPopups';
+import DownloadIcon from '@mui/icons-material/Download';
 
-const LastAudio = ({tileName, firstName,fileBucket }) => {
+const LastAudio = ({ tileName, firstName, fileBucket, text='Last Audio', audioType='raw' }) => {
     const [showRemarkAudio, setShowRemarkAudio] = useState(false);
     const [loadingAudio, setLoadingAudio] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -25,7 +26,7 @@ const LastAudio = ({tileName, firstName,fileBucket }) => {
                     body: JSON.stringify({
                         fileName: `${firstName}.wav`,
                         buckName: "celeb-audio-data",
-                        subpath: fileBucket ? `${fileBucket}-raw` : null,
+                        subpath: fileBucket ? `${fileBucket}-${audioType}` : null,
                     }),
                     headers: {
                         "Content-type": "application/json",
@@ -52,7 +53,7 @@ const LastAudio = ({tileName, firstName,fileBucket }) => {
                 audio.addEventListener('error', () => {
                     setLoadingAudio(false)
                     setShowRemarkAudio(false)
-                    triggerError('Remark audio not found')
+                    triggerError(`${text} not found`)
                     console.log('Audio URL does not exist');
                 });
 
@@ -73,18 +74,32 @@ const LastAudio = ({tileName, firstName,fileBucket }) => {
     let endAudio = () => {
         setIsPlaying(false);
     };
+
+    function downloadAudio() {
+        const audioElement = audio;
+        const audioUrl = `${audioElement.src}&response-content-disposition=attachment`;
+        const audioFilename = `${firstName}.wav`;
+        const downloadLink = document.createElement("a");
+
+        downloadLink.href = audioUrl;
+        // downloadLink.target = '_blank'
+        downloadLink.download = audioFilename;
+        downloadLink.click();
+    }
+
+
     useEffect(() => {
-        audio = document.getElementById(`myLastAudio-${tileName.split('_')[3]}`);
+        audio = document.getElementById(`${text.split(' ').join('-')}-${tileName.split('_')[3]}`);
 
         audio.addEventListener("ended", endAudio);
     });
     return (
         <div
             className="outlined-btn"
-            id='last-audio'
+            id={`${text.split(' ').join('-')}`}
         >
             <audio
-                id={`myLastAudio-${tileName.split('_')[3]}`}
+                id={`${text.split(' ').join('-')}-${tileName.split('_')[3]}`}
                 src={audioUrl}
             >
             </audio>
@@ -95,16 +110,22 @@ const LastAudio = ({tileName, firstName,fileBucket }) => {
                             <Loader />
                             :
                             (
-                                isPlaying ?
-                                    <PauseCircleIcon onClick={playPause} />
-                                    :
-                                    <PlayCircleIcon onClick={playPause} />
+                                <div className='d-flex justify-between'>
+                                    {
+
+                                        isPlaying ?
+                                            <PauseCircleIcon onClick={playPause} />
+                                            :
+                                            <PlayCircleIcon onClick={playPause} />
+                                    }
+                                    <DownloadIcon onClick={downloadAudio} />
+                                </div>
                             )
                     )
                     :
                     <div onClick={handleFetchAudio}>
                         <AudiotrackIcon />
-                        Last Audio
+                        {text}
                     </div>
             }
         </div>

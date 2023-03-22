@@ -13,6 +13,7 @@ import { Typography } from "@mui/material";
 
 import AudiotrackIcon from '@mui/icons-material/Audiotrack';
 import VAS from "../ExtraComponents/VAS";
+import LastAudio from "../ExtraComponents/last-audio/LastAudio";
 
 const style = {
   position: "absolute",
@@ -256,7 +257,7 @@ const AudioMistreatedTile = ({ comments, vas, value, changeDataStatus, pageNumbe
         </div>
 
         <div className="d-flex">
-          {!showModal.raw ? (
+          {/* {!showModal.raw ? (
             <button
               className="outlined-btn"
               onClick={() => {
@@ -274,8 +275,11 @@ const AudioMistreatedTile = ({ comments, vas, value, changeDataStatus, pageNumbe
             </button>
           ) : (
             <ReactAudioPlayer src={rawAudioUrl} controls />
-          )}
-          {showModal.raw && (
+          )} */}
+          
+        <LastAudio tileName={value}  firstName={value.split('_')[0]} fileBucket={value.split('_')[1]}  text="Raw Audio"/>
+        <LastAudio tileName={value}  firstName={value.split('_')[0]} fileBucket={value.split('_')[1]}  text="Treated Audio" audioType='treated' />
+          {/* {showModal.raw && (
             <p
               style={{
                 position: "absolute",
@@ -286,8 +290,8 @@ const AudioMistreatedTile = ({ comments, vas, value, changeDataStatus, pageNumbe
             >
               Raw Audio
             </p>
-          )}
-          {!showModal.treated ? (
+          )} */}
+          {/* {!showModal.treated ? (
             <button
               className="outlined-btn"
               onClick={() => {
@@ -316,7 +320,7 @@ const AudioMistreatedTile = ({ comments, vas, value, changeDataStatus, pageNumbe
             >
               Treated Audio
             </p>
-          )}
+          )} */}
           <button
             className="primary-btn"
             onClick={() => {

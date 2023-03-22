@@ -1,7 +1,10 @@
-#last-audio{
+#Last-Audio,#Raw-Audio{
     width: 127px;
     height: 42px;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+#Treated-Audio{
+    width: 152px;
 }

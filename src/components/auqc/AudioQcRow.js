@@ -9,6 +9,7 @@ import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import { useQueryClient } from "react-query";
 import VAS from "../ExtraComponents/VAS";
 import { triggerError, triggerSuccess } from "../ExtraComponents/AlertPopups";
+import LastAudio from "../ExtraComponents/last-audio/LastAudio";
 
 const AudioQcRow = ({ index,vas, comments, tileName, item, pageNumber, changeDataStatus }) => {
   const [remark, setRemark] = useState("");
@@ -131,7 +132,8 @@ const AudioQcRow = ({ index,vas, comments, tileName, item, pageNumber, changeDat
         <VAS vas={vas} />
       </div>
       <div className="main-tiles">
-        <AudioQcPlayer value={tileName} />
+        <LastAudio tileName={tileName}  firstName={tileName.split('_')[0]} fileBucket={tileName.split('_')[1]} />
+        {/* <AudioQcPlayer value={tileName} /> */}
         <TextareaAutosize
           required={true}
           className="remark-area"
