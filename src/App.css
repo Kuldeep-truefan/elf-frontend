@@ -489,6 +489,9 @@ li.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root{
 .disabled-input{
   background-color: #e8e8e8;
 }
+#simplified_names .tile{
+  overflow: unset;
+}
 .d-flex{
   display: flex;
   gap: 10px;
@@ -670,6 +673,10 @@ input, textarea{
   background-color:#c3ffdd;
   color:#00e061;
   font-size: 10px;
+}
+.vas {
+  border-radius: 0 10px 0 0;
+  overflow: hidden;
 }
 .vas div:first-child{
   border-radius: 0 0 0 10px;

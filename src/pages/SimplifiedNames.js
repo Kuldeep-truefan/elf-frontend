@@ -70,7 +70,7 @@ const SimplifiedNames = () => {
   // const { filename: simpNamesData } = data || {};
 
   return (
-    <div className="data-section">
+    <div className="data-section" id="simplified_names">
       <div className="section-header">
         <div className="section-header-1">
           <h1 className="heading-screens">Simplified Names</h1>
