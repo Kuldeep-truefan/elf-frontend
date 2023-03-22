@@ -6,6 +6,8 @@ import AudiotrackIcon from '@mui/icons-material/Audiotrack';
 import './am.css';
 import AudioPlayer from "../audioPlayer/AudioPlayer";
 import { triggerError, triggerSuccess } from "../ExtraComponents/AlertPopups";
+import RemarkAudio from "../ExtraComponents/remark-audio/RemarkAudio";
+import LastAudio from "../ExtraComponents/last-audio/LastAudio";
 const accessToken = localStorage.getItem("authToken");
 
 const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
@@ -172,7 +174,7 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
           </>
         ):(
           // <audio src={sendFile.url} controls />
-          <AudioPlayer link={sendFile.url}/>
+          <AudioPlayer link={sendFile.url} tileName={value}/>
         )}
       </div>
       <div className="d-flex">
@@ -190,7 +192,8 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
           </button>
         ) : (
           // <ReactAudioPlayer src={lastAudioUrl} controls />
-          <AudioPlayer link={lastAudioUrl} />
+          // <AudioPlayer link={lastAudioUrl} tileName={value} />
+          <LastAudio tileName={value}  firstName={fileFirstName} fileBucket={fileBucket} />
         )}
         {showModal.attach && (
           <p
@@ -204,21 +207,7 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
             Last Audio
           </p>
         )}
-        {!showModal.remark ? (
-          <button
-            onClick={() =>{
-              FetchPlayAudio("audio-remarks", value);
-              setShowModal({ ...showModal, remark: !showModal.remark })
-            }}
-            className="outlined-btn"
-          >
-          <AudiotrackIcon/>
-            Remarks Audio
-          </button>
-        ) : ( 
-          // <ReactAudioPlayer src={remarksAudioUrl} controls />
-          <AudioPlayer link={remarksAudioUrl} />
-        )}
+        <RemarkAudio tileName={value} />
         {showModal.attach && (
           <p
             style={{

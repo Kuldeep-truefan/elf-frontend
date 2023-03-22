@@ -9,6 +9,7 @@ import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import { debounce } from "lodash";
 import VAS from "../ExtraComponents/VAS";
 import { triggerError, triggerSuccess } from "../ExtraComponents/AlertPopups";
+import RemarkAudio from "../ExtraComponents/remark-audio/RemarkAudio";
 const namecodes = [
   "a",
   "d",
@@ -7350,7 +7351,7 @@ const username = localStorage.getItem("username");
 const socketUrl = `${WEB_BASE_URL}/ausoket.io/`;
 const accessToken = localStorage.getItem("authToken");
 
-const RedoLipRowTile = ({ tileName,vas, comments, nameCode, pageNumber, changeDataStatus }) => {
+const RedoLipRowTile = ({ tileName, vas, comments, nameCode, pageNumber, changeDataStatus }) => {
   const queryClient = useQueryClient();
   // const [emittedData, setemittedData] = useState("");
   const [open, setOpen] = useState(false);
@@ -7405,28 +7406,28 @@ const RedoLipRowTile = ({ tileName,vas, comments, nameCode, pageNumber, changeDa
 
   let UpdateRedoLipSync = async (videoId) => {
     try {
-      if(value.length > 0){
-          setUpdating(true)
-           const response = await fetch(`${BASE_URL}/audio/updt-redo-lip-newnamecode`, {
-            method: "PUT",
-            body: JSON.stringify({
-              newNameCode: value.join(" ").trim(),
-              videoId: videoId,
-            }),
-            headers: {
-              "Content-type": "application/json; charset=UTF-8",
-              Authorization: `Bearer ${accessToken}`,
-            },
-          })
-          if(response.status === 200){
-            triggerSuccess('Namecodes changed successfully')
-            changeDataStatus('fetching')
-            queryClient.invalidateQueries(["FetchAudioRedoLipSync", pageNumber]);
-          }else{
-            triggerError();
-            setUpdating(false)
-          }
-      }else{
+      if (value.length > 0) {
+        setUpdating(true)
+        const response = await fetch(`${BASE_URL}/audio/updt-redo-lip-newnamecode`, {
+          method: "PUT",
+          body: JSON.stringify({
+            newNameCode: value.join(" ").trim(),
+            videoId: videoId,
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        if (response.status === 200) {
+          triggerSuccess('Namecodes changed successfully')
+          changeDataStatus('fetching')
+          queryClient.invalidateQueries(["FetchAudioRedoLipSync", pageNumber]);
+        } else {
+          triggerError();
+          setUpdating(false)
+        }
+      } else {
         triggerError('Please enter namecodes')
       }
     } catch (error) {
@@ -7435,7 +7436,7 @@ const RedoLipRowTile = ({ tileName,vas, comments, nameCode, pageNumber, changeDa
   };
 
   return (
-    <div className={`tile auto-complete ${updating?'action-performing':''}`}>
+    <div className={`tile auto-complete ${updating ? 'action-performing' : ''}`}>
       <div className="main-tile">
         {/* <ColorCheckboxes
           tileName={tileName}
@@ -7468,70 +7469,75 @@ const RedoLipRowTile = ({ tileName,vas, comments, nameCode, pageNumber, changeDa
         <VAS vas={vas} />
       </div>
       <div className="main-tiles">
-        <RedoLipModal
-          onClick={handelClick}
-          open={open}
-          setOpen={setOpen}
-          item={tileName}
-        />
-        <Box
-          component="form"
-          sx={{
-            "& > :not(style)": { m: 1, width: "25ch" },
-          }}
-          noValidate
-          autoComplete="off"
-        >
-          <TextField
-            value={nameCode}
-            id="outlined-basic"
-            disabled
-            wrap="hard"
-            className="disabled-input"
-            variant="outlined"
+        <div className="d-flex align-items-center">
+          <RedoLipModal
+            onClick={handelClick}
+            open={open}
+            setOpen={setOpen}
+            item={tileName}
           />
-          
-          <Autocomplete
-            multiple
-            // id="fixed-tags-demo"
-            value={value}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-            options={namecodes}
-            filterOptions={(options, {inputValue}) =>
-              options.filter((option) =>
-                option.toLowerCase().startsWith(inputValue.toLowerCase())
-              )
-            }
-            isOptionEqualToValue={() => false}
-            getOptionLabel={(option) => option}
-            renderTags={(tagValue, getTagProps) =>
-              tagValue.map((option, index) => (
-                <Chip
-                  key={index}
-                  label={option}
-                  style={{ background: "transparent" }}
+          <Box
+            component="form"
+            sx={{
+              "& > :not(style)": { m: 1, width: "25ch" },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <TextField
+              value={nameCode}
+              id="outlined-basic"
+              disabled
+              wrap="hard"
+              className="disabled-input"
+              variant="outlined"
+            />
+
+            <Autocomplete
+              multiple
+              // id="fixed-tags-demo"
+              value={value}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+              options={namecodes}
+              filterOptions={(options, { inputValue }) =>
+                options.filter((option) =>
+                  option.toLowerCase().startsWith(inputValue.toLowerCase())
+                )
+              }
+              isOptionEqualToValue={() => false}
+              getOptionLabel={(option) => option}
+              renderTags={(tagValue, getTagProps) =>
+                tagValue.map((option, index) => (
+                  <Chip
+                    key={index}
+                    label={option}
+                    style={{ background: "transparent" }}
+                  />
+                ))
+              }
+              style={{ width: 300, transition: 'unset' }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Namecode"
+                  placeholder="Type & Enter To Add New Value"
                 />
-              ))
-            }
-            style={{ width: 500,transition:'unset' }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Namecode"
-                placeholder="Type & Enter To Add New Value"
-              />
-            )}
-          />
-        </Box>
-        <button
-          onClick={() => {
-            UpdateRedoLipSync(tileName.split("_")[3].split(".")[0]);
-          }}
-          className="primary-btn"
-        >
-          Change Now
-        </button>
+              )}
+            />
+          </Box>
+        </div>
+        <div className="d-flex">
+          <RemarkAudio tileName={tileName} />
+          <button
+            onClick={() => {
+              UpdateRedoLipSync(tileName.split("_")[3].split(".")[0]);
+            }}
+            className="primary-btn"
+          >
+            Change Now
+          </button>
+        </div>
       </div>
     </div>
   );

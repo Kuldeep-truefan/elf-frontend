@@ -28,7 +28,7 @@ const NewRequestFormModal = ({ handleClose }) => {
 
     // check for input values, either all fields are filledor not
     const handleInputErr = () => {
-        if (!(!!inputValue.video_id && !!inputValue.vas && !!inputValue.request_name && !!inputValue.celeb && !!inputValue.occasion)) {
+        if (!(!!inputValue.video_id  && !!inputValue.request_name && !!inputValue.celeb && !!inputValue.occasion)) {
             setErrMsg('Please enter values for all fields')
             return true
         } else {
@@ -106,7 +106,7 @@ const NewRequestFormModal = ({ handleClose }) => {
                     <TextField
                         onChange={(e) => handleChange(e)}
                         id="outlined-required"
-                        label="VAS"
+                        label="VAS (optional)"
                         name='vas'
                     />
                     <TextField
@@ -143,7 +143,7 @@ const NewRequestFormModal = ({ handleClose }) => {
                         >
                             {
                                 occasions?.map((occasion,index)=>
-                                    <MenuItem key={occasion.occasion_code + String(index)} value={occasion.occasion_code}>{occasion.occasion}</MenuItem>
+                                    <MenuItem key={occasion.occasion_code + String(index)} value={occasion.occasion}>{occasion.occasion.split('_').join(' ')}</MenuItem>
                                 )
                             }
                         </Select>
