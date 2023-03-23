@@ -121,7 +121,7 @@ const RowComponent = ({
     setUpdating(true)
     try {
 
-      const result = await UploadAudioRecored();
+      const result = recordedAudio? await UploadAudioRecored(): true;
       if(result) {
         updateStatus();
       }else{
