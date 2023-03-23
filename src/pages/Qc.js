@@ -54,10 +54,8 @@ function Qc() {
   const { refetch } = useQuery(['FetchLinkData', pageNumber], () => FetchLink(pageNumber),
     {
       onSuccess: (res) => {
-        // setLink(res.filename);
-        setAllData(res.filename)
-        setPageCount(res.pagecount); 
-
+        setAllData(res.filename?res.filename:[]);
+        setPageCount(res.pagecount?res.pagecount:0);  
       }
     })
 
