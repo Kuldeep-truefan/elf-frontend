@@ -570,7 +570,7 @@ input, textarea{
 }
 .tiles-loading, .row-loader{
   width: 100%;
-  height: 100px;
+  height: 150px;
   display: block;
   background: linear-gradient(   
     to right,

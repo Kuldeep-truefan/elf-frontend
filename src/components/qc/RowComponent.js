@@ -82,50 +82,50 @@ const RowComponent = ({
         `${BASE_URL}/audio/upload-rec-auqc-file`,
         requestOptions
       );
-      const convertToText = await response.text();
-      return convertToText;
+      // const convertToText = await response.text();
+      return true;
     } catch (error) {
       console.log(error);
+      return false;
     }
   };
 
+  const updateStatus = async ()=>{
+    const response = await fetch(`${BASE_URL}/log/tilestatus`, {
+      method: "POST",
+      body: JSON.stringify({
+        sourceBucket: sbuck,
+        destinationBucket: dbuck,
+        videoName: item,
+        videoStatus: status,
+        videoOption: option,
+        videoRemarks: remark,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    if(response.status === 200){
+      triggerSuccess()
+      changeDataStatus('fetching')
+      queryClient.invalidateQueries({queryKey:['FetchLinkData']})
+    }else{
+      triggerError()
+      setUpdating(false)
+    }
+  }
 
   let GetQCDone = async () => {
     
     setUpdating(true)
-    const saveStatus = status;
-    const saveOption = option;
-    const saveRemark = remark;
-    // setStatus("");
-    // setOptions("");
-    // setRemark("");
     try {
-      const response = await fetch(`${BASE_URL}/log/tilestatus`, {
-        method: "POST",
-        body: JSON.stringify({
-          sourceBucket: sbuck,
-          destinationBucket: dbuck,
-          videoName: item,
-          videoStatus: saveStatus,
-          videoOption: saveOption,
-          videoRemarks: saveRemark,
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
 
-      if(response.status === 200){
-        if(recordedAudio){
-          await UploadAudioRecored(item, item.split("_")[3].split(".")[0])
-        }
-        triggerSuccess()
-        changeDataStatus('fetching')
-        queryClient.invalidateQueries({queryKey:['FetchLinkData']})
+      const result = await UploadAudioRecored();
+      if(result) {
+        updateStatus();
       }else{
-        triggerError()
-        setUpdating(false)
+        triggerError('Remark audio not uploaded')
       }
 
     } catch (error) {
