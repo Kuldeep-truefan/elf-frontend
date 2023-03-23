@@ -50,9 +50,8 @@ const SimplifiedNames = () => {
   const {refetch } = useQuery(["FetchSimplifiedNames", pageNumber],() => FetchSimplifiedNames(pageNumber),
     {
       onSuccess: (res) => {
-        setPageCount(res.pagecount);
-        setAllData(res.filename)
-        // setSimpNamesData(res.filename)
+        setPageCount(res.pagecount?res.pagecount:0);
+        setAllData(res.filename?res.filename:[])
       },
     }
   );

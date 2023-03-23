@@ -78,8 +78,8 @@ const AudioMispronounced = ({ item, sendFile }) => {
   const { refetch } = useQuery(["FetchAudioMisTiles", pageNumber], () => FetchAudioMisTiles(pageNumber),
     {
       onSuccess: (res) => {
-        setAllData(res.filename)
-        setPageCount(res.pagecount);
+        setAllData(res.filename?res.filename:[])
+        setPageCount(res.pagecount? res.pagecount:0);
       }
     }
   );

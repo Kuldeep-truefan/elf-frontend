@@ -48,9 +48,8 @@ const AudioQc = ({
   const { refetch } = useQuery(['FetchAudioQcTiles', pageNumber], () => FetchAudioQcTiles(pageNumber),
     {
       onSuccess: (res) => {
-        setPageCount(res.pagecount)
-        setAllData(res.filename)
-        // setAudioQcData(res.filename)
+        setPageCount(res.pagecount?res.pagecount:0)
+        setAllData(res.filename?res.filename:[])
       }
     })
 

@@ -106,9 +106,8 @@ const AudioMistreated = ({ item, destbucket }) => {
     ["FetchAudioMisTreated", pageNumber],
     () => FetchAudioMisTreated(pageNumber), {
     onSuccess: (res) => {
-      setPageCount(res.pagecount)
-      setAllData(res.filename)
-      // setAudTreData(res.filename)
+      setPageCount(res.pagecount?res.pagecount:0)
+      setAllData(res.filename?res.filename:[])
     }
   }
   );

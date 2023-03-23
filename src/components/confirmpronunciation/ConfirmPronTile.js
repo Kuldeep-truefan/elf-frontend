@@ -52,9 +52,8 @@ const ConfirmPronTile = () => {
     () => FetchConfirmPronunFiles(pageNumber),
     {
       onSuccess: (res) => {
-        setPageCount(res.pagecount);
-        setAllData(res.filename)
-        // setAudioConfirmPro(res.filename)
+        setPageCount(res.pagecount?res.pagecount:0);
+        setAllData(res.filename?res.filename:[])
       },
       onError:(error) =>{
         console.log(error)

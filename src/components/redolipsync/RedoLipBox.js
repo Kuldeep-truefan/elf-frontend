@@ -45,10 +45,8 @@ const RedoLipBox = ({sbuck, handleClickSendMessage, destbucket}) => {
   const { refetch } = useQuery(["FetchAudioRedoLipSync", pageNumber],() => FetchAudioRedoLipSync(pageNumber),
     {
       onSuccess: (res) => {
-        // setPageCount
-        setPageCount(res.pagecount);
-        setAllData(res.filename)
-        // setRedoTileName(res.filename)
+        setPageCount(res.pagecount?res.pagecount:0);
+        setAllData(res.filename?res.filename:[])
       },
     }
   );
