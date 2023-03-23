@@ -109,18 +109,21 @@ const NewRequestFormModal = () => {
                         id="outlined-required"
                         label="Video ID"
                         name='video_id'
+                        value={inputValue.video_id}
                     />
                     <TextField
                         onChange={(e) => handleChange(e)}
                         id="outlined-required"
                         label="VAS (optional)"
                         name='vas'
+                        value={inputValue.vas}
                     />
                     <TextField
                         onChange={(e) => handleChange(e)}
                         id="outlined-required"
                         label="Request Name"
                         name='request_name'
+                        value={inputValue.request_name}
                     />
 
                     <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
