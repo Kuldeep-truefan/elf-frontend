@@ -178,35 +178,8 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
         )}
       </div>
       <div className="d-flex">
-
-        {!showModal.last ? (
-          <button
-            onClick={() => {
-              FetchPlayAudio("celeb-audio-data", fileFirstName && `${fileFirstName}.wav`, fileBucket && `${fileBucket}-raw`, 'last');
-              setShowModal({ ...showModal, last: !showModal.last });
-            }}
-            className="outlined-btn"
-          >
-            <AudiotrackIcon/>
-            Last Audio
-          </button>
-        ) : (
-          // <ReactAudioPlayer src={lastAudioUrl} controls />
-          // <AudioPlayer link={lastAudioUrl} tileName={value} />
           <LastAudio tileName={value}  firstName={fileFirstName} fileBucket={fileBucket} />
-        )}
-        {showModal.attach && (
-          <p
-            style={{
-              position: "absolute",
-              top: "2px",
-              left: "10%",
-              fontSize: "12px",
-            }}
-          >
-            Last Audio
-          </p>
-        )}
+        
         <RemarkAudio tileName={value} />
         {showModal.attach && (
           <p
@@ -220,7 +193,7 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
             Remarks Audio
           </p>
         )}
-        <div className="au-dn-uncracked-btns">
+        <div className="au-dn-uncracked-btns d-flex">
         <button
           onClick={() => {
             if (window.confirm("Do you want to proceed?")) {
@@ -231,7 +204,7 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
         >
           Audio Uncracked
         </button>
-        &nbsp;&nbsp;&nbsp;&nbsp;
+        {/* &nbsp;&nbsp;&nbsp;&nbsp; */}
         <button
           id="donebtn"
           onClick={() => {

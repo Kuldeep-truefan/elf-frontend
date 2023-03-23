@@ -8,7 +8,7 @@ import { BASE_URL } from '../../../constants/constant';
 import { triggerError } from '../AlertPopups';
 import DownloadIcon from '@mui/icons-material/Download';
 
-const LastAudio = ({ tileName, firstName, fileBucket, text='Last Audio', audioType='raw' }) => {
+const LastAudio = ({ tileName, firstName, fileBucket, text = 'Last Audio', audioType = 'raw' }) => {
     const [showRemarkAudio, setShowRemarkAudio] = useState(false);
     const [loadingAudio, setLoadingAudio] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -81,7 +81,7 @@ const LastAudio = ({ tileName, firstName, fileBucket, text='Last Audio', audioTy
         const audioFilename = `${firstName}.wav`;
         const downloadLink = document.createElement("a");
 
-        downloadLink.href = audioUrl;
+        downloadLink.href = audioUrl; 
         // downloadLink.target = '_blank'
         downloadLink.download = audioFilename;
         downloadLink.click();
