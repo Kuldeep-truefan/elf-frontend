@@ -7,15 +7,15 @@ function AudioPlayer({ link,tileName }) {
   let audio;
   function downloadAudio() {
     const audioElement = audio;
-    const audioUrl = audioElement.src;
-    const audioFilename = "my-audio-file.mp3";
+    const audioUrl = `${audioElement.src}&response-content-disposition=attachment`;
+    const audioFilename = `${tileName.split('_')[0]}.wav`;
     const downloadLink = document.createElement("a");
 
-    downloadLink.href = audioUrl;
-    downloadLink.target = '_blank'
+    downloadLink.href = audioUrl; 
+    // downloadLink.target = '_blank'
     downloadLink.download = audioFilename;
     downloadLink.click();
-  }
+}
   const playPause = () => {
     if (isPlaying) {
       audio.pause();

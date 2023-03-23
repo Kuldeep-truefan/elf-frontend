@@ -114,7 +114,7 @@ export default function PopUp({ data }) {
           }}>Audio file not found!</p>:
           <div>
             <small>{downloadType.charAt(0).toUpperCase()+downloadType.slice(1) + ' audio'}</small>
-            <AudioPlayer link={downloadLink} />
+            <AudioPlayer link={downloadLink} tileName={data.blob.split('_')[0]} />
           </div>
         ):
         ( data.blob.split("_")[0] === 'null' ?

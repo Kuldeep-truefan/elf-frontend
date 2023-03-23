@@ -245,7 +245,7 @@ const RowComponent = ({
                 value={remark}
                 onChange={handleChange}
               />
-              <AudioRecorders setRecordedAudio={setRecordedAudio} />
+              <AudioRecorders setRecordedAudio={setRecordedAudio} tileName={item} />
             </>
           }
         </div>

@@ -1,9 +1,12 @@
 import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 
 import React, { useState } from "react";
+import RemarkAudio from "../ExtraComponents/remark-audio/RemarkAudio";
+import AudioPlayer from "../audioPlayer/AudioPlayer";
 
 const AudioRecorders = ({
-  setRecordedAudio
+  setRecordedAudio,
+  tileName
 }) => {
   const [url, setUrl] = useState();
   const recorderControls = useAudioRecorder();
@@ -24,7 +27,7 @@ const AudioRecorders = ({
         onRecordingComplete={(blob) => addAudioElement(blob)}
         recorderControls={recorderControls}
       />
-      {url && <audio src={url} type='file' controls></audio>}
+      {url && <AudioPlayer link={url} tileName={tileName} />} 
     </div>
   );
 };
