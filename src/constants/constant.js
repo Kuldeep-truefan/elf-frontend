@@ -21,3 +21,7 @@
 
 // export const BASE_URL = "http://34.29.72.93"
 // export const WEB_BASE_URL = "ws://34.29.72.93:6000"
+
+
+export const BASE_URL = "http://20.198.101.77:7000"
+export const WEB_BASE_URL = "http://20.198.101.77:7000"
