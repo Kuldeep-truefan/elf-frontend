@@ -1,27 +1,12 @@
-
-// prod servers
-// export const BASE_URL = "http://34.29.72.93:8000"
-// export const WEB_BASE_URL = "ws://34.29.72.93:8000"
-
-
-// export const BASE_URL = "http://127.0.0.1:8000"
-// export const WEB_BASE_URL = "ws://127.0.0.1:8000"
-
-
-// dev servers
-
-// export const BASE_URL = "http://34.29.72.93:8001"
-// export const WEB_BASE_URL = "ws://34.29.72.93:8001"
-
+// Local urls pmt
 // export const BASE_URL = "http://127.0.0.1:8001"
 // export const WEB_BASE_URL = "ws://127.0.0.1:8001"
 
+// DEV URLS PMT
 // export const BASE_URL = "http://20.204.109.2:8001"
-// export const WEB_BASE_URL = "ws://20.204.109.2:8001"
+// export const WEB_BASE_URL = "wss://20.204.109.2:8001"
 
-// export const BASE_URL = "http://34.29.72.93"
-// export const WEB_BASE_URL = "ws://34.29.72.93:6000"
+// PROD URLS PMT
+export const BASE_URL = "https://20.198.101.77:443"
+export const WEB_BASE_URL = "wss://20.198.101.77:443"
 
-
-export const BASE_URL = "http://20.198.101.77:7000"
-export const WEB_BASE_URL = "http://20.198.101.77:7000"
