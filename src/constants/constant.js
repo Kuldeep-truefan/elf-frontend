@@ -7,6 +7,6 @@
 // export const WEB_BASE_URL = "wss://20.204.109.2:8001"
 
 // PROD URLS PMT
-export const BASE_URL = "https://20.198.101.77:443"
-export const WEB_BASE_URL = "wss://20.198.101.77:443"
+export const BASE_URL = "https://backend.elfdashboard.info"
+export const WEB_BASE_URL = "wss://backend.elfdashboard.info"
 
