@@ -8,7 +8,7 @@ const DataTilesLoader = () => {
         <span className='tiles-loading'></span>
         <span className='tiles-loading'></span>
         <span className='tiles-loading'></span>
-        <span className='tiles-loading'></span>
+        <span className='tiles-loading'></span> 
     </div>
   )
 }

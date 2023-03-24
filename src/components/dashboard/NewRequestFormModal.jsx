@@ -8,7 +8,7 @@ import { BASE_URL } from '../../constants/constant';
 import useGetCelebsAndOccasions from '../../hooks/useGetCelebsAndOccasions';
 
 
-const NewRequestFormModal = ({ handleClose }) => {
+const NewRequestFormModal = () => {
     const [inputValue, setInputValues] = useState({
         video_id: '',
         vas: '',
@@ -28,7 +28,7 @@ const NewRequestFormModal = ({ handleClose }) => {
 
     // check for input values, either all fields are filledor not
     const handleInputErr = () => {
-        if (!(!!inputValue.video_id && !!inputValue.vas && !!inputValue.request_name && !!inputValue.celeb && !!inputValue.occasion)) {
+        if (!(!!inputValue.video_id  && !!inputValue.request_name && !!inputValue.celeb && !!inputValue.occasion)) {
             setErrMsg('Please enter values for all fields')
             return true
         } else {
@@ -67,9 +67,16 @@ const NewRequestFormModal = ({ handleClose }) => {
                 .then((res) => {
                     if (res.status === 200) {
                         setCreated(true)
-                        setTimeout(() => {
-                            handleClose()
-                        }, 1000)
+                        // setTimeout(() => {
+                        //     handleClose()
+                        // }, 1000)
+                        setInputValues({
+                            video_id: '',
+                            vas: '',
+                            request_name: '',
+                            celeb: '',
+                            occasion: ''
+                        })
                     }else{
                         setErrMsg(`Video ID ${inputValue.video_id} already present, enter correct video ID`)
                     }
@@ -102,18 +109,21 @@ const NewRequestFormModal = ({ handleClose }) => {
                         id="outlined-required"
                         label="Video ID"
                         name='video_id'
+                        value={inputValue.video_id}
                     />
                     <TextField
                         onChange={(e) => handleChange(e)}
                         id="outlined-required"
-                        label="VAS"
+                        label="VAS (optional)"
                         name='vas'
+                        value={inputValue.vas}
                     />
                     <TextField
                         onChange={(e) => handleChange(e)}
                         id="outlined-required"
                         label="Request Name"
                         name='request_name'
+                        value={inputValue.request_name}
                     />
 
                     <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -143,7 +153,7 @@ const NewRequestFormModal = ({ handleClose }) => {
                         >
                             {
                                 occasions?.map((occasion,index)=>
-                                    <MenuItem key={occasion.occasion_code + String(index)} value={occasion.occasion_code}>{occasion.occasion}</MenuItem>
+                                    <MenuItem key={occasion.occasion_code + String(index)} value={occasion.occasion}>{occasion.occasion.split('_').join(' ')}</MenuItem>
                                 )
                             }
                         </Select>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "../App.css";
 import { useState } from "react";
 import { BASE_URL } from "../constants/constant";
@@ -9,6 +9,7 @@ import { useQuery } from "react-query";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoader";
 import NoDataFound from "../components/ExtraComponents/NoDataFound";
+import Filter from "../components/filter/Filter";
 
 
 const SimplifiedNames = () => {
@@ -16,9 +17,13 @@ const SimplifiedNames = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageCount, setPageCount] = useState(1);
   const accessToken = localStorage.getItem("authToken");
-  const [simpNamesData, setSimpNamesData] = useState([])
+  const [simpNamesData, setSimpNamesData] = useState([]);
+  const [allData, setAllData] = useState([])
   const [loading, setLoading] = useState(true);
-  const [loadingType, setLoadingType] = useState('loading')
+  const [loadingType, setLoadingType] = useState('loading');
+
+  
+  const filterRef = useRef();
 
 
   let FetchSimplifiedNames = async (value) => {
@@ -45,8 +50,8 @@ const SimplifiedNames = () => {
   const {refetch } = useQuery(["FetchSimplifiedNames", pageNumber],() => FetchSimplifiedNames(pageNumber),
     {
       onSuccess: (res) => {
-        setPageCount(res.pagecount);
-        setSimpNamesData(res.filename)
+        setPageCount(res.pagecount?res.pagecount:0);
+        setAllData(res.filename?res.filename:[])
       },
     }
   );
@@ -56,12 +61,15 @@ const SimplifiedNames = () => {
     refetch()
   }
 
+  useEffect(()=>{
+    filterRef.current.handleFilterData()
+  },[allData])
   
 
   // const { filename: simpNamesData } = data || {};
 
   return (
-    <div className="data-section">
+    <div className="data-section" id="simplified_names">
       <div className="section-header">
         <div className="section-header-1">
           <h1 className="heading-screens">Simplified Names</h1>
@@ -75,9 +83,10 @@ const SimplifiedNames = () => {
               <RefreshIcon/>
             </div>
           </div>
+        <Filter data={allData}  setData={setSimpNamesData} ref={filterRef} />
         </div>
         {
-          pageCount === 1 ?
+          pageCount === 1 || !pageCount ?
           null
           :
           <div className="pagination-class">
@@ -96,7 +105,7 @@ const SimplifiedNames = () => {
         <DataTilesLoader/>
         :
         simpNamesData.length > 0 ?
-        simpNamesData.map(([tileName, vas], index) => (
+        simpNamesData.map(({simplified_name:tileName, vas}, index) => (
           <SimpTile
             key={`${tileName}-${index}`}
             tileName={tileName}

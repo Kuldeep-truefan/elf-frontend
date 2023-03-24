@@ -14,8 +14,8 @@ function TileController({ pageCount,setSbuck, setDbuck, destbucket, setDestMove,
   const accessToken = localStorage.getItem('authToken');
 
   // // PROD ENV BUCKETS
-  const [loadbucketoption, setLoadbucketoption] = useState([{label:"qc2",value:"qc2"},{label:"n2v-outputs",value:"n2v-outputs"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}])
-  const [movebucketoption, setMovebucketoption] = useState([{label:"qc2",value:"qc2"},{label:"n2v-outputs",value:"n2v-outputs"}, {label:"final-qc",value:"final-qc"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}, {label:"qc-rejects",value:"qc-rejects"}])
+  const [loadbucketoption, setLoadbucketoption] = useState([{label:"qc2",value:"qc2"},{label:"n2v-outputs",value:"n2v-outputs"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}])
+  const [movebucketoption, setMovebucketoption] = useState([ {label:"final-qc",value:"final-qc"}, {label:"rts",value:"approved-videos"}])
   const defaultloadbucketoption = [{label:"qc2",value:"qc2"},{label:"n2v-outputs",value:"n2v-outputs"}, {label:"final-qc",value:"final-qc"}, {label:"qc-rejects",value:"qc-rejects"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}]
   const defaultmovebucketoption = [{label:"qc2",value:"qc2"},{label:"n2v-outputs",value:"n2v-outputs"}, {label:"final-qc",value:"final-qc"}, {label:"rts",value:"truefan_no_logo_celeb_videos_bucket"}, {label:"qc-rejects",value:"qc-rejects"}]
 
@@ -79,6 +79,7 @@ function TileController({ pageCount,setSbuck, setDbuck, destbucket, setDestMove,
           </Select>
         </FormControl>
         <button href="#contained-buttons" onClick = {() => refetchData()} className="primary-btn"><SearchIcon />Search</button>
+        
         </div>
 
   );

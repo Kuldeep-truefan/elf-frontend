@@ -15,6 +15,8 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import SearchIcon from '@mui/icons-material/Search';
+import VAS from "../ExtraComponents/VAS";
+import { triggerError, triggerSuccess } from "../ExtraComponents/AlertPopups";
 
 const filter = createFilterOptions();
 // https://beta.reactjs.org/reference/react-dom/components/textarea for text area customisations
@@ -29,8 +31,8 @@ const SimpTile = ({ value, vas, tileName, pageNumber, changeDataStatus}) => {
   const [username, setUsername] = useState(localStorage.getItem("username"));
   const [updating, setUpdating] = useState(false)
   
-  const [videoSelected, setVideoSelected] = useState('Mapping')
-  const [audioSelected, setAudioSelected] = useState('IPA');
+  const [videoSelected, setVideoSelected] = useState('G2P')
+  const [audioSelected, setAudioSelected] = useState('Normal');
 
 
   // const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/simpredocon.io/`);
@@ -90,7 +92,7 @@ const SimpTile = ({ value, vas, tileName, pageNumber, changeDataStatus}) => {
     try {
       if(button_type === 'Confirm Name' || (button_type === 'Done' && englishName && hindiName)){
         setUpdating(true)
-        fetch(`${BASE_URL}/audio/update-simplified-fields`, {
+        const response = await fetch(`${BASE_URL}/audio/update-simplified-fields`, {
           method: "POST",
           body: JSON.stringify({
             englishName: englishName.trim(),
@@ -104,14 +106,17 @@ const SimpTile = ({ value, vas, tileName, pageNumber, changeDataStatus}) => {
             "Content-type": "application/json; charset=UTF-8",
             Authorization: `Bearer ${accessToken}`,
           },
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            changeDataStatus('fetching')
-            queryClient.invalidateQueries(["FetchSimplifiedNames", pageNumber]);
-          });
+        });
+        if(response.status === 200){
+          triggerSuccess()
+          changeDataStatus('fetching')
+          queryClient.invalidateQueries(["FetchSimplifiedNames", pageNumber]);
+        }else{
+          triggerError();
+          setUpdating(false)
+        }
       }else{
-        alert('Please fill the names')
+        triggerError('Please fill the names')
       }
     } catch (error) {
       console.log("Error occured", error);
@@ -139,6 +144,7 @@ const SimpTile = ({ value, vas, tileName, pageNumber, changeDataStatus}) => {
                 )} */}
         </div>
         <p className="video-name-dynamic">{vas}</p>
+        <VAS vas={vas}/>
       </div>
       <div className="main-tiles">
         <div className="d-flex">

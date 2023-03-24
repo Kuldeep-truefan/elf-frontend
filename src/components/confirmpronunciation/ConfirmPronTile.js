@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../App.css";
 
 import { BASE_URL } from "../../constants/constant";
@@ -9,15 +9,19 @@ import { useQuery, useQueryClient } from "react-query";
 import ConfirmPronRow from "./ConfirmPronRow";
 import DataTilesLoader from "../ExtraComponents/Loaders/DataTilesLoader";
 import NoDataFound from "../ExtraComponents/NoDataFound";
+import Filter from "../filter/Filter";
 
 const ConfirmPronTile = () => {
   const queryClient = useQueryClient();
-  const [audioConfirmPro, setAudioConfirmPro] = useState([])
+  const [audioConfirmPro, setAudioConfirmPro] = useState([]);
+  const [allData, setAllData] = useState([])
   const [pageCount, setPageCount] = useState(1);
   const [pageNumber, setPageNumber] = useState(1);
   const accessToken = localStorage.getItem("authToken");
   const [loading, setLoading] = useState(true)
-  const [loadingType, setLoadingType] = useState('loading')
+  const [loadingType, setLoadingType] = useState('loading');
+  
+  const filterRef = useRef();
 
   let FetchConfirmPronunFiles = async (value) => {
     setLoading(true)
@@ -48,8 +52,8 @@ const ConfirmPronTile = () => {
     () => FetchConfirmPronunFiles(pageNumber),
     {
       onSuccess: (res) => {
-        setPageCount(res.pagecount);
-        setAudioConfirmPro(res.filename)
+        setPageCount(res.pagecount?res.pagecount:0);
+        setAllData(res.filename?res.filename:[])
       },
       onError:(error) =>{
         console.log(error)
@@ -57,6 +61,11 @@ const ConfirmPronTile = () => {
     },
     
   );
+
+  useEffect(()=>{
+    filterRef.current.handleFilterData()
+  },[allData])
+
   return (
     <div className="data-section">
       <div className="section-header">
@@ -71,9 +80,11 @@ const ConfirmPronTile = () => {
               <RefreshIcon/>
             </div>
           </div>
+          
+        <Filter data={allData}  setData={setAudioConfirmPro} ref={filterRef} />
         </div>
         {
-          pageCount === 1 ?
+          pageCount === 1 || !pageCount?
           null
           :
           <div className="pagination-class">
@@ -91,8 +102,8 @@ const ConfirmPronTile = () => {
         loadingType === 'loading' && loading ?
         <DataTilesLoader/>
         :
-        audioConfirmPro.length>0?audioConfirmPro.map((value, index) => (
-        <ConfirmPronRow key={`${value}-${index}`} value={value} changeDataStatus={setLoadingType} />
+        audioConfirmPro.length>0?audioConfirmPro.map(({simplified_name:value,vas}, index) => (
+        <ConfirmPronRow key={`${value}-${index}`} vas={vas} value={value} changeDataStatus={setLoadingType} />
       ))
     :
     <NoDataFound text={'No data found...'} />

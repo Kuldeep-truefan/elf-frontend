@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { createContext, lazy, Suspense, useContext, useReducer } from 'react';
 import "./index.css";
 import "./App.css";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
@@ -8,6 +8,10 @@ import {
   QueryClientProvider,
 } from 'react-query';
 import Nav from "./pages/Nav";
+import { filterReducer } from './components/filter/FilterReducer';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const OfflineInternet = lazy(()=> import('./constants/OfflineInternet'));
 const PrivateRoute = lazy(()=> import("./components/PrivateRoute"));
@@ -23,6 +27,8 @@ const ConfirmPronunciation = lazy(()=>import('./pages/ConfirmPronunciation'));
 const Dashboard = lazy(()=>import('./pages/Dashboard'));
 const VideoUpload = lazy(()=>import("../src/pages/VideoUpload"));
 
+// const FilterContext = createContext()
+
 
 const App = () => {
   const location = useLocation();
@@ -33,29 +39,35 @@ const App = () => {
       },
     },
   })
+
+  const [state,dispatch] = useReducer(filterReducer,{vas:false})
   
   return (
     <QueryClientProvider client={queryClient}>
-      <div>{location.pathname!=="/login"&& <Nav/>}
-      <Suspense fallback={null}>
-        <OfflineInternet/>
-        <Routes>
-          <Route path="/" element={<PrivateRoute component={Dashboard} />} />
-          <Route path='/login' element={<Login/>} />
-          <Route path="/qc"  element={<PrivateRoute component={Qc} />}/>
-          <Route path="/am"  element={<PrivateRoute component={AudioMispronounced} />}/>
-          <Route path="/audioqc"  element={<PrivateRoute component={AudioQc} />}/>
-          <Route path="/redlip"  element={<PrivateRoute component={RedoLipSync} />}/>
-          <Route path="/simpname"  element={<PrivateRoute component={SimplifiedNames} />}/>
-          <Route path="/audiomt"  element={<PrivateRoute component={AudioMistreated} />}/>
-          <Route path="/confpron"  element={<PrivateRoute component={ConfirmPronunciation} />}/>    
-          <Route path="/videoupload"  element={<PrivateRoute component={VideoUpload} />}/>  
-          <Route path="*"  element={<PageNotFound />}/>
-        </Routes>
-    </Suspense>
-      </div>
+      {/* <FilterContext.Provider value={{state,dispatch}} > */}
+        <div>{location.pathname!=="/login"&& <Nav/>}
+        <Suspense fallback={null}>
+          <OfflineInternet/>
+          <Routes>
+            <Route path="/" element={<PrivateRoute component={Dashboard} />} />
+            <Route path='/login' element={<Login/>} />
+            <Route path="/quality-check"  element={<PrivateRoute component={Qc} />}/>
+            <Route path="/audio-mispronounced"  element={<PrivateRoute component={AudioMispronounced} />}/>
+            <Route path="/audio-qc"  element={<PrivateRoute component={AudioQc} />}/>
+            <Route path="/redo-lip-sync"  element={<PrivateRoute component={RedoLipSync} />}/>
+            <Route path="/simplified-names"  element={<PrivateRoute component={SimplifiedNames} />}/>
+            <Route path="/audio-mistreated"  element={<PrivateRoute component={AudioMistreated} />}/>
+            <Route path="/confirm-pronounciation"  element={<PrivateRoute component={ConfirmPronunciation} />}/>    
+            <Route path="/upload-video"  element={<PrivateRoute component={VideoUpload} />}/>  
+            <Route path="*"  element={<PageNotFound />}/>
+          </Routes>
+      </Suspense>
+      <ToastContainer />
+        </div>
+      {/* </FilterContext.Provider> */}
     </QueryClientProvider>
   )
 }
 
 export default App
+// export const useFilterContext = ()=>useContext(FilterContext)

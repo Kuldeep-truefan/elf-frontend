@@ -6,13 +6,14 @@ import { BASE_URL, WEB_BASE_URL } from "../constants/constant";
 import RowComponent from "../components/qc/RowComponent";
 import * as React from "react";
 import Pagination from "@mui/material/Pagination";
-import { useMutation, useQuery } from "react-query";
-import ClockLoader from "react-spinners/ClockLoader";
-import NoDataFound from '../components/ExtraComponents/NoDataFound'
+import { useQuery } from "react-query";
+import NoDataFound from '../components/ExtraComponents/NoDataFound';
 import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoader";
+import Filter from "../components/filter/Filter";
 
 function Qc() {
-  const [link, setLink] = useState("");
+  const [link, setLink] = useState([]);
+  const [allData, setAllData] = useState([])
   const [sbuck, setSbuck] = useState('qc2');
   const [dbuck, setDbuck] = useState('');
   const [destbucket, setDestMove] = useState("");
@@ -25,6 +26,9 @@ function Qc() {
   const [loadingType, setLoadingType] = useState('loading')
 
   const accessToken = localStorage.getItem("authToken");
+
+  
+  const filterRef = React.useRef()
 
   let FetchLink = async (value) => {
     setLoading(true)
@@ -50,60 +54,66 @@ function Qc() {
   const { refetch } = useQuery(['FetchLinkData', pageNumber], () => FetchLink(pageNumber),
     {
       onSuccess: (res) => {
-        setLink(res.filename);
-        setPageCount(res.pagecount);
-
+        setAllData(res.filename?res.filename:[]);
+        setPageCount(res.pagecount?res.pagecount:0);  
       }
     })
 
   //Public API that will echo messages sent to it back to the client
-  const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/socket.io/`);
+  // const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/socket.io/`);
 
-  const [messageHistory, setMessageHistory] = useState([]);
+  // const [messageHistory, setMessageHistory] = useState([]);
 
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
-    onMessage: (message) => {
-      const data = JSON.parse(message?.data);
-      if (data?.msg === "updated") {
-      }
-      setemittedData(JSON.parse(data?.data));
-      console.log("message", message);
-    },
-  });
+  // const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl
+    // , {
+    // onOpen: () => console.log('opened'),
+    // onMessage: (message) => {
+    //   const data = JSON.parse(JSON.parse(message?.data));
+    //   if (data?.msg === "updated") {
+    //   }
+    //   setemittedData(JSON.parse(data?.data));
+    //   console.log("message", message);
+    // },
+  // }
+  // );
 
-  useEffect(() => {
-    if (lastMessage !== null) {
-      setMessageHistory((prev) => prev.concat(lastMessage));
-    }
-  }, [lastMessage, setMessageHistory]);
+  // useEffect(() => {
+  //   if (lastMessage !== null) {
+  //     setMessageHistory((prev) => prev.concat(lastMessage));
+  //   }
+  // }, [lastMessage, setMessageHistory]);
 
   // console.log(messageHistory, 'this is message history');
 
-  const handleClickSendMessage = useCallback(
-    (payload) =>{
+  // const handleClickSendMessage = useCallback(
+  //   (payload) =>{
 
-      console.log(payload)
-        sendMessage(
-          JSON.stringify({
-            user: username,
-            ...payload,
-          })
-        )
-    },
-    [username]
-  );
+  //     console.log(payload)
+  //       sendMessage(
+  //         JSON.stringify({
+  //           user: username,
+  //           ...payload,
+  //         })
+  //       )
+  //   },
+  //   [username]
+  // );
 
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  }[readyState];
+  // const connectionStatus = {
+  //   [ReadyState.CONNECTING]: "Connecting",
+  //   [ReadyState.OPEN]: "Open",
+  //   [ReadyState.CLOSING]: "Closing",
+  //   [ReadyState.CLOSED]: "Closed",
+  //   [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  // }[readyState];
 
   // useEffect(() => {
   //   FetchLink()
   // }, [])
+
+  useEffect(()=>{
+    filterRef.current.handleFilterData(allData)
+  },[allData])
 
   return (
     <>
@@ -120,7 +130,7 @@ function Qc() {
               <TileController
                 setLink={setLink}
                 setSbuck={setSbuck}
-                emittedData={emittedData}
+                // emittedData={emittedData}
                 setDbuck={setDbuck}
                 destbucket={destbucket}
                 setDestMove={setDestMove}
@@ -134,8 +144,10 @@ function Qc() {
 
             </div>
           </div>
+          
+        <Filter data={allData}  setData={setLink} ref={filterRef} />
           {
-            pageCount === 1 ?
+            pageCount === 1 || !pageCount ?
               null
               :
               <div className="pagination-class">
@@ -155,17 +167,18 @@ function Qc() {
             <DataTilesLoader />
             :
             link?.length > 0 ?
-              link?.map(([fileName, comments], index) => {
+              link?.map(({filename:fileName, qc_comment:comments,vas}, index) => {
                 return (
                   <RowComponent
                     key={index + fileName}
                     comments={comments}
                     setLink={setLink}
-                    handleClickSendMessage={handleClickSendMessage}
+                    // handleClickSendMessage={handleClickSendMessage}
                     destbucket={destbucket}
-                    emittedData={emittedData}
+                    // emittedData={emittedData}
                     item={fileName}
                     sbuck={sbuck}
+                    vas={vas}
                     dbuck={dbuck}
                     index={index}
                     link={link}

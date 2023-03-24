@@ -1,6 +1,5 @@
 import React from "react";
 import AudioQcPlayer from "./AudioQcPlayer";
-import AudioRecorders from "./AudioRecorders";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import { useCallback, useState } from "react";
 import ColorCheckboxes from "../../components/CheckBoxPick.js/ColorCheckboxes";
@@ -8,17 +7,21 @@ import { Chip, Typography } from "@mui/material";
 // import useWebSocket, { ReadyState } from "react-use-websocket";
 import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import { useQueryClient } from "react-query";
+import VAS from "../ExtraComponents/VAS";
+import { triggerError, triggerSuccess } from "../ExtraComponents/AlertPopups";
+import LastAudio from "../ExtraComponents/last-audio/LastAudio";
 
-const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataStatus }) => {
+const AudioQcRow = ({ index,vas, comments, tileName, item, pageNumber, changeDataStatus }) => {
   const [remark, setRemark] = useState("");
   const queryClient = useQueryClient();
   const [isDisabled, setIsDisabled] = useState(false);
-  const [recordedAudio, setRecordedAudio] = useState();
   // const [emittedData, setemittedData] = useState();
   const [username, setUsername] = useState(localStorage.getItem("username"));
   // const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/ausoket.io/`);
   const [updating, setUpdating] = useState(false)
+  
 
+  
   // const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
   //   onMessage: (message) => {
   //     const data = JSON.parse(message?.data);
@@ -46,34 +49,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
   // }[readyState];
 
   const accessToken = localStorage.getItem("authToken");
-  let UploadAudioRecored = async (fullFileName, vidAuRec) => {
-    try {
-      let myHeaders = new Headers();
-      myHeaders.append(
-        "Cookie",
-        "csrftoken=L2ETtVsdGnxYzQ4llNrKESv7Evm5nGa5N7SWvkTt488G43CzM7AnoWHJoxr8GNSC"
-      );
 
-      let formdata = new FormData();
-      formdata.append("fileName", fullFileName);
-      formdata.append("file", recordedAudio);
-      formdata.append("videoId", vidAuRec);
-
-      let requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: formdata,
-      };
-      const response = await fetch(
-        `${BASE_URL}/audio/upload-rec-auqc-file`,
-        requestOptions
-      );
-      const convertToText = await response.text();
-      return convertToText;
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   let UpdateQcComtStatus = async (
     audioQcStatus,
@@ -84,7 +60,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
   ) => {
     try {
       setUpdating(true)
-      await fetch(`${BASE_URL}/audio/qccommentstatus`, {
+      const response = await fetch(`${BASE_URL}/audio/qccommentstatus`, {
         method: "POST",
         body: JSON.stringify({
           audioQc: audioQcStatus,
@@ -97,11 +73,20 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      if (audioQcStatus === "Rejected") {
-        await UploadAudioRecored(tileName, audioId);
+      // if (audioQcStatus === "Rejected") {
+      //   await UploadAudioRecored(tileName, audioId);
+      // }
+      if (response.status === 200) {
+        triggerSuccess()
+        changeDataStatus('fetching')
+        queryClient.invalidateQueries(["FetchAudioQcTiles", pageNumber]);
+      }else{
+        triggerError()
+        setUpdating(false)
+        // setTimeout(()=>{
+        //   setUploadError(false)
+        // },2000)
       }
-      changeDataStatus('fetching')
-      queryClient.invalidateQueries(["FetchAudioQcTiles", pageNumber]);
     } catch (error) {
       console.log("Error occured", error);
     }
@@ -111,8 +96,10 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
     setRemark(event.target.value);
   };
 
+  
+
   return (
-    <div key={index} className={`tile ${updating?'action-performing':''}`}>
+    <div key={index} className={`tile ${updating ? 'action-performing' : ''}`}>
       <div className="main-tile">
         {/* <ColorCheckboxes
           tileName={tileName}
@@ -142,10 +129,11 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
             )} */}
         </div>
         <p className="video-name-dynamic">{comments}</p>
+        <VAS vas={vas} />
       </div>
       <div className="main-tiles">
-        <AudioQcPlayer value={tileName} />
-        <AudioRecorders setRecordedAudio={setRecordedAudio} />
+        <LastAudio tileName={tileName}  firstName={tileName.split('_')[0]} fileBucket={tileName.split('_')[1]} />
+        {/* <AudioQcPlayer value={tileName} /> */}
         <TextareaAutosize
           required={true}
           className="remark-area"
@@ -155,9 +143,9 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
           value={remark}
           onChange={handleChange}
         />
-        <div style={{display:'flex',gap:'10px'}}>
+        <div style={{ display: 'flex', gap: '10px' }}>
           <button
-          className={`primary-btn ${isDisabled?'disable-btn':''}`}
+            className={`primary-btn ${isDisabled ? 'disable-btn' : ''}`}
             disabled={isDisabled}
             onClick={() => {
               UpdateQcComtStatus(
@@ -172,7 +160,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
             Approve
           </button>
           <button
-          className={`primary-btn ${isDisabled?'disable-btn':''}`}
+            className={`primary-btn ${isDisabled ? 'disable-btn' : ''}`}
             disabled={isDisabled}
             onClick={() => {
               UpdateQcComtStatus(
@@ -191,7 +179,7 @@ const AudioQcRow = ({ index, comments, tileName, item, pageNumber, changeDataSta
             Reject
           </button>
           <button
-          className={`primary-btn ${isDisabled?'disable-btn':''}`}
+            className={`primary-btn ${isDisabled ? 'disable-btn' : ''}`}
             onClick={() => {
               UpdateQcComtStatus(
                 "Audio Mistreated",

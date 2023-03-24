@@ -2,20 +2,20 @@ import React, { useEffect, useState } from "react";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import PauseCircleFilledIcon from "@mui/icons-material/PauseCircleFilled";
 import DownloadIcon from '@mui/icons-material/Download';
-function AudioPlayer({ link }) {
+function AudioPlayer({ link,tileName }) {
   const [isPlaying, setIsPLaying] = useState(false);
   let audio;
   function downloadAudio() {
     const audioElement = audio;
-    const audioUrl = audioElement.src;
-    const audioFilename = "my-audio-file.mp3";
+    const audioUrl = `${audioElement.src}&response-content-disposition=attachment`;
+    const audioFilename = `${tileName.split('_')[0]}.wav`;
     const downloadLink = document.createElement("a");
 
-    downloadLink.href = audioUrl;
-    downloadLink.target = '_blank'
+    downloadLink.href = audioUrl; 
+    // downloadLink.target = '_blank'
     downloadLink.download = audioFilename;
     downloadLink.click();
-  }
+}
   const playPause = () => {
     if (isPlaying) {
       audio.pause();
@@ -29,7 +29,7 @@ function AudioPlayer({ link }) {
     setIsPLaying(false);
   };
   useEffect(() => {
-    audio = document.getElementById("myAudio");
+    audio = document.getElementById(`myAudio-${tileName.split('_')[3]}`);
 
     audio.addEventListener("ended", endAudio);
   });
@@ -41,7 +41,7 @@ function AudioPlayer({ link }) {
         <PlayCircleIcon onClick={playPause}  sx={{cursor:'pointer'}}/>
       )}
       <audio
-        id="myAudio"
+        id={`myAudio-${tileName.split('_')[3]}`}
         src={link}
       ></audio>
 

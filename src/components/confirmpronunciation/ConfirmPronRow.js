@@ -6,11 +6,13 @@ import Box from "@mui/material/Box";
 import { BASE_URL, WEB_BASE_URL } from "../../constants/constant";
 import ColorCheckboxes from "../CheckBoxPick.js/ColorCheckboxes";
 import { useQueryClient } from "react-query";
+import VAS from "../ExtraComponents/VAS";
+import { triggerError, triggerSuccess } from "../ExtraComponents/AlertPopups";
 
 const username = localStorage.getItem("username");
 const socketUrl = `${WEB_BASE_URL}/simpredocon.io/`;
 
-const ConfirmPronRow = ({ value, changeDataStatus }) => {
+const ConfirmPronRow = ({ value,vas, changeDataStatus }) => {
     const queryClient = useQueryClient();
     // const [emittedData, setemittedData] = useState("");
     const [engName, setEngName] = useState("");
@@ -52,9 +54,9 @@ const ConfirmPronRow = ({ value, changeDataStatus }) => {
 
     let UpdateConfirmName = async (buttonPressed, vId) => {
         try {
-            if(buttonPressed ==='Refunded' || (buttonPressed === 'Confirm Name' && engName)){
+            if (buttonPressed === 'Refunded' || (buttonPressed === 'Confirm Name' && engName)) {
                 setUpdating(true)
-                fetch(`${BASE_URL}/audio/update-confirm-pronunciation`, {
+                const response = await fetch(`${BASE_URL}/audio/update-confirm-pronunciation`, {
                     method: "POST",
                     body: JSON.stringify({
                         englishName: engName,
@@ -65,19 +67,26 @@ const ConfirmPronRow = ({ value, changeDataStatus }) => {
                         "Content-type": "application/json; charset=UTF-8",
                         Authorization: `Bearer ${accessToken}`,
                     },
-                }).then(() => {
+                });
+                if(response.status === 200){
+                    triggerSuccess()
                     changeDataStatus('fetching')
                     queryClient.invalidateQueries(["FetchConfirmPronunFiles", pageNumber]);
-                });
-            }else{
-                alert('Enter name in the name field')
+                }else{
+                    triggerError();
+                    setUpdating(false)
+                }
+                
+            } else {
+                triggerError('Enter name in the name field')
             }
         } catch (error) {
             console.log("Error occured", error);
         }
     };
+
     return (
-        <div className={`tile ${updating?'action-performing':''}`}>
+        <div className={`tile ${updating ? 'action-performing' : ''}`}>
             <div className="main-tile">
                 {/* <ColorCheckboxes
                     tileName={value}
@@ -104,6 +113,7 @@ const ConfirmPronRow = ({ value, changeDataStatus }) => {
                                     sx={{ ml: "15px", backgroundColor: "#bcddfe", height:'unset',padding:'1px', color:'#1976d2', border:'1px solid #1976d2' }}
                             ></Chip>
                         )} */}
+                    <VAS vas={vas}  />
                 </div>
             </div>
             <div className="main-tiles">
@@ -116,18 +126,18 @@ const ConfirmPronRow = ({ value, changeDataStatus }) => {
                     autoComplete="off"
                 >
                     <input
-                    type="text"
-                    id="outlined-basic"
-                    label="English Name"
-                    variant="outlined"
-                    value={engName}
-                    onChange={handleChange}
-                    placeholder="English name"
+                        type="text"
+                        id="outlined-basic"
+                        label="English Name"
+                        variant="outlined"
+                        value={engName}
+                        onChange={handleChange}
+                        placeholder="English name"
                     />
                 </Box>
                 <div className="d-flex">
                     <button
-                    className="outlined-btn"
+                        className="outlined-btn"
                         onClick={() => {
                             UpdateConfirmName(
                                 "Refunded",
@@ -138,7 +148,7 @@ const ConfirmPronRow = ({ value, changeDataStatus }) => {
                         Refunded
                     </button>
                     <button
-                    className="primary-btn"
+                        className="primary-btn"
                         onClick={() => {
                             UpdateConfirmName(
                                 "Confirm Name",

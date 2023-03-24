@@ -1,6 +1,6 @@
 import "../App.css";
 import { Button, Chip, Typography } from "@mui/material";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { BASE_URL } from "../constants/constant";
 import AudioModal from "../components/am/AudioModal";
 import ColorCheckboxes from "../components/CheckBoxPick.js/ColorCheckboxes";
@@ -12,16 +12,22 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import DataTilesLoader from "../components/ExtraComponents/Loaders/DataTilesLoader";
 import NoDataFound from "../components/ExtraComponents/NoDataFound";
 import AudioMisTile from "../components/am/AudioMisTile";
+import Filter from "../components/filter/Filter";
 
 const AudioMispronounced = ({ item, sendFile }) => {
   const accessToken = localStorage.getItem("authToken");
   const [emittedData, setemittedData] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
-  const [misProData, setMisProData] = useState([])
+  const [misProData, setMisProData] = useState([]);
+  const [allData, setAllData] = useState([])
   const [pageCount, setPageCount] = useState(1);
   const [username, setUsername] = useState(localStorage.getItem("username"));
   const [loading, setLoading] = useState(true)
-  const [loadingType, setLoadingType] = useState('loading')
+  const [loadingType, setLoadingType] = useState('loading');
+
+
+
+  const filterRef = useRef()
 
   // const [socketUrl, setSocketUrl] = useState(`${WEB_BASE_URL}/audiomis.io/`);
   // const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
@@ -62,7 +68,7 @@ const AudioMispronounced = ({ item, sendFile }) => {
         Authorization: `Bearer ${accessToken}`,
       },
     })
-    .then((res)=>res.json())
+      .then((res) => res.json())
       .finally(() => {
         setLoading(false)
       })
@@ -72,11 +78,20 @@ const AudioMispronounced = ({ item, sendFile }) => {
   const { refetch } = useQuery(["FetchAudioMisTiles", pageNumber], () => FetchAudioMisTiles(pageNumber),
     {
       onSuccess: (res) => {
-        setMisProData(res.filename)
-        setPageCount(res.pagecount);
+        setAllData(res.filename?res.filename:[])
+        setPageCount(res.pagecount? res.pagecount:0);
       }
     }
   );
+  const reloadData = ()=>{
+    setLoadingType('loading')
+    refetch()
+  }
+
+  useEffect(()=>{
+    filterRef.current.handleFilterData()
+  },[allData])
+
   return (
     <div className="data-section">
       <div className="section-header">
@@ -85,15 +100,18 @@ const AudioMispronounced = ({ item, sendFile }) => {
           <div className="audio-refresh-btn">
             <div
               onClick={() => {
-                refetch();
+                reloadData();
+                // console.log(filterRef.current)
+                // filterRef && filterRef.current && filterRef.current.click()
               }}
             >
               <RefreshIcon />
             </div>
           </div>
+          <Filter data={allData} setData={setMisProData} ref={filterRef}  />
         </div>
         {
-          pageCount === 1 ?
+          pageCount === 1 || !pageCount ?
             null
             :
             <div className="pagination-class">
@@ -113,8 +131,8 @@ const AudioMispronounced = ({ item, sendFile }) => {
           <DataTilesLoader />
           :
           (misProData.length > 0 ?
-            misProData.map(([tileName, comments], index) => (
-              <AudioMisTile key={`${tileName}-${index}`} tileName={tileName} comments = {comments} index={index} pageNumber={pageNumber} changeDataStatus={setLoadingType} />
+            misProData.map(({ simplified_name: tileName, qc_comment: comments, vas }, index) => (
+              <AudioMisTile key={`${tileName}-${index}`} tileName={tileName} vas={vas} comments={comments} index={index} pageNumber={pageNumber} changeDataStatus={setLoadingType} />
             ))
             :
             <NoDataFound text={'No data found...'} />

@@ -1,0 +1,23 @@
+	.spin {
+	    position: relative;
+	    box-sizing: border-box;
+	    display: block;
+	    margin: auto;
+	    height: 20px;
+	    width: 20px;
+	    border: 3px solid #ede7f6;
+	    border-top: 3px solid #1976d2;
+	    border-radius: 50%;
+	    animation: loader-2-spin 2s linear infinite;
+	}
+
+
+	@keyframes loader-2-spin {
+	    0% {
+	        transform: rotate(0deg);
+	    }
+
+	    100% {
+	        transform: rotate(360deg);
+	    }
+	}

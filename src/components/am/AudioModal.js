@@ -4,6 +4,10 @@ import { BASE_URL } from "../../constants/constant";
 import { useQueryClient } from "react-query";
 import AudiotrackIcon from '@mui/icons-material/Audiotrack';
 import './am.css';
+import AudioPlayer from "../audioPlayer/AudioPlayer";
+import { triggerError, triggerSuccess } from "../ExtraComponents/AlertPopups";
+import RemarkAudio from "../ExtraComponents/remark-audio/RemarkAudio";
+import LastAudio from "../ExtraComponents/last-audio/LastAudio";
 const accessToken = localStorage.getItem("authToken");
 
 const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
@@ -90,8 +94,12 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
       })
       .then((res)=>{
         if(res.status === 200){
+          triggerSuccess('Audio Marked Uncracked')
           changeDataStatus('fetching')
           queryClient.invalidateQueries(["FetchAudioMisTiles", pageNumber]);
+        }else{
+          setUpdating(false)
+          triggerError()
         }
       })
     } catch (error) {
@@ -126,8 +134,13 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
           requestOptions
         );
         if (response.status === 200) {
+          triggerSuccess('File Uploaded Successfully')
           changeDataStatus('fetching')
           queryClient.invalidateQueries(["FetchAudioMisTiles", pageNumber]);
+          setSendFile(null)
+        }else{
+          setUpdating(false)
+          triggerError('File not uploaded')
           setSendFile(null)
         }
         const convertToText = await response.text();
@@ -160,51 +173,14 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
             </div> */}
           </>
         ):(
-          <audio src={sendFile.url} controls />
+          // <audio src={sendFile.url} controls />
+          <AudioPlayer link={sendFile.url} tileName={value}/>
         )}
       </div>
       <div className="d-flex">
-
-        {!showModal.last ? (
-          <button
-            onClick={() => {
-              FetchPlayAudio("celeb-audio-data", fileFirstName && `${fileFirstName}.wav`, fileBucket && `${fileBucket}-raw`, 'last');
-              setShowModal({ ...showModal, last: !showModal.last });
-            }}
-            className="outlined-btn"
-          >
-            <AudiotrackIcon/>
-            Last Audio
-          </button>
-        ) : (
-          <ReactAudioPlayer src={lastAudioUrl} controls />
-        )}
-        {showModal.attach && (
-          <p
-            style={{
-              position: "absolute",
-              top: "2px",
-              left: "10%",
-              fontSize: "12px",
-            }}
-          >
-            Last Audio
-          </p>
-        )}
-        {!showModal.remark ? (
-          <button
-            onClick={() =>{
-              FetchPlayAudio("audio-remarks", value);
-              setShowModal({ ...showModal, remark: !showModal.remark })
-            }}
-            className="outlined-btn"
-          >
-          <AudiotrackIcon/>
-            Remarks Audio
-          </button>
-        ) : (
-          <ReactAudioPlayer src={remarksAudioUrl} controls />
-        )}
+          <LastAudio tileName={value}  firstName={fileFirstName} fileBucket={fileBucket} />
+        
+        <RemarkAudio tileName={value} />
         {showModal.attach && (
           <p
             style={{
@@ -217,7 +193,7 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
             Remarks Audio
           </p>
         )}
-        <div className="au-dn-uncracked-btns">
+        <div className="au-dn-uncracked-btns d-flex">
         <button
           onClick={() => {
             if (window.confirm("Do you want to proceed?")) {
@@ -228,7 +204,7 @@ const AudioModal = ({ value, pageNumber, changeDataStatus, setUpdating }) => {
         >
           Audio Uncracked
         </button>
-        &nbsp;&nbsp;&nbsp;&nbsp;
+        {/* &nbsp;&nbsp;&nbsp;&nbsp; */}
         <button
           id="donebtn"
           onClick={() => {

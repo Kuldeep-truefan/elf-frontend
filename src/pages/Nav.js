@@ -11,21 +11,22 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import logo1 from "../assets/img/logo1.png";
+import tflogo from "../assets/img/tflogo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Fade from '@mui/material/Fade';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 const pages = [
-  "Dashboard",
-  "QUALITY CHECK",
-  "AUDIO MISPRONOUNCED",
-  "AUDIO QC",
-  // "SIMPLIFIED NAMES",
-  "AUDIO MISTREATED",
-  // "REDO LIP SYNC",
-  // "CONFIRM PRONUNCIATION",
+  {label:"Dashboard",link:'/'},
+  {label:"Quality Check",link:'/quality-check'},
+  {label:"Audio Mispronounced",link:'/audio-mispronounced'},
+  {label:"Audio QC",link:'/audio-qc'},
+  {label:"Simplified Names",link:'/simplified-names'},
+  {label:"Audio Mistreated",link:'/audio-mistreated'},
+  {label:"Redo Lip Sync",link:'redo-lip-sync'},
+  {label:"Confirm Pronunciation",link:'/confirm-pronounciation'},
+  {label:"Upload Videos",link:'/upload-video'},
 ];
 
 const settings = ["Profile", "Dashboard", "Logout"];
@@ -46,19 +47,7 @@ function Nav() {
     setAnchorEl(null);
   };
 
-  const pageRedirect = (path) =>{
-    if (path === "redlip"){
-      navigate("/redlip")
-    }else if (path === "simpname"){
-      navigate("/simpname")
-    }else if (path === "audiomt"){
-      navigate("/audiomt")
-    }else if (path === "confpron"){
-      navigate("/confpron")
-    }else if(path === "videoupload"){
-      navigate("/videoupload")
-    }
-  }
+  
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -82,65 +71,14 @@ function Nav() {
           <div className="navbar-child">
           <Toolbar disableGutters>
             <Link to='/'>
-              <img src={logo1} sx={{}} />
+              <img src={tflogo} sx={{}} />
             </Link>
-            <Box>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{
-                  display: { xs: "block", md: "none" },
-                }}
-              >
-                {pages.map((page) => (
-                  <MenuItem
-                    key={page}
-                    onClick={() => {
-                      handleCloseNavMenu();
-                    }}
-                  >
-                    <Typography textAlign="center">{page}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {pages.map((page) => (
-                <Button
-                  key={page}
-                  onClick={() => {
-                    handleCloseNavMenu();
-                    navigate(
-                      page === "Dashboard"
-                        ? "/"
-                        : page === "QUALITY CHECK"
-                        ? "/qc"
-                        : page === "AUDIO MISPRONOUNCED"
-                        ? "/am"
-                        : page === "AUDIO QC"
-                        ? "/audioqc"
-                        : page === "AUDIO MISTREATED"
-                        ? "/audiomt"
-                        : "/nf"
-                    );
-                  }}
-                  sx={{ my: 2, color: "white", display: "block" }}
-                >
-                  {page}
-                </Button>
+              {pages.map((page,index) => (
+                <MenuItem key={index} onClick={ () => {handleClose(); navigate(page.link);}}>{page.label}</MenuItem>
               ))}
-              <Button
+                 
+              {/* <Button
                 // id="fade-button"
                 sx={{
                   color: '#fff'
@@ -168,7 +106,7 @@ function Nav() {
                 <MenuItem onClick={ () => {handleClose(); pageRedirect('confpron');}}>CONFIRM PRONUNCIATION</MenuItem>
                 <MenuItem onClick={ () => {handleClose(); pageRedirect('videoupload');}}>UPLOAD VIDEOS</MenuItem>
               
-              </Menu>
+              </Menu> */}
             </Box>
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title={showname}>
